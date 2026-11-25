@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manual 06 · Bancos y Conciliación · Academia GesPro Administrativo</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --navy:#0c1d35; --blue:#1a5da8; --sky:#3892e8; --bg:#f4f7fb; --card:#ffffff;
+    --ink:#162233; --muted:#52657d; --line:#dce5f0; --ok:#0f766e; --warn:#b45309;
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif; background:var(--bg); color:var(--ink); line-height:1.68; }
+  .topbar {
+    position:sticky; top:0; z-index:40; background:linear-gradient(135deg,#091628,#143a68);
+    color:#fff; padding:12px 22px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    box-shadow:0 4px 18px rgba(9,22,40,.18);
+  }
+  .topbar-left { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .back-btn {
+    display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.12); color:#fff;
+    text-decoration:none; padding:7px 13px; border-radius:9px; font-weight:600; font-size:13.5px; border:1px solid rgba(255,255,255,.22);
+  }
+  .back-btn:hover { background:rgba(255,255,255,.22); }
+  .topbar-title { font-weight:700; font-size:15px; display:flex; align-items:center; gap:8px; }
+  .pill { background:rgba(56,146,232,.25); border:1px solid rgba(137,201,255,.4); color:#d8eeff; padding:2px 9px; border-radius:999px; font-size:11.5px; font-weight:700; }
+  .topbar-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .act-btn {
+    border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.12); color:#fff;
+    padding:7px 13px; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+  }
+  .act-btn.primary { background:var(--sky); border-color:transparent; color:#061322; font-weight:700; }
+  .act-btn:hover { filter:brightness(1.08); }
+
+  .shell { max-width:1180px; margin:24px auto; padding:0 18px 56px; display:grid; grid-template-columns:250px minmax(0,1fr); gap:24px; align-items:start; }
+  aside.toc {
+    position:sticky; top:76px; background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px; max-height:calc(100vh - 96px); overflow:auto; box-shadow:0 4px 14px rgba(12,29,53,.04);
+  }
+  aside.toc h4 { margin:0 0 10px; font-size:11.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); }
+  .toc-link { display:block; color:var(--ink); text-decoration:none; font-size:13px; padding:5px 8px; border-radius:7px; line-height:1.35; }
+  .toc-link:hover { background:#eaf2fb; color:var(--blue); }
+  .toc-link.l3 { padding-left:18px; color:var(--muted); font-size:12.5px; }
+
+  article.doc {
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:34px 38px; box-shadow:0 6px 24px rgba(12,29,53,.05);
+  }
+  .doc-hero { border-bottom:2px solid #e6eef7; padding-bottom:18px; margin-bottom:24px; }
+  .doc-hero .kicker { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--blue); }
+  .doc-hero h1 { margin:6px 0 6px; font-size:28px; line-height:1.2; color:var(--navy); }
+  .doc-hero p { margin:0; color:var(--muted); font-size:15.5px; }
+
+  article.doc h1 { font-size:24px; color:var(--navy); margin:28px 0 12px; }
+  article.doc h2 { font-size:20px; color:var(--navy); margin:30px 0 12px; padding-bottom:6px; border-bottom:1px solid #e6eef7; scroll-margin-top:82px; }
+  article.doc h3 { font-size:16.5px; color:var(--blue); margin:22px 0 8px; scroll-margin-top:82px; }
+  article.doc h4 { font-size:15px; color:#2b415d; margin:16px 0 6px; }
+  article.doc p { margin:0 0 12px; }
+  article.doc ul, article.doc ol { margin:0 0 14px; padding-left:22px; }
+  article.doc li { margin-bottom:6px; }
+  article.doc code { background:#eef4fb; color:#113968; padding:1.5px 6px; border-radius:5px; font-size:.9em; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  article.doc pre { background:#0d1c31; color:#e5f0ff; padding:14px 16px; border-radius:10px; overflow:auto; font-size:13px; line-height:1.5; }
+  article.doc pre code { background:none; color:inherit; padding:0; }
+  article.doc hr { border:none; border-top:1px solid var(--line); margin:24px 0; }
+  article.doc a { color:var(--blue); }
+  .chk { font-weight:700; color:var(--blue); }
+  .chk.done { color:var(--ok); }
+
+  .tbl-wrap { overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:10px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  thead { background:#eef4fb; }
+  th { text-align:left; padding:10px 12px; color:var(--navy); font-weight:700; border-bottom:1px solid var(--line); }
+  td { padding:9px 12px; border-bottom:1px solid #edf2f8; vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:nth-child(even) { background:#fafcff; }
+
+  .callout { padding:13px 16px; border-radius:10px; margin:16px 0; border-left:4px solid var(--blue); background:#eef5fd; }
+  .callout p:last-child { margin-bottom:0; }
+  .callout.warn { border-left-color:var(--warn); background:#fff7ed; }
+  .callout.ok { border-left-color:var(--ok); background:#ecfdf5; }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns:1fr; }
+    aside.toc { position:static; max-height:none; }
+    article.doc { padding:22px 18px; }
+  }
+  @media print {
+    .topbar, aside.toc { display:none !important; }
+    body { background:#fff; }
+    .shell { display:block; max-width:none; margin:0; padding:0; }
+    article.doc { border:none; box-shadow:none; padding:0; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-left">
+    <a class="back-btn" href="../index.html#manuales">← Volver al Portal</a>
+    <div class="topbar-title">🏦 Manual 06 · Bancos y Conciliación <span class="pill">Sección 6</span></div>
+  </div>
+  <div class="topbar-actions">
+    <a class="act-btn" href="../index.html#bancos">▶ Ver videos del módulo</a>
+    <a class="act-btn" href="md/06-Manual-Bancos-y-Conciliacion.md" download>⬇ Descargar .md</a>
+    <button class="act-btn primary" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="toc"><h4>Contenido</h4><a class="toc-link l2" href="#1-mapa-del-modulo-de-bancos-5-pestanas">1. Mapa del Módulo de Bancos (5 Pestañas)</a>
+<a class="toc-link l2" href="#2-cuentas-devaluacion-y-reglas-del-saldo-inicial">2. Cuentas, Devaluación y Reglas del Saldo Inicial</a>
+<a class="toc-link l3" href="#al-crear-una-cuenta-bancaria-nueva-cuenta">Al crear una cuenta bancaria (`Nueva cuenta`)</a>
+<a class="toc-link l3" href="#se-puede-corregir-el-saldo-inicial-de-una-cuenta">¿Se puede corregir el Saldo Inicial de una cuenta?</a>
+<a class="toc-link l2" href="#3-conciliacion-bancaria-en-7-pasos-exactos">3. Conciliación Bancaria en 7 Pasos Exactos</a>
+<a class="toc-link l3" href="#paso-1-revisar-la-cuenta-y-el-libro">Paso 1 · Revisar la cuenta y el libro</a>
+<a class="toc-link l3" href="#paso-2-importar-el-extracto-del-banco">Paso 2 · Importar el extracto del banco</a>
+<a class="toc-link l3" href="#paso-3-abrir-la-conciliacion">Paso 3 · Abrir la conciliación</a>
+<a class="toc-link l3" href="#paso-4-ejecutar-el-cruce-automatico">Paso 4 · Ejecutar el «Cruce automático»</a>
+<a class="toc-link l3" href="#paso-5-emparejar-a-mano-las-excepciones">Paso 5 · Emparejar a mano las excepciones</a>
+<a class="toc-link l3" href="#paso-6-registrar-comisiones-y-notas-del-banco-sin-salir-de-aqui">Paso 6 · Registrar comisiones y notas del banco (sin salir de aquí)</a>
+<a class="toc-link l3" href="#paso-7-transferencias-devueltas-y-cierre-en-0-00">Paso 7 · Transferencias devueltas y Cierre en 0,00</a>
+<a class="toc-link l2" href="#4-el-agente-de-conciliacion-bancaria-tu-asistente-diario">4. El Agente de Conciliación Bancaria (Tu Asistente Diario)</a>
+<a class="toc-link l2" href="#5-errores-clasicos-en-bancos-y-como-evitarlos">⚠️ 5 Errores Clásicos en Bancos (y Cómo Evitarlos)</a>
+<a class="toc-link l2" href="#reto-practico-del-estudiante-30-min">🛠️ Reto Práctico del Estudiante (30 min)</a>
+<a class="toc-link l2" href="#chuleta-rapida-1-minuto">📌 Chuleta Rápida (1 minuto)</a></aside>
+  <article class="doc">
+    <div class="doc-hero">
+      <div class="kicker">Academia GesPro Administrativo · Material Oficial</div>
+      <h1>🏦 Manual 06 · Bancos y Conciliación</h1>
+      <p>Cuentas, Importación de extractos, Cruce automático y Cierre</p>
+    </div>
+    <h1 id="manual-del-usuario-modulo-6-bancos-y-conciliacion">Manual del Usuario · Módulo 6: Bancos y Conciliación</h1>
+<p><strong>GesPro Administrativo v5.7.0 · Guía Práctica del Estudiante</strong></p>
+<div class="callout tip"><p><strong>Tu misión en este módulo:</strong> Controlar el saldo real de tus bancos y cajas en cada moneda, vigilar la pérdida por devaluación en bolívares, conciliar cualquier estado de cuenta en minutos hasta dejar la diferencia en <strong>0,00</strong> y activar el Agente de conciliación para que trabaje por ti todos los días.  </p><p><strong>🎬 Videos de repaso de este módulo:</strong> <code>13-Bancos-y-conciliacion</code> (<code>1:45</code>, resumen general, también en <code>-WhatsApp.mp4</code>) + <code>video/gespro-conciliacion.mp4</code> (<code>5:50</code>, los 7 pasos en detalle + Agente).</p></div>
+<hr>
+<h2 id="1-mapa-del-modulo-de-bancos-5-pestanas">1. Mapa del Módulo de Bancos (5 Pestañas)</h2>
+<p>En <strong>Tesorería → Bancos y conciliación</strong> tienes todo el control del dinero:</p>
+<div class="tbl-wrap"><table><thead><tr><th>Pestaña</th><th>Qué haces allí</th></tr></thead><tbody><tr><td><strong>Cuentas y saldos</strong></td><td>Lista de cuentas bancarias y cajas (corriente, ahorro, caja), moneda, consolidado a moneda base, contador <strong>Sin conciliar</strong> y columna <strong>Devaluación</strong> (en multimoneda).</td></tr><tr><td><strong>Libro bancario</strong></td><td>Todos los ingresos y egresos registrados por el ERP (cobros, pagos, nóminas, movimientos manuales) con filtros por fecha y estado de conciliación.</td></tr><tr><td><strong>Extracto del banco</strong></td><td>Carga automática del estado de cuenta real descargado del banco (Excel, CSV o TXT con o sin encabezados).</td></tr><tr><td><strong>Conciliación</strong></td><td>Tablero cara a cara (Libro a la izquierda, Extracto a la derecha) con cruce automático, cruce manual, notas del banco, devoluciones y cierre auditado.</td></tr><tr><td><strong>Pago masivo (archivo al banco)</strong></td><td>Armado y generación de archivos TXT/CSV de pago por lote a proveedores y nómina (<code>BORRADOR → GENERADO → ENVIADO → CONFIRMADO</code>).</td></tr></tbody></table></div>
+<hr>
+<h2 id="2-cuentas-devaluacion-y-reglas-del-saldo-inicial">2. Cuentas, Devaluación y Reglas del Saldo Inicial</h2>
+<p>!<a href="../presentacion/img/01-cuentas.png" target="_blank" rel="noopener">Cuentas bancarias y movimientos</a></p>
+<h3 id="al-crear-una-cuenta-bancaria-nueva-cuenta">Al crear una cuenta bancaria (<code>Nueva cuenta</code>)</h3>
+<ul><li>Escribe el <strong>número de cuenta exactamente</strong> como aparece en el estado de cuenta de tu banco (GesPro lo usa para impedir que importes por error el extracto de otra cuenta).</li><li>Asocia su <strong>moneda</strong> (una vez tenga movimientos, la moneda queda fija), su <strong>cuenta contable</strong> (<code>11…</code>), su <strong>plantilla de pago</strong> (si harás lotes masivos) y marca <strong>«sujeta a IGTF»</strong> si corresponde.</li><li><strong>Columna «Devaluación» (oro puro para gerencia):</strong> Si operas en bolívares y dólares, GesPro muestra automáticamente cuánto perdió de valor cada saldo quieto en bolívares desde la última tasa BCV, tanto en <strong>%</strong> como en <strong>dinero real</strong>. <em>(Es un dato gerencial para decidir compra de divisas o pagos; no genera asiento contable).</em></li></ul>
+<h3 id="se-puede-corregir-el-saldo-inicial-de-una-cuenta">¿Se puede corregir el Saldo Inicial de una cuenta?</h3>
+<p>Depende del estado de la cuenta (en <code>Cuentas y saldos → Editar</code>):</p>
+<ul><li><strong>Sin movimientos:</strong> Sí, se corrige sin restricción.</li><li><strong>Con movimientos sin conciliar:</strong> Sí, con aviso (desplaza el saldo histórico en todas las fechas).</li><li><strong>Con movimientos YA conciliados:</strong> <strong>BLOQUEADO.</strong> Nunca se altera el saldo inicial bajo una conciliación ya firmada. Para ajustar una diferencia, usa el botón superior <strong>«Movimiento manual»</strong> (crea un movimiento con fecha, concepto y asiento auditable).</li></ul>
+<hr>
+<h2 id="3-conciliacion-bancaria-en-7-pasos-exactos">3. Conciliación Bancaria en 7 Pasos Exactos</h2>
+<div class="callout tip"><p><strong>🎬 Video de apoyo para repasar en casa:</strong> <code>video/gespro-conciliacion.mp4</code> (5 min 50 s) recorre exactamente estos 7 pasos + el Agente automático.</p></div>
+<p>!<a href="../presentacion/img/07-panel-inicial.png" target="_blank" rel="noopener">Panel de conciliación bancaria</a></p>
+<h3 id="paso-1-revisar-la-cuenta-y-el-libro">Paso 1 · Revisar la cuenta y el libro</h3>
+<ol><li>En <strong>Cuentas y saldos</strong>, ubica la cuenta con movimientos en la columna <strong>«Sin conciliar»</strong>.</li><li>Revisa en <strong>Libro bancario</strong> que ya hayas registrado los cobros y pagos del período antes de empezar.</li></ol>
+<h3 id="paso-2-importar-el-extracto-del-banco">Paso 2 · Importar el extracto del banco</h3>
+<ol><li>Ve a <strong>Extracto del banco → «Importar extracto»</strong>.</li><li>Selecciona la cuenta y sube tu archivo (<strong>Excel, CSV o TXT</strong> tal como lo baja tu banco — incluso texto posicional sin encabezados como Banco Mercantil, con separador <code>;</code>, <code>,</code> o tabulador, o pegando el texto).</li><li><strong>3 Validaciones automáticas antes de guardar:</strong> - Confirma que la <strong>moneda</strong> coincida con la cuenta. - Confirma que el <strong>número de cuenta</strong> del archivo sea el de la cuenta elegida (si te equivocaste, te dice cuál parece ser la correcta). - Comprueba la matemática del extracto: <code>Saldo inicial (SI) + Créditos − Débitos = Saldo final (SF)</code>. - <em>Tranquilidad total:</em> Las líneas <code>SI</code> y <code>SF</code> no se cargan como movimientos (se usan para prellenar el saldo final) y <strong>reimportar el mismo archivo nunca duplica líneas</strong>.</li></ol>
+<h3 id="paso-3-abrir-la-conciliacion">Paso 3 · Abrir la conciliación</h3>
+<ol><li>Pulsa el botón directo desde el resumen de importación, o ve a <strong>Conciliación → «Nueva conciliación»</strong>.</li><li>Selecciona la cuenta, la <strong>fecha de corte</strong> (ej. último día del mes) y escribe el <strong>saldo final exacto según el banco</strong>.</li><li>Pulsa <strong>«Abrir conciliación»</strong>. Se abre el tablero con la fórmula arriba: $$\text{Saldo según banco} + \text{Depósitos en tránsito} - \text{Cheques pendientes} = \text{Saldo según libros}$$ Y abajo dos columnas frente a frente: <strong>tu Libro a la izquierda</strong> y <strong>el Extracto del banco a la derecha</strong>.</li></ol>
+<h3 id="paso-4-ejecutar-el-cruce-automatico">Paso 4 · Ejecutar el «Cruce automático»</h3>
+<p>!<a href="../presentacion/img/08-cruce-auto.png" target="_blank" rel="noopener">Cruce automático</a></p>
+<ul><li>Pulsa <strong>«Cruce automático»</strong> en la cabecera.</li><li>En segundos, GesPro empareja todas las partidas que coinciden por <strong>importe exacto, tipo (ingreso/egreso), tolerancia de fecha y similitud de referencia</strong>. Normalmente resuelve el 80–95 % del mes en un clic y te deja a la vista solo las excepciones.</li></ul>
+<h3 id="paso-5-emparejar-a-mano-las-excepciones">Paso 5 · Emparejar a mano las excepciones</h3>
+<ul><li>Si un cobro o pago entró en el banco varios días después o con otra referencia, haz clic en la fila de la <strong>izquierda (Libro)</strong>, haz clic en su pareja de la <strong>derecha (Extracto)</strong> y pulsa <strong>«Conciliar las dos partidas seleccionadas»</strong>.</li><li><em>¿Te equivocaste?</em> Mientras la conciliación siga abierta, baja a la lista de conciliados y pulsa <strong>«Deshacer»</strong>.</li></ul>
+<h3 id="paso-6-registrar-comisiones-y-notas-del-banco-sin-salir-de-aqui">Paso 6 · Registrar comisiones y notas del banco (sin salir de aquí)</h3>
+<p>!<a href="../presentacion/img/10-registrar-nota.png" target="_blank" rel="noopener">Registrar nota del banco</a></p>
+<ul><li>Cuando el banco cobró mantenimiento, comisión por transferencia, IGTF bancario o abonó intereses que aún no estaban en tu libro: 1. Pulsa <strong>«Registrar»</strong> junto a esa línea del extracto. 2. Elige la cuenta contable de contrapartida (ej. <em>Comisiones y gastos bancarios</em>). 3. Pulsa <strong>«Registrar y conciliar»</strong>. GesPro crea el movimiento en el libro, <strong>genera el asiento contable cuadrado</strong> y lo concilia al instante.</li></ul>
+<h3 id="paso-7-transferencias-devueltas-y-cierre-en-0-00">Paso 7 · Transferencias devueltas y Cierre en 0,00</h3>
+<p>!<a href="../presentacion/img/12-cuadrada.png" target="_blank" rel="noopener">Conciliación cuadrada</a></p>
+<h4 id="que-hago-si-el-banco-devolvio-una-transferencia">¿Qué hago si el banco devolvió una transferencia?</h4>
+<p>A veces pagas a un proveedor, el banco rechaza/devuelve el dinero por el mismo monto y luego haces una segunda transferencia exitosa:</p>
+<ol><li><strong>NO anules el pago.</strong> Abre el pago en <code>CxP → Pagos</code> (o el cobro en <code>CxC → Cobros</code>) y pulsa <strong>«Corregir referencia»</strong>: pon la referencia de la segunda transferencia (la buena) y el motivo. Así cruza automáticamente con el débito bueno.</li><li>En la conciliación te quedarán sueltas en el extracto la primera transferencia rechazada y su devolución (mismo monto, signos contrarios).</li><li>Selecciona una de ellas, pulsa <strong>«Compensar con su devolución»</strong>, confirma su pareja y escribe el motivo. <strong>Se concilian entre sí SIN crear asientos contables ficticios.</strong> <em>(Si el banco cobró comisión por el rechazo, regístrala aparte con el Paso 6).</em></li></ol>
+<h4 id="cerrar-con-diferencia-0-00">Cerrar con diferencia 0,00</h4>
+<ul><li>Cuando todo el extracto está conciliado y las únicas partidas restantes en tu libro son reales <strong>en tránsito</strong> (ej. un cheque emitido el día 30 que aún no han cobrado), el indicador de diferencia se pone en <strong>verde (<code>0,00</code>)</strong> y se habilita <strong>«Cerrar conciliación»</strong>.</li><li>Al cerrar, la conciliación pasa al <strong>Histórico</strong> en estado <strong>Cerrada</strong> y <strong>bloquea todas sus partidas y el saldo inicial</strong> para que nadie pueda alterar un mes ya auditado. <em>(Si aparece algo después, se registra en el mes siguiente).</em></li></ul>
+<hr>
+<h2 id="4-el-agente-de-conciliacion-bancaria-tu-asistente-diario">4. El Agente de Conciliación Bancaria (Tu Asistente Diario)</h2>
+<p>!<a href="../presentacion/img/14-agente-conciliacion.png" target="_blank" rel="noopener">Agente de conciliación</a></p>
+<p>No esperes al día 30 del mes para conciliar. En <strong>Configuración → Agentes → Conciliación bancaria</strong>:</p>
+<ol><li>Enciéndelo y configura tus horarios (ej. <code>8:00 a. m.</code> y <code>4:00 p. m.</code>) y las cuentas a vigilar.</li><li><strong>Qué hace solo por ti:</strong> - Recuerda por correo y <strong>GP Mensajes</strong> a quien descarga los estados de cuenta si falta cargar el extracto del día. - Apenas alguien sube un extracto, ejecuta el <strong>cruce automático</strong> solo. - Envía un <strong>informe separado por área</strong> con lo que no cruzó: ingresos sin registrar → a <strong>CxC</strong>; egresos sin registrar → a <strong>CxP</strong>; comisiones/IGTF/intereses → a <strong>Bancos</strong> (¡incluso avisa si un monto coincide exactamente con una factura abierta!).</li><li><strong>Regla de seguridad:</strong> El agente <strong>prepara, cruza y avisa, pero nunca contabiliza ni cierra</strong> sin decisión humana.</li></ol>
+<hr>
+<h2 id="5-errores-clasicos-en-bancos-y-como-evitarlos">⚠️ 5 Errores Clásicos en Bancos (y Cómo Evitarlos)</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Error clásico</th><th>Qué pasa</th><th>Cómo hacerlo bien</th></tr></thead><tbody><tr><td>Crear un asiento de gasto y otro de ingreso para una transferencia devuelta</td><td>Infla falsamente tus gastos e ingresos en el Estado de Resultados</td><td>Usa <strong>«Compensar con su devolución»</strong> en conciliación y <strong>«Corregir referencia»</strong> en el pago</td></tr><tr><td>Intentar cerrar la conciliación con diferencia distinta de <code>0,00</code></td><td>El sistema bloquea el cierre (casi siempre faltan comisiones/notas del banco)</td><td>Revisa líneas pendientes del extracto y usa <strong>«Registrar»</strong> en comisiones/intereses</td></tr><tr><td>Importar un extracto en dólares dentro de una cuenta en bolívares</td><td>El sistema te detiene avisando la cuenta y moneda correcta</td><td>Verifica siempre la cuenta elegida arriba en el modal de importación</td></tr><tr><td>Querer anular un cobro o pago que ya está conciliado</td><td>GesPro lo impide para no romper una conciliación</td><td>Si está abierta, pulsa <strong>«Deshacer»</strong> en el cruce; si está cerrada, ajusta en el período siguiente</td></tr><tr><td>Dejar acumular un mes entero sin subir extractos</td><td>Cierres estresantes con cientos de partidas sin recordar de quién eran</td><td>Sube el extracto a diario o semanalmente y activa el <strong>Agente de conciliación bancaria</strong></td></tr></tbody></table></div>
+<hr>
+<h2 id="reto-practico-del-estudiante-30-min">🛠️ Reto Práctico del Estudiante (30 min)</h2>
+<ol><li>Entra a <strong>Tesorería → Bancos y conciliación → Cuentas y saldos</strong>. Revisa qué cuentas tienen saldo en bolívares y lee su columna de <strong>Devaluación</strong> (si la empresa opera multimoneda).</li><li>Ve a <strong>Extracto del banco → Importar extracto</strong>. Selecciona la cuenta bancaria del Banco Mercantil (<code>BCO-03</code> en la demo) y sube el archivo real <strong><code>ejemplos/extracto-mercantil-agosto.txt</code></strong>. Verifica el resumen de validación (<code>SI + créditos − débitos = SF</code>).</li><li>Abre una <strong>Nueva conciliación</strong> con la fecha de corte y el saldo final del extracto.</li><li>Pulsa <strong>«Cruce automático»</strong> y observa cuántas partidas se cruzan en 1 segundo.</li><li>Practica <strong>1 cruce manual</strong> (una fila de la izquierda + una de la derecha) y pulsa <strong>«Registrar»</strong> en una línea de comisión bancaria asignándola a <em>Comisiones y gastos bancarios</em>.</li><li><em>(Si tu conciliación llega a diferencia <code>0,00</code>)</em> Pulsa <strong>«Cerrar conciliación»</strong> y compruébala luego en el <strong>Histórico</strong>.</li></ol>
+<hr>
+<h2 id="chuleta-rapida-1-minuto">📌 Chuleta Rápida (1 minuto)</h2>
+<ul><li><strong>Los 7 pasos:</strong> <code>1. Revisar libro → 2. Importar extracto → 3. Abrir conciliación → 4. Cruce automático → 5. Emparejar a mano → 6. Registrar notas del banco → 7. Compensar devoluciones y cerrar en 0,00</code>.</li><li><strong>Transferencia devuelta:</strong> En el pago usa <strong>«Corregir referencia»</strong>; en el extracto usa <strong>«Compensar con su devolución»</strong> (cero asientos falsos).</li><li><strong>Cierre:</strong> Solo cierra en <strong><code>0,00</code></strong>; al cerrar bloquea partidas y saldo inicial.</li><li><strong>Automatiza:</strong> Activa <strong>Configuración → Agentes → Conciliación bancaria</strong> para informes diarios por área.</li></ul>
+  </article>
+</div>
+</body>
+</html>

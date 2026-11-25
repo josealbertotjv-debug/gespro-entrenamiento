@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manual 04 · Inventario · Academia GesPro Administrativo</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --navy:#0c1d35; --blue:#1a5da8; --sky:#3892e8; --bg:#f4f7fb; --card:#ffffff;
+    --ink:#162233; --muted:#52657d; --line:#dce5f0; --ok:#0f766e; --warn:#b45309;
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif; background:var(--bg); color:var(--ink); line-height:1.68; }
+  .topbar {
+    position:sticky; top:0; z-index:40; background:linear-gradient(135deg,#091628,#143a68);
+    color:#fff; padding:12px 22px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    box-shadow:0 4px 18px rgba(9,22,40,.18);
+  }
+  .topbar-left { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .back-btn {
+    display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.12); color:#fff;
+    text-decoration:none; padding:7px 13px; border-radius:9px; font-weight:600; font-size:13.5px; border:1px solid rgba(255,255,255,.22);
+  }
+  .back-btn:hover { background:rgba(255,255,255,.22); }
+  .topbar-title { font-weight:700; font-size:15px; display:flex; align-items:center; gap:8px; }
+  .pill { background:rgba(56,146,232,.25); border:1px solid rgba(137,201,255,.4); color:#d8eeff; padding:2px 9px; border-radius:999px; font-size:11.5px; font-weight:700; }
+  .topbar-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .act-btn {
+    border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.12); color:#fff;
+    padding:7px 13px; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+  }
+  .act-btn.primary { background:var(--sky); border-color:transparent; color:#061322; font-weight:700; }
+  .act-btn:hover { filter:brightness(1.08); }
+
+  .shell { max-width:1180px; margin:24px auto; padding:0 18px 56px; display:grid; grid-template-columns:250px minmax(0,1fr); gap:24px; align-items:start; }
+  aside.toc {
+    position:sticky; top:76px; background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px; max-height:calc(100vh - 96px); overflow:auto; box-shadow:0 4px 14px rgba(12,29,53,.04);
+  }
+  aside.toc h4 { margin:0 0 10px; font-size:11.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); }
+  .toc-link { display:block; color:var(--ink); text-decoration:none; font-size:13px; padding:5px 8px; border-radius:7px; line-height:1.35; }
+  .toc-link:hover { background:#eaf2fb; color:var(--blue); }
+  .toc-link.l3 { padding-left:18px; color:var(--muted); font-size:12.5px; }
+
+  article.doc {
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:34px 38px; box-shadow:0 6px 24px rgba(12,29,53,.05);
+  }
+  .doc-hero { border-bottom:2px solid #e6eef7; padding-bottom:18px; margin-bottom:24px; }
+  .doc-hero .kicker { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--blue); }
+  .doc-hero h1 { margin:6px 0 6px; font-size:28px; line-height:1.2; color:var(--navy); }
+  .doc-hero p { margin:0; color:var(--muted); font-size:15.5px; }
+
+  article.doc h1 { font-size:24px; color:var(--navy); margin:28px 0 12px; }
+  article.doc h2 { font-size:20px; color:var(--navy); margin:30px 0 12px; padding-bottom:6px; border-bottom:1px solid #e6eef7; scroll-margin-top:82px; }
+  article.doc h3 { font-size:16.5px; color:var(--blue); margin:22px 0 8px; scroll-margin-top:82px; }
+  article.doc h4 { font-size:15px; color:#2b415d; margin:16px 0 6px; }
+  article.doc p { margin:0 0 12px; }
+  article.doc ul, article.doc ol { margin:0 0 14px; padding-left:22px; }
+  article.doc li { margin-bottom:6px; }
+  article.doc code { background:#eef4fb; color:#113968; padding:1.5px 6px; border-radius:5px; font-size:.9em; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  article.doc pre { background:#0d1c31; color:#e5f0ff; padding:14px 16px; border-radius:10px; overflow:auto; font-size:13px; line-height:1.5; }
+  article.doc pre code { background:none; color:inherit; padding:0; }
+  article.doc hr { border:none; border-top:1px solid var(--line); margin:24px 0; }
+  article.doc a { color:var(--blue); }
+  .chk { font-weight:700; color:var(--blue); }
+  .chk.done { color:var(--ok); }
+
+  .tbl-wrap { overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:10px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  thead { background:#eef4fb; }
+  th { text-align:left; padding:10px 12px; color:var(--navy); font-weight:700; border-bottom:1px solid var(--line); }
+  td { padding:9px 12px; border-bottom:1px solid #edf2f8; vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:nth-child(even) { background:#fafcff; }
+
+  .callout { padding:13px 16px; border-radius:10px; margin:16px 0; border-left:4px solid var(--blue); background:#eef5fd; }
+  .callout p:last-child { margin-bottom:0; }
+  .callout.warn { border-left-color:var(--warn); background:#fff7ed; }
+  .callout.ok { border-left-color:var(--ok); background:#ecfdf5; }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns:1fr; }
+    aside.toc { position:static; max-height:none; }
+    article.doc { padding:22px 18px; }
+  }
+  @media print {
+    .topbar, aside.toc { display:none !important; }
+    body { background:#fff; }
+    .shell { display:block; max-width:none; margin:0; padding:0; }
+    article.doc { border:none; box-shadow:none; padding:0; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-left">
+    <a class="back-btn" href="../index.html#manuales">← Volver al Portal</a>
+    <div class="topbar-title">📦 Manual 04 · Inventario <span class="pill">Sección 4</span></div>
+  </div>
+  <div class="topbar-actions">
+    <a class="act-btn" href="../index.html#inventario">▶ Ver videos del módulo</a>
+    <a class="act-btn" href="md/04-Manual-Inventario.md" download>⬇ Descargar .md</a>
+    <button class="act-btn primary" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="toc"><h4>Contenido</h4><a class="toc-link l2" href="#1-mapa-del-modulo-de-inventario-11-pestanas">1. Mapa del Módulo de Inventario (11 Pestañas)</a>
+<a class="toc-link l2" href="#2-catalogo-costo-promedio-y-costo-inicial">2. Catálogo, Costo Promedio y «Costo Inicial»</a>
+<a class="toc-link l3" href="#como-calcula-gespro-el-costo-costo-promedio-ponderado">Cómo calcula GesPro el costo (Costo Promedio Ponderado)</a>
+<a class="toc-link l3" href="#alerta-roja-articulos-con-existencia-y-sin-costo-costo-inicial">🚨 Alerta Roja: «Artículos con existencia y sin costo» → `Costo inicial`</a>
+<a class="toc-link l3" href="#papeles-de-cada-articulo-y-moneda-de-precios">Papeles de cada artículo y Moneda de Precios</a>
+<a class="toc-link l2" href="#3-el-kardex-y-la-mercancia-apartada-24-h-habiles">3. El Kardex y la Mercancía Apartada (24 h hábiles)</a>
+<a class="toc-link l3" href="#usar-el-kardex-como-lupa-de-auditoria">Usar el Kardex como lupa de auditoría</a>
+<a class="toc-link l3" href="#existencias-vs-disponible-apartado-por-pedidos">Existencias vs Disponible («Apartado por pedidos»)</a>
+<a class="toc-link l2" href="#4-ajustes-transferencias-y-reposicion-ordenes-de-compra">4. Ajustes, Transferencias y Reposición (Órdenes de Compra)</a>
+<a class="toc-link l3" href="#diferencia-clave-entre-transferencia-y-ajuste">Diferencia clave entre Transferencia y Ajuste</a>
+<a class="toc-link l3" href="#ordenes-de-compra-y-recepcion-de-mercancia">Órdenes de compra y Recepción de mercancía</a>
+<a class="toc-link l2" href="#5-notas-de-despacho-ordenes-de-entrega-y-guias">5. Notas de Despacho (Órdenes de Entrega y Guías)</a>
+<a class="toc-link l2" href="#6-bonus-manufactura-si-tu-empresa-fabrica-o-ensambla">6. Bonus: Manufactura (si tu empresa fabrica o ensambla)</a>
+<a class="toc-link l2" href="#5-errores-clasicos-en-inventario-y-como-evitarlos">⚠️ 5 Errores Clásicos en Inventario (y Cómo Evitarlos)</a>
+<a class="toc-link l2" href="#reto-practico-del-estudiante-25-min">🛠️ Reto Práctico del Estudiante (25 min)</a>
+<a class="toc-link l2" href="#chuleta-rapida-1-minuto">📌 Chuleta Rápida (1 minuto)</a></aside>
+  <article class="doc">
+    <div class="doc-hero">
+      <div class="kicker">Academia GesPro Administrativo · Material Oficial</div>
+      <h1>📦 Manual 04 · Inventario</h1>
+      <p>Artículos, Almacenes, Stock apartado, Kardex y Transferencias</p>
+    </div>
+    <h1 id="manual-del-usuario-modulo-4-inventario">Manual del Usuario · Módulo 4: Inventario</h1>
+<p><strong>GesPro Administrativo v5.7.0 · Guía Práctica del Estudiante</strong></p>
+<div class="callout tip"><p><strong>Tu misión en este módulo:</strong> Saber en todo momento qué mercancía tienes, dónde está, cuánto vale al costo promedio ponderado, qué está apartado por pedidos, cómo reponer faltantes y cómo documentar cada salida con Notas de despacho sin descuadrar la contabilidad.  </p><p><strong>🎬 Videos de repaso de este módulo (<code>-WhatsApp.mp4</code> disponibles):</strong> <code>15-Inventario</code> (<code>1:41</code>) · <em>opcionales:</em> <code>16-Manufactura</code> (<code>1:53</code>) · <code>17-Sucursales</code> (<code>1:20</code>).</p></div>
+<hr>
+<h2 id="1-mapa-del-modulo-de-inventario-11-pestanas">1. Mapa del Módulo de Inventario (11 Pestañas)</h2>
+<p>En <strong>Operaciones → Inventario</strong> encontrarás pestañas organizadas para controlar el ciclo físico y valorado <em>(nota: quienes no tienen permiso de ver costos —como vendedores o cajeros— solo ven existencias y precios, nunca costos ni kardex)</em>:</p>
+<div class="tbl-wrap"><table><thead><tr><th>Pestaña</th><th>Para qué sirve</th></tr></thead><tbody><tr><td><strong>Artículos</strong></td><td>Catálogo de productos y servicios, precios (Precio 1, 2 y 3), costo promedio, valorización, importación desde Excel/CSV y adjuntos del producto (garantías, fichas técnicas, certificados).</td></tr><tr><td><strong>Existencias por almacén</strong></td><td>Stock real sede por sede y el recuadro clave <strong>«Apartado por pedidos»</strong> (Existencia − Apartado = Disponible real).</td></tr><tr><td><strong>Kardex</strong></td><td>Historial movimiento por movimiento de cada artículo (entradas, salidas, costo promedio y saldo después de cada operación).</td></tr><tr><td><strong>Costo inicial</strong></td><td>Herramienta masiva para cargar costo a artículos migrados del sistema anterior con existencia en cero costo.</td></tr><tr><td><strong>Alertas de stock</strong></td><td>Productos que llegaron a su stock mínimo o están por debajo.</td></tr><tr><td><strong>Órdenes de compra</strong></td><td>Pedidos a proveedores (manuales o automáticos con <strong>«Generar por faltantes»</strong>).</td></tr><tr><td><strong>Recepción de mercancía</strong></td><td>Registro físico de la entrada de mercancía de órdenes aprobadas.</td></tr><tr><td><strong>Listas de precios</strong></td><td>Listas de precios de proveedores para comparar y presupuestar reposiciones.</td></tr><tr><td><strong>Transferencias</strong></td><td>Mover mercancía de un almacén a otro (sin asiento contable, porque el valor total de la empresa no cambia).</td></tr><tr><td><strong>Notas de despacho</strong></td><td><strong>Órdenes de entrega</strong> (ventas) y <strong>Guías de despacho</strong> (donaciones, muestras con solicitante, traslados, consignación).</td></tr><tr><td><strong>Almacenes</strong></td><td>Gestión de almacenes, su sucursal asociada y su <strong>Encargado de despachar</strong> (recibe avisos en GP Mensajes).</td></tr></tbody></table></div>
+<p><em>(Módulos hermanos bajo Operaciones: <strong>Manufactura</strong> para recetas y órdenes de producción, y <strong>Sucursales</strong> para gestionar varias sedes).</em></p>
+<hr>
+<h2 id="2-catalogo-costo-promedio-y-costo-inicial">2. Catálogo, Costo Promedio y «Costo Inicial»</h2>
+<p>!<a href="../presentacion/img/inventario-articulos.png" target="_blank" rel="noopener">Catálogo de artículos</a></p>
+<h3 id="como-calcula-gespro-el-costo-costo-promedio-ponderado">Cómo calcula GesPro el costo (Costo Promedio Ponderado)</h3>
+<ul><li>Cada vez que entra mercancía por una compra (o producción), el costo promedio se recalcula automáticamente: $$\text{Nuevo costo promedio} = \frac{(\text{Existencia actual} \times \text{Costo anterior}) + (\text{Cantidad nueva} \times \text{Costo nuevo})}{\text{Existencia total}}$$</li><li>Al vender, ese costo promedio es el que sale al <strong>Costo de ventas</strong> en contabilidad. Por eso el costo promedio <strong>nunca se teclea a mano</strong> en la ficha del artículo: tocarlo descuadraría el inventario contra el balance.</li></ul>
+<h3 id="alerta-roja-articulos-con-existencia-y-sin-costo-costo-inicial">🚨 Alerta Roja: «Artículos con existencia y sin costo» → <code>Costo inicial</code></h3>
+<p>Si migraste existencias desde un sistema viejo sin ponerles costo, esas unidades entraron en <strong>$0,00</strong>. Si compras mercancía nueva sin corregir eso primero:</p>
+<ul><li><em>Ejemplo del desastre:</em> 10 unidades a $0 + 10 unidades compradas a $20 = promedio de <strong>$10</strong> (falso).</li><li><strong>Solución en 4 pasos (<code>Inventario → Costo inicial</code>):</strong> 1. Abre la pestaña <strong>Costo inicial</strong> (muestra todos los artículos con stock y costo $0). 2. Escribe el costo unitario en la columna (o pulsa <strong>«Plantilla»</strong>, llénalo en Excel y súbelo con <strong>«Subir archivo»</strong>). 3. Elige la fecha y pulsa <strong>«Revisar y guardar»</strong> para comprobar el asiento contable (<em>Debe: Inventario / Haber: Saldos de apertura</em>, no es ganancia del mes). 4. Confirma <strong>«Guardar los costos»</strong>. En el Kardex aparecerá una línea <strong><code>COSTO INICIAL</code></strong> sin cambiar unidades.</li></ul>
+<h3 id="papeles-de-cada-articulo-y-moneda-de-precios">Papeles de cada artículo y Moneda de Precios</h3>
+<ul><li>Dentro de cualquier artículo puedes adjuntar hasta 6 MB en PDF o imagen (factura original, garantía, manual, certificado): viajan siempre con la ficha.</li><li>Si tu contabilidad va en bolívares pero fijas precios en dólares (<code>MONEDA_PRECIOS = USD</code>), escribes el precio y costo en USD y GesPro convierte automáticamente a la tasa BCV del día al facturar o guardar el kardex.</li></ul>
+<hr>
+<h2 id="3-el-kardex-y-la-mercancia-apartada-24-h-habiles">3. El Kardex y la Mercancía Apartada (24 h hábiles)</h2>
+<p>!<a href="../presentacion/img/inventario-kardex.png" target="_blank" rel="noopener">Kardex de inventario</a></p>
+<h3 id="usar-el-kardex-como-lupa-de-auditoria">Usar el Kardex como lupa de auditoría</h3>
+<p>Cuando algo no cuadra en almacén, <strong>empieza siempre en <code>Inventario → Kardex</code></strong>:</p>
+<ul><li>Elige el artículo (y opcionalmente almacén y rango de fechas — si filtras desde una fecha, el kardex arranca con el <strong>saldo inicial arrastrado</strong>).</li><li>Cada fila te dice: fecha, tipo de movimiento (compra, venta, ajuste, transferencia, costo inicial, revalorización, despacho), documento origen, cantidad, costo unitario y saldo resultante.</li></ul>
+<h3 id="existencias-vs-disponible-apartado-por-pedidos">Existencias vs Disponible («Apartado por pedidos»)</h3>
+<ul><li>En <strong>Existencias por almacén</strong>, revisa el cuadro <strong>«Apartado por pedidos»</strong>: muestra Existencia total, unidades apartadas por pedidos firmes (con su hora exacta de vencimiento de 24 h hábiles) y lo realmente <strong>Disponible</strong>.</li><li>GesPro impide vender o producir por encima de lo disponible para evitar sobreventas.</li></ul>
+<hr>
+<h2 id="4-ajustes-transferencias-y-reposicion-ordenes-de-compra">4. Ajustes, Transferencias y Reposición (Órdenes de Compra)</h2>
+<h3 id="diferencia-clave-entre-transferencia-y-ajuste">Diferencia clave entre Transferencia y Ajuste</h3>
+<div class="tbl-wrap"><table><thead><tr><th>Operación</th><th>Cuándo usarla</th><th>¿Genera asiento contable?</th></tr></thead><tbody><tr><td><strong>Transferir</strong> (botón arriba o pestaña <em>Transferencias</em>)</td><td>Mover cajas del Almacén Principal al Almacén Sucursal Valencia</td><td><strong>NO</strong> (el valor total del inventario de la empresa no cambia)</td></tr><tr><td><strong>Ajustar existencia</strong> (botón arriba)</td><td>Conteo físico (sobrantes/faltantes), roturas, mermas, inventario inicial</td><td><strong>SÍ</strong> (automático contra cuenta de mermas/ajustes o apertura)</td></tr></tbody></table></div>
+<div class="callout tip"><p><strong>Ojo con Sucursales:</strong> La sucursal a la que se acredita una venta sale del <strong>Almacén</strong> de donde se despacha la mercancía, no de quién hizo la factura. Si ves un aviso rojo de <em>«Almacenes sin sucursal»</em>, pulsa <strong>«Asignarlos a la principal»</strong>.</p></div>
+<h3 id="ordenes-de-compra-y-recepcion-de-mercancia">Órdenes de compra y Recepción de mercancía</h3>
+<ol><li>En <strong>Alertas de stock</strong> ves los artículos en o bajo el stock mínimo.</li><li>En <strong>Órdenes de compra</strong>, pulsa <strong>«Generar por faltantes»</strong>: GesPro arma automáticamente borradores agrupados por el proveedor habitual de cada artículo (también puede hacerlo el <strong>Agente de Compras</strong> según horario).</li><li>El encargado revisa, edita cantidades si hace falta y pulsa <strong>«Revisar y aprobar»</strong>.</li><li>Cuando llega el camión, en <strong>Recepción de mercancía</strong> (o desde la orden aprobada → <strong>«Registrar recepción»</strong>) se registra lo que entró realmente (puede ser recepción parcial).</li></ol>
+<hr>
+<h2 id="5-notas-de-despacho-ordenes-de-entrega-y-guias">5. Notas de Despacho (Órdenes de Entrega y Guías)</h2>
+<p>En <strong>Inventario → Notas de despacho</strong> salen los documentos físicos que acompañan a la mercancía (con número <code>DES-…</code>, logo y leyenda obligatoria <strong>«SIN DERECHO A CRÉDITO FISCAL»</strong> — Providencia SNAT/2024/000102):</p>
+<div class="tbl-wrap"><table><thead><tr><th>Motivo</th><th>Nombre del papel</th><th>Cómo nace</th><th>¿Mueve inventario?</th><th>¿Genera asiento?</th></tr></thead><tbody><tr><td><strong>Venta</strong></td><td>Orden de entrega</td><td><strong>Sola</strong> al aprobar una factura con mercancía</td><td>No (ya lo descontó la factura)</td><td>No (ya lo hizo la factura)</td></tr><tr><td><strong>Muestra</strong></td><td>Guía de despacho</td><td>Botón <strong>«Nueva nota de despacho»</strong> <em>(pide Solicitante)</em></td><td>Sí (sale al costo promedio)</td><td>Sí (Gasto por muestras vs Inventario)</td></tr><tr><td><strong>Donación</strong></td><td>Guía de despacho</td><td>Botón <strong>«Nueva nota de despacho»</strong> <em>(pide Solicitante)</em></td><td>Sí (sale al costo promedio)</td><td>Sí (Gasto por donaciones vs Inventario)</td></tr><tr><td><strong>Traslado</strong></td><td>Guía de despacho</td><td>Botón <strong>«Nueva nota de despacho»</strong></td><td>Sí (de almacén origen a destino)</td><td>No</td></tr><tr><td><strong>Préstamo / Consignación</strong></td><td>Guía de despacho</td><td>Botón <strong>«Nueva nota de despacho»</strong></td><td>Pasa al almacén destino (ej. Consignación)</td><td>No</td></tr></tbody></table></div>
+<ul><li><strong>Control de muestras y donaciones:</strong> En <em>Muestra</em> o <em>Donación</em>, el campo <strong>«Solicitante»</strong> es obligatorio (quién lo pidió: vendedor, gerente, médico…). Al buscar su nombre en la lista de Notas de despacho, GesPro suma arriba cuántas muestras pidió y cuánto costaron.</li><li>Cuando el encargado del almacén entrega físicamente las cajas, abre la nota y pulsa <strong>«Marcar despachada»</strong>.</li></ul>
+<hr>
+<h2 id="6-bonus-manufactura-si-tu-empresa-fabrica-o-ensambla">6. Bonus: Manufactura (si tu empresa fabrica o ensambla)</h2>
+<p>En <strong>Operaciones → Manufactura</strong>:</p>
+<ol><li><strong>Recetas:</strong> Define los insumos, cantidades, merma esperada, mano de obra y costos indirectos por lote (soporta subensambles multinivel y bloquea recetas circulares).</li><li><strong>Orden de producción (3 pasos):</strong> - <strong>Planificar (Borrador):</strong> Verifica si alcanza la materia prima nivel por nivel. - <strong>Iniciar:</strong> Saca los insumos del almacén y pasa su costo a <em>Producción en proceso</em>. - <strong>Terminar:</strong> Ingresa las unidades buenas que realmente salieron; el costo real del lote (insumos + mano de obra + indirectos) se divide entre las unidades buenas producidas y entra al inventario con su costo real.</li></ol>
+<hr>
+<h2 id="5-errores-clasicos-en-inventario-y-como-evitarlos">⚠️ 5 Errores Clásicos en Inventario (y Cómo Evitarlos)</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Error clásico</th><th>Qué pasa</th><th>Cómo hacerlo bien</th></tr></thead><tbody><tr><td>Comprar encima de inventario migrado con costo <code>$0</code></td><td>El costo promedio se desploma a la mitad y falsea tus utilidades</td><td>Carga primero el costo real en <strong>Inventario → Costo inicial</strong></td></tr><tr><td>Usar «Ajustar existencia» (salida + entrada) en vez de «Transferir»</td><td>Genera dos asientos innecesarios de merma/ajuste y ensucia resultados</td><td>Usa siempre <strong>Transferir</strong> para mover stock entre tus almacenes</td></tr><tr><td>Sacar muestras o regalos «de palabra» sin documento</td><td>Faltantes inexplicables en el conteo de fin de mes</td><td>Emite una <strong>Nota de despacho (Muestra)</strong> indicando el <strong>Solicitante</strong></td></tr><tr><td>Ignorar el cuadro «Apartado por pedidos»</td><td>Crees que sobra mercancía y te sorprende que el sistema bloquee la venta</td><td>Mira siempre la columna <strong>Disponible</strong> (= Existencia − Apartado)</td></tr><tr><td>Dejar un almacén sin «Encargado de despachar»</td><td>Nadie recibe el aviso inmediato en GP Mensajes al aprobarse una factura</td><td>Configura el encargado en <strong>Inventario → Almacenes → Editar</strong></td></tr></tbody></table></div>
+<hr>
+<h2 id="reto-practico-del-estudiante-25-min">🛠️ Reto Práctico del Estudiante (25 min)</h2>
+<ol><li>Abre <strong>Inventario → Kardex</strong>, selecciona el artículo que vendiste en el Módulo 2 y compraste en el Módulo 3. Anota su costo promedio actual y comprueba que ambos movimientos aparecen enlazados a sus documentos.</li><li>Pulsa <strong>«Transferir»</strong> (arriba a la derecha) y mueve <strong>2 unidades</strong> de un artículo desde el Almacén Principal a otro almacén.</li><li>Ve a <strong>Notas de despacho → Nueva nota de despacho</strong>, elige motivo <strong>Muestra</strong>, selecciona 1 unidad, escribe tu nombre como <strong>Solicitante</strong>, guarda, revisa el PDF (leyenda <em>Sin derecho a crédito fiscal</em>) y pulsa <strong>«Marcar despachada»</strong>.</li><li>Entra a <strong>Órdenes de compra</strong> y pulsa <strong>«Generar por faltantes»</strong> para observar cómo el sistema propone reposiciones por proveedor.</li></ol>
+<hr>
+<h2 id="chuleta-rapida-1-minuto">📌 Chuleta Rápida (1 minuto)</h2>
+<ul><li><strong>Algo no cuadra en stock:</strong> Mira primero <strong>Inventario → Kardex</strong>.</li><li><strong>Stock migrado en cero costo:</strong> Usa <strong>Inventario → Costo inicial</strong> antes de comprar.</li><li><strong>Mover entre almacenes:</strong> <strong>Transferir</strong> (0 asientos). <strong>Merma/conteo:</strong> <strong>Ajustar existencia</strong> (sí contabiliza).</li><li><strong>Salidas sin venta (muestras/donaciones):</strong> <strong>Notas de despacho</strong> con <strong>Solicitante</strong> obligatorio.</li></ul>
+  </article>
+</div>
+</body>
+</html>

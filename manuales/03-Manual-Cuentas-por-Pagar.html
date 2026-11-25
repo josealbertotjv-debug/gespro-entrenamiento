@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manual 03 · Cuentas por Pagar · Academia GesPro Administrativo</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --navy:#0c1d35; --blue:#1a5da8; --sky:#3892e8; --bg:#f4f7fb; --card:#ffffff;
+    --ink:#162233; --muted:#52657d; --line:#dce5f0; --ok:#0f766e; --warn:#b45309;
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif; background:var(--bg); color:var(--ink); line-height:1.68; }
+  .topbar {
+    position:sticky; top:0; z-index:40; background:linear-gradient(135deg,#091628,#143a68);
+    color:#fff; padding:12px 22px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    box-shadow:0 4px 18px rgba(9,22,40,.18);
+  }
+  .topbar-left { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .back-btn {
+    display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.12); color:#fff;
+    text-decoration:none; padding:7px 13px; border-radius:9px; font-weight:600; font-size:13.5px; border:1px solid rgba(255,255,255,.22);
+  }
+  .back-btn:hover { background:rgba(255,255,255,.22); }
+  .topbar-title { font-weight:700; font-size:15px; display:flex; align-items:center; gap:8px; }
+  .pill { background:rgba(56,146,232,.25); border:1px solid rgba(137,201,255,.4); color:#d8eeff; padding:2px 9px; border-radius:999px; font-size:11.5px; font-weight:700; }
+  .topbar-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .act-btn {
+    border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.12); color:#fff;
+    padding:7px 13px; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+  }
+  .act-btn.primary { background:var(--sky); border-color:transparent; color:#061322; font-weight:700; }
+  .act-btn:hover { filter:brightness(1.08); }
+
+  .shell { max-width:1180px; margin:24px auto; padding:0 18px 56px; display:grid; grid-template-columns:250px minmax(0,1fr); gap:24px; align-items:start; }
+  aside.toc {
+    position:sticky; top:76px; background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px; max-height:calc(100vh - 96px); overflow:auto; box-shadow:0 4px 14px rgba(12,29,53,.04);
+  }
+  aside.toc h4 { margin:0 0 10px; font-size:11.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); }
+  .toc-link { display:block; color:var(--ink); text-decoration:none; font-size:13px; padding:5px 8px; border-radius:7px; line-height:1.35; }
+  .toc-link:hover { background:#eaf2fb; color:var(--blue); }
+  .toc-link.l3 { padding-left:18px; color:var(--muted); font-size:12.5px; }
+
+  article.doc {
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:34px 38px; box-shadow:0 6px 24px rgba(12,29,53,.05);
+  }
+  .doc-hero { border-bottom:2px solid #e6eef7; padding-bottom:18px; margin-bottom:24px; }
+  .doc-hero .kicker { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--blue); }
+  .doc-hero h1 { margin:6px 0 6px; font-size:28px; line-height:1.2; color:var(--navy); }
+  .doc-hero p { margin:0; color:var(--muted); font-size:15.5px; }
+
+  article.doc h1 { font-size:24px; color:var(--navy); margin:28px 0 12px; }
+  article.doc h2 { font-size:20px; color:var(--navy); margin:30px 0 12px; padding-bottom:6px; border-bottom:1px solid #e6eef7; scroll-margin-top:82px; }
+  article.doc h3 { font-size:16.5px; color:var(--blue); margin:22px 0 8px; scroll-margin-top:82px; }
+  article.doc h4 { font-size:15px; color:#2b415d; margin:16px 0 6px; }
+  article.doc p { margin:0 0 12px; }
+  article.doc ul, article.doc ol { margin:0 0 14px; padding-left:22px; }
+  article.doc li { margin-bottom:6px; }
+  article.doc code { background:#eef4fb; color:#113968; padding:1.5px 6px; border-radius:5px; font-size:.9em; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  article.doc pre { background:#0d1c31; color:#e5f0ff; padding:14px 16px; border-radius:10px; overflow:auto; font-size:13px; line-height:1.5; }
+  article.doc pre code { background:none; color:inherit; padding:0; }
+  article.doc hr { border:none; border-top:1px solid var(--line); margin:24px 0; }
+  article.doc a { color:var(--blue); }
+  .chk { font-weight:700; color:var(--blue); }
+  .chk.done { color:var(--ok); }
+
+  .tbl-wrap { overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:10px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  thead { background:#eef4fb; }
+  th { text-align:left; padding:10px 12px; color:var(--navy); font-weight:700; border-bottom:1px solid var(--line); }
+  td { padding:9px 12px; border-bottom:1px solid #edf2f8; vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:nth-child(even) { background:#fafcff; }
+
+  .callout { padding:13px 16px; border-radius:10px; margin:16px 0; border-left:4px solid var(--blue); background:#eef5fd; }
+  .callout p:last-child { margin-bottom:0; }
+  .callout.warn { border-left-color:var(--warn); background:#fff7ed; }
+  .callout.ok { border-left-color:var(--ok); background:#ecfdf5; }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns:1fr; }
+    aside.toc { position:static; max-height:none; }
+    article.doc { padding:22px 18px; }
+  }
+  @media print {
+    .topbar, aside.toc { display:none !important; }
+    body { background:#fff; }
+    .shell { display:block; max-width:none; margin:0; padding:0; }
+    article.doc { border:none; box-shadow:none; padding:0; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-left">
+    <a class="back-btn" href="../index.html#manuales">← Volver al Portal</a>
+    <div class="topbar-title">🧾 Manual 03 · Cuentas por Pagar <span class="pill">Sección 3</span></div>
+  </div>
+  <div class="topbar-actions">
+    <a class="act-btn" href="../index.html#cxp">▶ Ver videos del módulo</a>
+    <a class="act-btn" href="md/03-Manual-Cuentas-por-Pagar.md" download>⬇ Descargar .md</a>
+    <button class="act-btn primary" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="toc"><h4>Contenido</h4><a class="toc-link l2" href="#1-mapa-del-modulo-de-cuentas-por-pagar">1. Mapa del Módulo de Cuentas por Pagar</a>
+<a class="toc-link l2" href="#2-ficha-del-proveedor-el-secreto-para-pagar-sin-tropiezos">2. Ficha del Proveedor: El Secreto para Pagar sin Tropiezos</a>
+<a class="toc-link l2" href="#3-registrar-una-factura-de-proveedor-2-caminos-ia-o-manual">3. Registrar una Factura de Proveedor (2 Caminos: IA o Manual)</a>
+<a class="toc-link l3" href="#camino-a-importar-factura-con-ia-el-mas-rapido">Camino A · 🚀 Importar factura con IA (el más rápido)</a>
+<a class="toc-link l3" href="#camino-b-registro-manual">Camino B · Registro manual</a>
+<a class="toc-link l3" href="#el-comprobante-de-pago-y-retencion-previo-cpr">El Comprobante de Pago y Retención Previo (`CPR-…`)</a>
+<a class="toc-link l2" href="#4-casos-especiales-que-ahorran-dolores-de-cabeza">4. Casos Especiales que Ahorran Dolores de Cabeza</a>
+<a class="toc-link l3" href="#4-1-pagada-por-un-accionista">4.1 «Pagada por un accionista»</a>
+<a class="toc-link l3" href="#4-2-retenciones-por-reintegrar-proveedor-que-exige-el-100">4.2 «Retenciones por reintegrar» (Proveedor que exige el 100 %)</a>
+<a class="toc-link l2" href="#5-pagar-facturas-y-emitir-comprobantes-fiscales-de-retencion">5. Pagar Facturas y Emitir Comprobantes Fiscales de Retención</a>
+<a class="toc-link l2" href="#6-pagos-por-lote-al-banco-segregacion-de-tareas">6. Pagos por Lote al Banco (Segregación de Tareas)</a>
+<a class="toc-link l2" href="#5-errores-clasicos-en-cxp-y-como-evitarlos">⚠️ 5 Errores Clásicos en CxP (y Cómo Evitarlos)</a>
+<a class="toc-link l2" href="#reto-practico-del-estudiante-25-min">🛠️ Reto Práctico del Estudiante (25 min)</a>
+<a class="toc-link l2" href="#chuleta-rapida-1-minuto">📌 Chuleta Rápida (1 minuto)</a></aside>
+  <article class="doc">
+    <div class="doc-hero">
+      <div class="kicker">Academia GesPro Administrativo · Material Oficial</div>
+      <h1>🧾 Manual 03 · Cuentas por Pagar</h1>
+      <p>Proveedores, Carga con IA, Retenciones IVA/ISLR y Pagos</p>
+    </div>
+    <h1 id="manual-del-usuario-modulo-3-cuentas-por-pagar">Manual del Usuario · Módulo 3: Cuentas por Pagar</h1>
+<p><strong>GesPro Administrativo v5.7.0 · Guía Práctica del Estudiante</strong></p>
+<div class="callout warn"><p><strong>Tu misión en este módulo:</strong> Registrar facturas de proveedores en segundos (incluso leyendo PDFs/fotos con IA), validar el comprobante previo, calcular retenciones de IVA e ISLR sin errores, controlar reintegros y enviar pagos masivos al banco respetando el control interno.  </p><p><strong>🎬 Videos de repaso de este módulo (<code>-WhatsApp.mp4</code> disponibles):</strong> <code>11-Proveedores</code> (<code>1:28</code>) · <code>06-Facturacion-de-proveedores</code> (<code>2:12</code>) · <code>09-Cuentas-por-pagar</code> (<code>1:31</code>) · <code>07-Pago-a-proveedores</code> (<code>1:48</code>).</p></div>
+<hr>
+<h2 id="1-mapa-del-modulo-de-cuentas-por-pagar">1. Mapa del Módulo de Cuentas por Pagar</h2>
+<p>En el menú <strong>Ciclo comercial</strong> tienes herramientas especializadas para separar el registro de compras del pago:</p>
+<div class="tbl-wrap"><table><thead><tr><th>Sección del menú</th><th>Qué haces allí</th></tr></thead><tbody><tr><td><strong>Proveedores</strong></td><td>Fichas fiscales, porcentajes de retención IVA, concepto ISLR (Decreto 1.808), datos bancarios obligatorios y alerta <strong>«Sin datos para pagarles»</strong>.</td></tr><tr><td><strong>Facturación de proveedores</strong></td><td>Solo cargar y asentar facturas/notas de proveedores (sin acceso a pagos).</td></tr><tr><td><strong>Cuentas por pagar</strong></td><td>Vista completa con 6 pestañas: <strong>Documentos</strong>, <strong>Pagar facturas</strong>, <strong>Antigüedad de saldos</strong>, <strong>Pagos</strong>, <strong>Retenciones por reintegrar</strong> y <strong>Lotes al banco</strong>.</td></tr><tr><td><strong>Pago a proveedores</strong></td><td>Centro de mando de Tesorería/Pagos: <strong>Pagar facturas</strong>, <strong>Programación</strong> (vencimientos vs dinero disponible), <strong>Pagos realizados</strong>, <strong>Retenciones por reintegrar</strong> y <strong>Archivo al banco</strong>.</td></tr><tr><td><strong>Operaciones → Importaciones</strong></td><td>Proyectos de importación con cuenta transitoria para acumular flete, seguro, aduana y facturas antes de cerrar o costear.</td></tr></tbody></table></div>
+<hr>
+<h2 id="2-ficha-del-proveedor-el-secreto-para-pagar-sin-tropiezos">2. Ficha del Proveedor: El Secreto para Pagar sin Tropiezos</h2>
+<p>!<a href="../presentacion/img/proveedores-listado.png" target="_blank" rel="noopener">Listado de proveedores</a></p>
+<ol><li><strong>Los 4 datos bancarios obligatorios:</strong> Para incluir a un proveedor en un <strong>Lote de pago al banco</strong>, su ficha debe tener: <strong>Banco</strong>, <strong>Número de cuenta</strong>, <strong>Titular</strong> y <strong>Documento</strong>. - Revisa siempre la tarjeta <strong>«Sin datos para pagarles»</strong> en la parte superior de <code>Proveedores</code>: te muestra exactamente a quién y qué dato le falta antes del día de pago. - Si al proveedor se le paga en efectivo (o es un organismo sin transferencia), marca <strong>«Se le paga en efectivo»</strong> en <em>Forma de pagarle</em> (no pedirá datos bancarios ni entrará en lotes).</li><li><strong>Condición fiscal y retenciones (⚠️ ¡Clave para ISLR!):</strong> - Configura su <strong>% de retención de IVA</strong> (75 % o 100 %) y su <strong>concepto de ISLR</strong> según el tabulador del Decreto 1.808. - <strong>Proveedores extranjeros:</strong> Nunca los dejes como «Extranjero» a secas; elige <strong>«Persona natural no residente»</strong> o <strong>«Persona jurídica no domiciliada»</strong> (de lo contrario GesPro no puede aplicar la tabla correcta de ISLR ni permite retenerles).</li></ol>
+<hr>
+<h2 id="3-registrar-una-factura-de-proveedor-2-caminos-ia-o-manual">3. Registrar una Factura de Proveedor (2 Caminos: IA o Manual)</h2>
+<p>!<a href="../presentacion/img/cxp-listado.png" target="_blank" rel="noopener">Listado de cuentas por pagar</a></p>
+<h3 id="camino-a-importar-factura-con-ia-el-mas-rapido">Camino A · 🚀 Importar factura con IA (el más rápido)</h3>
+<ol><li>En <strong>Cuentas por pagar</strong> (o <strong>Facturación de proveedores</strong>), pulsa <strong>«Importar factura con IA»</strong>.</li><li>Si conoces la moneda de la factura (o si pertenece a una <strong>Importación</strong>), indícalo. Adjunta el <strong>PDF o foto</strong> (hasta 8 MB).</li><li>En segundos, la IA lee proveedor/RIF, número de factura, número de control, fecha, moneda, renglones y totales, y crea un <strong>Borrador</strong> con el documento original adjunto. - Si el RIF no existía, abre la ficha nueva prellenada para que la guardes y cree la factura sola. - Los renglones cuyo código coincida exactamente con tu catálogo se enlazan solos al inventario; los demás entran como gasto/servicio para que los ajustes.</li><li>Abre el borrador, pulsa <strong>«Ver factura original»</strong> para comparar lado a lado, revisa cualquier advertencia en las notas y aprueba.</li></ol>
+<h3 id="camino-b-registro-manual">Camino B · Registro manual</h3>
+<ol><li>Pulsa <strong>«Nuevo documento»</strong>, elige el proveedor y escribe el <strong>número de factura</strong> y el <strong>número de control</strong> exactamente como vienen en el papel del proveedor <em>(en CxP estos números nunca son automáticos; van al Libro de Compras)</em>.</li><li>Agrega las líneas: si compras mercancía, selecciona el <strong>artículo</strong> y el <strong>almacén</strong> de destino; si es un servicio o gasto, elige la <strong>cuenta contable</strong> de gasto.</li><li>Guarda en <strong>Borrador</strong>.</li></ol>
+<h3 id="el-comprobante-de-pago-y-retencion-previo-cpr">El Comprobante de Pago y Retención Previo (<code>CPR-…</code>)</h3>
+<ul><li>Apenas guardas el borrador de la factura del proveedor, GesPro genera automáticamente el <strong>Comprobante previo (<code>CPR-…</code>)</strong>: desglosa base imponible, IVA, retenciones de IVA/ISLR estimadas y el <strong>neto real a pagar</strong>.</li><li>Pulsa <strong>«Copiar enlace»</strong> y envíaselo al proveedor (página de solo lectura válida por 30 días) para que confirme los cálculos antes de pagar. Si modificas la factura, el enlace viejo caduca y nace uno nuevo.</li><li>Al pulsar <strong>«Aprobar / Asentar»</strong>: entra la mercancía al almacén (recalculando el <strong>costo promedio</strong>), nace la deuda en CxP y se genera el asiento contable.</li></ul>
+<hr>
+<h2 id="4-casos-especiales-que-ahorran-dolores-de-cabeza">4. Casos Especiales que Ahorran Dolores de Cabeza</h2>
+<h3 id="4-1-pagada-por-un-accionista">4.1 «Pagada por un accionista»</h3>
+<p>Cuando un socio/accionista paga de su bolsillo una factura de proveedor:</p>
+<ol><li>Registra y aprueba la factura del proveedor <strong>como siempre</strong> (con el gasto en su cuenta real — <strong>NUNCA</strong> pongas la cuenta de accionistas en el renglón de gasto).</li><li>Haz las retenciones primero si aplican.</li><li>Abre la factura aprobada y pulsa <strong>«Pagada por un accionista»</strong> → indica quién pagó, fecha y monto.</li></ol>
+<ul><li><strong>Qué hace GesPro:</strong> Salda la factura (nadie la pagará dos veces), mueve la deuda de <em>Proveedores</em> a <em>Cuentas por pagar Accionistas</em> y <strong>no saca dinero de ningún banco</strong>. Cuando la empresa le devuelva el dinero al socio, se registra un movimiento de banco contra esa cuenta.</li></ul>
+<h3 id="4-2-retenciones-por-reintegrar-proveedor-que-exige-el-100">4.2 «Retenciones por reintegrar» (Proveedor que exige el 100 %)</h3>
+<p>Algunos proveedores cobran la factura entera sin dejar descontar la retención y devuelven el monto retenido días después:</p>
+<ol><li>Al pagarle completo desde <strong>Pagar facturas</strong>, la retención se declara y entera igual al SENIAT, pero lo retenido queda abierto como deuda a tu favor en la pestaña <strong>Retenciones por reintegrar</strong>.</li><li>Cuando el proveedor te devuelva ese dinero, entra a <strong>Retenciones por reintegrar</strong> y pulsa <strong>«Registrar reintegro»</strong> (o regístralo desde el abono en la conciliación bancaria).</li><li>Si acuerdan rebajarlo de su próxima factura, pulsa <strong>«Descontar de otra factura»</strong>.</li></ol>
+<hr>
+<h2 id="5-pagar-facturas-y-emitir-comprobantes-fiscales-de-retencion">5. Pagar Facturas y Emitir Comprobantes Fiscales de Retención</h2>
+<ol><li>Entra a <strong>Pago a proveedores</strong> (o <strong>Cuentas por pagar → Pagar facturas</strong>) y selecciona el proveedor.</li><li>Verás todas sus facturas pendientes, días vencidos y retenciones calculadas automáticamente: - <strong>IVA:</strong> según % de la ficha (75 % o 100 %; lo exento se separa automáticamente en <em>Sin derecho a crédito</em>). - <strong>ISLR:</strong> según el tabulador del <strong>Decreto 1.808</strong>. <em>(Para empresas no domiciliadas en filas T-2, GesPro aplica automáticamente la <strong>Tarifa 2 acumulativa anual</strong>: 15 %, 22 % y 34 % restando lo ya retenido en el año).</em></li><li>Marca las facturas a pagar (puedes pagar el saldo completo o un monto parcial, y las retenciones se prorratean).</li><li>Elige la cuenta bancaria (solo muestra cuentas de la misma moneda), fecha, método y referencia. Verifica el neto a transferir y pulsa <strong>«Generar pago»</strong>.</li><li><strong>Emitir comprobantes fiscales:</strong> Abre el pago en la pestaña <strong>Pagos</strong> → pulsa <strong>«Emitir comprobante de IVA»</strong> y/o <strong>«… de ISLR»</strong> → verifica fecha de emisión y escribe la <strong>fecha de aplicación</strong> (obligatoria) → imprime el PDF (con logo, firma y sello configurados en <code>Configuración → Retenciones</code>) o pulsa <strong>«Enviar por correo»</strong> al proveedor.</li></ol>
+<hr>
+<h2 id="6-pagos-por-lote-al-banco-segregacion-de-tareas">6. Pagos por Lote al Banco (Segregación de Tareas)</h2>
+<p>!<a href="../presentacion/img/cxp-lotes.png" target="_blank" rel="noopener">Lotes de pago al banco</a></p>
+<p>Para pagar a 10, 30 o 100 proveedores sin teclear transferencias a mano:</p>
+<ol><li><strong>Compras / CxP</strong> registra y postea los pagos (rebajan la deuda de cada proveedor).</li><li><strong>Tesorería</strong> entra a <strong>Bancos → Pago masivo (archivo al banco)</strong> (o <strong>Lotes al banco</strong>), agrupa esos pagos y elige la plantilla del banco (ancho fijo o delimitado por <code>;</code>).</li><li>Revisa la <strong>Vista previa</strong> del archivo, genera el archivo de texto (queda con huella criptográfica SHA-256) y súbelo al portal del banco.</li><li>Sigue el ciclo de vida: <code>BORRADOR → GENERADO → ENVIADO → CONFIRMADO</code>. - <em>Regla de control interno:</em> Quien registra facturas/pagos en compras <strong>no</strong> es quien genera y envía el archivo al banco; GesPro impone esta separación por permisos. - Si anulas un lote antes de enviarlo, sus pagos vuelven a estar disponibles.</li></ol>
+<hr>
+<h2 id="5-errores-clasicos-en-cxp-y-como-evitarlos">⚠️ 5 Errores Clásicos en CxP (y Cómo Evitarlos)</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Error clásico</th><th>Qué pasa</th><th>Cómo hacerlo bien</th></tr></thead><tbody><tr><td>Elegir la cuenta de «Accionistas» en el renglón de gasto de la factura</td><td>No registra el gasto y baja falsamente la deuda del socio</td><td>Carga el gasto en su cuenta real, aprueba, y luego pulsa <strong>«Pagada por un accionista»</strong></td></tr><tr><td>Dejar un proveedor del exterior como «Extranjero» a secas</td><td>El sistema bloquea la retención de ISLR por ambigüedad legal</td><td>Edita su ficha y elige <em>Persona natural no residente</em> o <em>Persona jurídica no domiciliada</em></td></tr><tr><td>Llegar al día de pago sin revisar datos bancarios</td><td>El proveedor queda fuera del lote masivo al banco</td><td>Usa la tarjeta <strong>«Sin datos para pagarles»</strong> en <code>Proveedores</code> al crear la ficha</td></tr><tr><td>Aprobar una factura importada con IA sin mirar el original</td><td>Puede entrar una fecha, tasa o renglón mal interpretado</td><td>Pulsa siempre <strong>«Ver factura original»</strong> y lee los avisos antes de aprobar</td></tr><tr><td>Intentar cambiar la fecha de emisión de un comprobante de IVA a otro mes</td><td>El mes va incrustado en el número fiscal (<code>AAAAMM…</code>)</td><td>Anula ese comprobante y emite uno nuevo en el mes correcto</td></tr></tbody></table></div>
+<hr>
+<h2 id="reto-practico-del-estudiante-25-min">🛠️ Reto Práctico del Estudiante (25 min)</h2>
+<ol><li>Ve a <strong>Proveedores</strong>, pulsa el indicador <strong>«Sin datos para pagarles»</strong> (o abre un proveedor cualquiera) y asegúrate de que tenga sus 4 datos bancarios completos.</li><li>Entra a <strong>Cuentas por pagar → Nuevo documento</strong>, registra una factura de proveedor (inventa número <code>FAC-P-001</code> y control <code>00-99001</code>) comprando <strong>10 unidades</strong> de un artículo del catálogo hacia el almacén principal. Guarda en borrador.</li><li>Abre el borrador, revisa el <strong>Comprobante previo (<code>CPR-…</code>)</strong> y pulsa <strong>«Aprobar y contabilizar»</strong>.</li><li>Ve a <strong>Pagar facturas</strong>, elige ese proveedor, marca la factura, observa las retenciones de IVA/ISLR calculadas y pulsa <strong>«Generar pago»</strong>.</li><li>Abre el pago en la pestaña <strong>Pagos</strong>, emite el <strong>Comprobante de retención de IVA</strong> (poniendo fecha de aplicación de hoy) y revisa la vista previa del PDF.</li></ol>
+<hr>
+<h2 id="chuleta-rapida-1-minuto">📌 Chuleta Rápida (1 minuto)</h2>
+<ul><li><strong>Ahorra tiempo:</strong> Usa <strong>«Importar factura con IA»</strong> (PDF o foto) y valida contra el original.</li><li><strong>Antes de aprobar:</strong> Revisa y comparte el <strong>Comprobante previo (<code>CPR-…</code>)</strong>.</li><li><strong>Pagó un socio:</strong> Aprueba normal → botón <strong>«Pagada por un accionista»</strong>.</li><li><strong>Pagó completo sin retener:</strong> Controla la devolución en <strong>Retenciones por reintegrar</strong>.</li><li><strong>Lotes al banco:</strong> Compras postea el pago → Tesorería genera el archivo (<code>BORRADOR → GENERADO → ENVIADO → CONFIRMADO</code>).</li></ul>
+  </article>
+</div>
+</body>
+</html>

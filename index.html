@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Academia GesPro Administrativo · Videos, Manuales y Evaluación</title>
+<meta name="description" content="Portal oficial de entrenamiento de GesPro Administrativo: 40 videos por secciones, 6 manuales completos, diapositivas y cuestionario interactivo del CRM.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --navy:#091628; --navy-2:#10294a; --blue:#1a5da8; --sky:#3892e8; --sky-lt:#89c9ff;
+    --bg:#f2f6fb; --card:#ffffff; --ink:#142033; --muted:#54677e; --line:#dce5f1;
+    --ok:#0f766e; --ok-bg:#e6f7f4; --warn:#b45309; --radius:14px;
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; }
+
+  /* Top Header */
+  header.top {
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(135deg,#081426 0%,#12345e 100%);
+    color:#fff; border-bottom:1px solid rgba(137,201,255,.18);
+    box-shadow:0 4px 20px rgba(8,20,38,.22);
+  }
+  .top-in {
+    max-width:1360px; margin:0 auto; padding:12px 20px;
+    display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+  }
+  .brand { display:flex; align-items:center; gap:11px; text-decoration:none; color:#fff; cursor:pointer; }
+  .brand-mark {
+    width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg,#1f7ae0,#3892e8);
+    display:grid; place-items:center; font-weight:800; font-size:16px; letter-spacing:-.5px;
+    box-shadow:0 4px 12px rgba(56,146,232,.35); flex-shrink:0;
+  }
+  .brand-txt strong { display:block; font-size:16px; line-height:1.15; }
+  .brand-txt span { display:block; font-size:12px; color:#a8caee; }
+
+  .search-box { flex:1; min-width:220px; max-width:420px; position:relative; }
+  .search-box input {
+    width:100%; padding:9px 36px 9px 36px; border-radius:10px;
+    border:1px solid rgba(137,201,255,.28); background:rgba(255,255,255,.1);
+    color:#fff; font-size:14px; outline:none; transition:background .15s, border-color .15s;
+  }
+  .search-box input::placeholder { color:#a8c5e5; }
+  .search-box input:focus { background:rgba(255,255,255,.17); border-color:var(--sky-lt); }
+  .search-ico { position:absolute; left:11px; top:50%; transform:translateY(-50%); font-size:14px; opacity:.8; pointer-events:none; }
+  .search-clr {
+    position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none;
+    color:#cfe4fa; font-size:16px; cursor:pointer; display:none; padding:2px 6px;
+  }
+  .search-clr.show { display:block; }
+
+  .top-right { display:flex; align-items:center; gap:10px; }
+  .prog-pill {
+    display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:999px;
+    background:rgba(255,255,255,.1); border:1px solid rgba(137,201,255,.25); font-size:12.5px; font-weight:600; color:#e6f2ff;
+  }
+  .prog-dot { width:8px; height:8px; border-radius:50%; background:#34d399; }
+  .qr-btn {
+    padding:7px 12px; border-radius:9px; border:1px solid rgba(137,201,255,.35);
+    background:rgba(56,146,232,.2); color:#fff; font-weight:700; font-size:13px; cursor:pointer;
+  }
+  .qr-btn:hover { background:rgba(56,146,232,.35); }
+
+  /* Tabs Bar */
+  nav.tabs-wrap {
+    position:sticky; top:63px; z-index:45; background:#fff; border-bottom:1px solid var(--line);
+    box-shadow:0 2px 10px rgba(12,29,53,.04);
+  }
+  .tabs {
+    max-width:1360px; margin:0 auto; padding:8px 16px;
+    display:flex; gap:6px; overflow-x:auto; scrollbar-width:thin;
+  }
+  .tab {
+    flex:0 0 auto; display:inline-flex; align-items:center; gap:6px;
+    padding:8px 13px; border-radius:10px; border:1px solid transparent;
+    background:transparent; color:#324863; font-size:13.5px; font-weight:600; cursor:pointer;
+    transition:all .15s; white-space:nowrap;
+  }
+  .tab:hover { background:#eef4fb; color:var(--navy); }
+  .tab.active { background:var(--navy); color:#fff; box-shadow:0 3px 10px rgba(9,22,40,.18); }
+  .tab .cnt {
+    font-size:11px; padding:1px 7px; border-radius:999px; background:#e7eff9; color:#2b4a70; font-weight:700;
+  }
+  .tab.active .cnt { background:rgba(56,146,232,.32); color:#d8eeff; }
+
+  main { max-width:1360px; margin:0 auto; padding:22px 20px 64px; }
+
+  /* Hero on Home */
+  .hero {
+    background:linear-gradient(135deg,#091628 0%,#143d70 55%,#1a5da8 100%);
+    color:#fff; border-radius:20px; padding:32px 34px; margin-bottom:24px;
+    display:grid; grid-template-columns:1.3fr .9fr; gap:28px; align-items:center;
+    box-shadow:0 12px 32px rgba(9,22,40,.18); position:relative; overflow:hidden;
+  }
+  .hero h1 { margin:8px 0 10px; font-size:clamp(24px,3vw,34px); line-height:1.15; letter-spacing:-.02em; }
+  .hero p { margin:0 0 18px; color:#cde1f7; font-size:15.5px; max-width:620px; }
+  .hero-kicker {
+    display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700;
+    text-transform:uppercase; letter-spacing:.12em; color:#96d0ff;
+  }
+  .hero-actions { display:flex; gap:10px; flex-wrap:wrap; }
+  .btn {
+    display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    padding:10px 16px; border-radius:10px; font-size:14px; font-weight:700;
+    border:1px solid var(--line); background:#fff; color:var(--navy); text-decoration:none; cursor:pointer;
+    transition:transform .12s, background .15s, border-color .15s;
+  }
+  .btn:hover { transform:translateY(-1px); border-color:#b6cbe4; }
+  .btn.primary { background:var(--sky); border-color:transparent; color:#051424; }
+  .btn.primary:hover { background:#54a4ef; }
+  .btn.navy { background:var(--navy); border-color:var(--navy); color:#fff; }
+  .btn.navy:hover { background:#15365f; }
+  .btn.ghost { background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.28); color:#fff; }
+  .btn.ghost:hover { background:rgba(255,255,255,.22); }
+  .btn.ok { background:var(--ok); border-color:var(--ok); color:#fff; }
+  .btn.sm { padding:7px 12px; font-size:13px; border-radius:8px; }
+
+  .hero-stats {
+    background:rgba(7,19,36,.42); border:1px solid rgba(137,201,255,.22);
+    border-radius:16px; padding:18px 20px; backdrop-filter:blur(6px);
+  }
+  .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+  .stat { background:rgba(255,255,255,.06); border-radius:10px; padding:12px; }
+  .stat b { display:block; font-size:22px; color:#fff; line-height:1.1; }
+  .stat span { font-size:12px; color:#a9c8ea; }
+  .bar-lbl { display:flex; justify-content:space-between; font-size:12.5px; color:#cfe4fa; margin-bottom:6px; }
+  .bar { height:8px; background:rgba(255,255,255,.14); border-radius:999px; overflow:hidden; }
+  .bar > div { height:100%; background:linear-gradient(90deg,#3892e8,#34d399); transition:width .3s; }
+
+  /* Section Grid on Home */
+  .sec-title { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:24px 0 14px; flex-wrap:wrap; }
+  .sec-title h2 { margin:0; font-size:20px; color:var(--navy); }
+  .sec-title span { font-size:13.5px; color:var(--muted); }
+
+  .mod-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:16px; }
+  .mod-card {
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:18px 20px; display:flex; flex-direction:column; gap:10px; cursor:pointer;
+    transition:transform .15s, box-shadow .15s, border-color .15s; box-shadow:0 3px 12px rgba(12,29,53,.04);
+  }
+  .mod-card:hover { transform:translateY(-2px); border-color:#93bce8; box-shadow:0 10px 26px rgba(12,29,53,.09); }
+  .mod-top { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .mod-ico { width:40px; height:40px; border-radius:11px; display:grid; place-items:center; font-size:20px; background:#edf4fc; }
+  .mod-badge { font-size:12px; font-weight:700; color:var(--blue); background:#eaf3fd; padding:3px 10px; border-radius:999px; }
+  .mod-card h3 { margin:0; font-size:16.5px; color:var(--navy); }
+  .mod-card p { margin:0; font-size:13.5px; color:var(--muted); flex:1; }
+  .mini-bar { height:6px; background:#e7eff8; border-radius:999px; overflow:hidden; }
+  .mini-bar > div { height:100%; background:var(--ok); transition:width .3s; }
+  .mod-foot { display:flex; justify-content:space-between; align-items:center; font-size:12.5px; color:var(--muted); }
+
+  /* Video Section Theater */
+  .sec-head {
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:20px 24px; margin-bottom:18px;
+    display:flex; justify-content:space-between; align-items:center; gap:18px; flex-wrap:wrap;
+  }
+  .sec-head h2 { margin:0 0 4px; font-size:22px; color:var(--navy); display:flex; align-items:center; gap:10px; }
+  .sec-head p { margin:0; color:var(--muted); font-size:14.5px; max-width:740px; }
+  .sec-head-actions { display:flex; gap:8px; flex-wrap:wrap; }
+
+  .theater { display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:18px; align-items:start; margin-bottom:24px; }
+  .player-box {
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    overflow:hidden; box-shadow:0 8px 28px rgba(12,29,53,.07);
+  }
+  .video-frame { background:#060f1d; aspect-ratio:16/9; position:relative; }
+  .video-frame video { width:100%; height:100%; display:block; background:#000; }
+  .player-meta { padding:18px 22px 22px; }
+  .v-kicker { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--blue); }
+  .player-meta h3 { margin:4px 0 4px; font-size:21px; color:var(--navy); }
+  .player-meta .sub { margin:0 0 14px; color:var(--muted); font-size:14.5px; }
+
+  .p-controls { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; padding-bottom:14px; border-bottom:1px solid #e9f0f8; margin-bottom:14px; }
+  .p-group { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+  .spd { padding:5px 9px; border-radius:7px; border:1px solid var(--line); background:#f7faff; color:#334c6b; font-size:12.5px; font-weight:700; cursor:pointer; }
+  .spd.active { background:var(--navy); color:#fff; border-color:var(--navy); }
+
+  .pts-box { background:#f5f9ff; border:1px solid #d9e7f7; border-radius:12px; padding:14px 16px; }
+  .pts-box h4 { margin:0 0 8px; font-size:12px; text-transform:uppercase; letter-spacing:.1em; color:var(--blue); }
+  .pts-box ul { margin:0; padding-left:19px; font-size:14px; color:#23374f; }
+  .pts-box li { margin-bottom:5px; }
+
+  .playlist-box {
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    overflow:hidden; box-shadow:0 4px 16px rgba(12,29,53,.05);
+  }
+  .pl-head {
+    padding:13px 16px; background:#f7faff; border-bottom:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:700; color:var(--navy);
+  }
+  .pl-list { max-height:560px; overflow-y:auto; padding:8px; display:flex; flex-direction:column; gap:6px; }
+  .pl-item {
+    display:grid; grid-template-columns:96px minmax(0,1fr); gap:10px; align-items:center;
+    padding:7px; border-radius:10px; border:1px solid transparent; cursor:pointer; transition:all .14s;
+  }
+  .pl-item:hover { background:#f2f7fd; }
+  .pl-item.active { background:#e8f2fe; border-color:#8cbcf0; }
+  .pl-thumb { position:relative; border-radius:7px; overflow:hidden; aspect-ratio:16/9; background:#0b1a2e; }
+  .pl-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+  .pl-dur {
+    position:absolute; right:4px; bottom:4px; background:rgba(6,15,29,.84); color:#fff;
+    font-size:10.5px; font-weight:700; padding:1px 5px; border-radius:4px;
+  }
+  .pl-done {
+    position:absolute; left:4px; top:4px; background:#10b981; color:#fff;
+    font-size:10px; font-weight:800; width:18px; height:18px; border-radius:50%; display:grid; place-items:center;
+  }
+  .pl-t { font-size:13px; font-weight:700; color:var(--navy); line-height:1.25; }
+  .pl-s { font-size:11.5px; color:var(--muted); margin-top:2px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+
+  /* Video Card Grid */
+  .v-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(265px,1fr)); gap:16px; }
+  .v-card {
+    background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden;
+    cursor:pointer; display:flex; flex-direction:column; transition:transform .15s, box-shadow .15s, border-color .15s;
+  }
+  .v-card:hover { transform:translateY(-2px); border-color:#8eb9eb; box-shadow:0 10px 24px rgba(12,29,53,.08); }
+  .v-card.active { border-color:var(--blue); box-shadow:0 0 0 2px rgba(26,93,168,.2); }
+  .v-card-img { position:relative; aspect-ratio:16/9; background:#0b1a2e; overflow:hidden; }
+  .v-card-img img { width:100%; height:100%; object-fit:cover; display:block; }
+  .v-play-pill {
+    position:absolute; left:10px; bottom:10px; background:rgba(9,22,40,.85); color:#fff;
+    font-size:11.5px; font-weight:700; padding:3px 9px; border-radius:999px;
+  }
+  .v-seen-pill {
+    position:absolute; right:10px; top:10px; background:#0f766e; color:#fff;
+    font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px;
+  }
+  .v-card-body { padding:13px 15px 15px; display:flex; flex-direction:column; gap:4px; flex:1; }
+  .v-card-body .b { font-size:11px; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:.07em; }
+  .v-card-body h4 { margin:0; font-size:15px; color:var(--navy); line-height:1.3; }
+  .v-card-body p { margin:2px 0 0; font-size:13px; color:var(--muted); }
+
+  /* Manuals & Resource Cards */
+  .res-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:16px; }
+  .res-card {
+    background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px;
+    display:flex; flex-direction:column; gap:10px; box-shadow:0 3px 12px rgba(12,29,53,.04);
+  }
+  .res-card.featured {
+    background:linear-gradient(135deg,#0c213f,#18477e); color:#fff; border-color:transparent;
+    grid-column:1 / -1; flex-direction:row; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:18px;
+  }
+  .res-card.featured p { color:#cbe0f7; margin:4px 0 0; }
+  .res-card h3 { margin:0; font-size:17px; }
+  .res-card p { margin:0; font-size:13.8px; color:var(--muted); flex:1; }
+  .res-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; }
+
+  /* Contextual Banner */
+  .ctx-banner {
+    margin-top:22px; background:linear-gradient(135deg,#eef5fe,#e3effd); border:1px solid #bfd7f4;
+    border-radius:14px; padding:18px 22px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  }
+  .ctx-banner h4 { margin:0 0 3px; font-size:16px; color:var(--navy); }
+  .ctx-banner p { margin:0; font-size:13.5px; color:#38506d; }
+
+  /* Search Overlay Banner */
+  .search-panel { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; margin-bottom:20px; }
+  .search-panel h2 { margin:0 0 14px; font-size:19px; color:var(--navy); }
+
+  /* QR Modal */
+  .modal-bg {
+    position:fixed; inset:0; background:rgba(6,15,29,.72); z-index:100;
+    display:none; place-items:center; padding:20px; backdrop-filter:blur(4px);
+  }
+  .modal-bg.open { display:grid; }
+  .modal {
+    background:#fff; border-radius:20px; max-width:440px; width:100%; padding:26px; text-align:center;
+    box-shadow:0 24px 60px rgba(0,0,0,.35);
+  }
+  .modal h3 { margin:0 0 6px; font-size:20px; color:var(--navy); }
+  .modal p { margin:0 0 16px; font-size:14px; color:var(--muted); }
+  .qr-frame { display:inline-block; padding:12px; border:2px solid var(--line); border-radius:14px; background:#fff; margin-bottom:14px; }
+  .qr-frame img { width:240px; height:240px; display:block; }
+  .url-copy {
+    background:#f1f6fc; border:1px solid var(--line); border-radius:10px; padding:9px 12px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; color:var(--navy);
+    word-break:break-all; margin-bottom:14px;
+  }
+
+  .toast {
+    position:fixed; bottom:20px; right:20px; z-index:120; background:#091628; color:#fff;
+    padding:10px 16px; border-radius:10px; font-size:13.5px; font-weight:600;
+    box-shadow:0 10px 28px rgba(0,0,0,.28); opacity:0; transform:translateY(10px);
+    transition:opacity .2s, transform .2s; pointer-events:none;
+  }
+  .toast.show { opacity:1; transform:translateY(0); }
+
+  footer { text-align:center; color:var(--muted); font-size:13px; padding:24px 16px 36px; border-top:1px solid var(--line); }
+
+  @media (max-width: 1020px) {
+    .hero { grid-template-columns:1fr; padding:24px 22px; }
+    .theater { grid-template-columns:1fr; }
+    .pl-list { max-height:360px; }
+  }
+  @media (max-width: 640px) {
+    .top-in { padding:10px 14px; }
+    .brand-txt span { display:none; }
+    .prog-pill { display:none; }
+    nav.tabs-wrap { top:58px; }
+    main { padding:14px 12px 48px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand" onclick="goTab('inicio')">
+      <div class="brand-mark">GP</div>
+      <div class="brand-txt">
+        <strong>Academia GesPro Administrativo</strong>
+        <span>40 videos HD · 6 manuales · Diapositivas · Evaluación CRM</span>
+      </div>
+    </div>
+
+    <div class="search-box">
+      <span class="search-ico">🔍</span>
+      <input id="q" type="search" placeholder="Buscar video o manual (ej. embudo, IGTF, kardex, bancos)..." autocomplete="off">
+      <button id="qClr" class="search-clr" title="Limpiar búsqueda">×</button>
+    </div>
+
+    <div class="top-right">
+      <div class="prog-pill" id="topProg"><span class="prog-dot"></span><span>0 / 40 vistos</span></div>
+      <button class="qr-btn" onclick="openQr()">📱 QR</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs-wrap" aria-label="Secciones del entrenamiento">
+  <div class="tabs" id="tabsBar"></div>
+</nav>
+
+<main id="app"></main>
+
+<footer>
+  <strong>Academia GesPro Administrativo</strong> · Centro de Entrenamiento Oficial · Todo el progreso se guarda automáticamente en tu navegador.
+</footer>
+
+<div class="modal-bg" id="qrModal" onclick="if(event.target===this)closeQr()">
+  <div class="modal">
+    <h3>📱 Acceso inmediato para estudiantes</h3>
+    <p>Proyecta este código QR para que los participantes abran el portal directo desde su teléfono o laptop.</p>
+    <div class="qr-frame"><img src="assets/qr.svg" alt="Código QR del Portal Academia GesPro"></div>
+    <div class="url-copy" id="qrUrlTxt"></div>
+    <div style="display:flex;gap:8px;justify-content:center">
+      <button class="btn navy sm" onclick="copyUrl()">📋 Copiar enlace</button>
+      <button class="btn sm" onclick="closeQr()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DATA = {"publicUrl":"https://josealbertotjv-debug.github.io/gespro-entrenamiento/","totalMin":84,"secciones":[{"id":"crm","icono":"🎯","nombre":"CRM Paso a Paso","corto":"CRM (14)","color":"#1a5da8","descripcion":"Serie práctica de 14 videos HD con voz natural: una guía completa por cada pestaña de Vendedor (CRM), de Tablero hasta Ajustes.","ctaExtra":{"titulo":"Evaluación de Retención y Cuaderno de Ensayos CRM","desc":"28 preguntas autocorregibles (2 por video), 7 casos prácticos y 10 ensayos guiados con autoguardado.","href":"evaluacion/Cuestionario-CRM-Interactivo.html","btn":"Abrir Cuestionario Interactivo →"},"manual":{"titulo":"Manual 01 · Ventas y CRM","href":"manuales/01-Manual-Ventas.html"}},{"id":"ventas","icono":"💼","nombre":"Ventas","corto":"Ventas","color":"#0e7490","descripcion":"Ciclo comercial completo: Vendedor (CRM), Cotizaciones con validez y descuentos, Punto de Venta (POS), Tienda en línea y App móvil en la calle.","manual":{"titulo":"Manual 01 · Ventas (CRM, Cotizaciones, POS y Tienda)","desc":"Guía paso a paso, retos prácticos y hoja de referencia rápida del ciclo comercial.","href":"manuales/01-Manual-Ventas.html","md":"manuales/md/01-Manual-Ventas.md"}},{"id":"cxc","icono":"💵","nombre":"Cuentas por Cobrar","corto":"CxC","color":"#0f766e","descripcion":"Desde la ficha del cliente y la facturación hasta la cobranza, el IGTF, el portal de comprobantes de pago y las autorizaciones.","manual":{"titulo":"Manual 02 · Cuentas por Cobrar (Clientes, Facturación y Cobros)","desc":"Facturas, pedidos por facturar, anticipos, IGTF 3 %, comprobantes del portal y antigüedad.","href":"manuales/02-Manual-Cuentas-por-Cobrar.html","md":"manuales/md/02-Manual-Cuentas-por-Cobrar.md"}},{"id":"cxp","icono":"🧾","nombre":"Cuentas por Pagar","corto":"CxP","color":"#b45309","descripcion":"Directorio de proveedores, importación inteligente de facturas con IA, control de vencimientos, retenciones IVA/ISLR y pagos en lote.","manual":{"titulo":"Manual 03 · Cuentas por Pagar (Proveedores, Retenciones y Pagos)","desc":"Carga con IA, retenciones fiscales automáticas, control de deuda y lotes bancarios.","href":"manuales/03-Manual-Cuentas-por-Pagar.html","md":"manuales/md/03-Manual-Cuentas-por-Pagar.md"}},{"id":"inventario","icono":"📦","nombre":"Inventario","corto":"Inventario","color":"#6d28d9","descripcion":"Control de existencias por almacén, stock apartado 24 h hábiles, Kardex, compras por faltantes, transferencias, manufactura y sucursales.","manual":{"titulo":"Manual 04 · Inventario (Artículos, Kardex, Compras y Almacenes)","desc":"Disponible real vs apartado, transferencias vs ajustes, notas de despacho y recetas.","href":"manuales/04-Manual-Inventario.html","md":"manuales/md/04-Manual-Inventario.md"}},{"id":"costos","icono":"📊","nombre":"Análisis de Costos","corto":"Costos","color":"#be185d","descripcion":"Estructura real de costos, gastos prorrateados, márgenes y precios sugeridos, expedientes de importación con costos aterrizados y reportes gerenciales.","manual":{"titulo":"Manual 05 · Análisis de Costos (Márgenes, Precios e Importaciones)","desc":"Fichas de costo, punto de equilibrio, prorrateo de fletes/aranceles y precios de venta.","href":"manuales/05-Manual-Analisis-de-Costos.html","md":"manuales/md/05-Manual-Analisis-de-Costos.md"}},{"id":"bancos","icono":"🏦","nombre":"Bancos y Conciliación","corto":"Bancos","color":"#1d4ed8","descripcion":"Cuentas bancarias en bolívares y divisas, lectura de extractos Excel/CSV/PDF, cruce automático, notas de débito y cierre cuadrado al centavo.","manual":{"titulo":"Manual 06 · Bancos y Conciliación Bancaria","desc":"Paso a paso desde la importación del extracto hasta el informe final de conciliación.","href":"manuales/06-Manual-Bancos-y-Conciliacion.html","md":"manuales/md/06-Manual-Bancos-y-Conciliacion.md"}},{"id":"otros","icono":"🧩","nombre":"Módulos Complementarios","corto":"Complementarios","color":"#334155","descripcion":"Visión ejecutiva de GesPro Administrativo, Recursos Humanos y nómina, Órdenes de Pago y Contabilidad integrada."}],"videos":[{"id":"crm-01","seccion":"crm","orden":1,"badge":"Pestaña 1/14","titulo":"01 · Tablero comercial","subtitulo":"KPIs, pronóstico ponderado, alertas accionables e IA","src":"videos/crm/01-crm-tablero.mp4","poster":"videos/posters/crm-01.jpg","dur":"1:54","seg":114,"mb":8.1,"puntos":["Filtra por rango de fechas y por vendedor; el pronóstico pondera monto × probabilidad de etapa.","Atiende cada mañana: Estancadas, Cierre vencido, Cotizaciones sin respuesta y Clientes dormidos.","Usa «✦ Preguntar a la IA» para consultar sobre las cifras visibles en el tablero."]},{"id":"crm-02","seccion":"crm","orden":2,"badge":"Pestaña 2/14","titulo":"02 · Embudo de ventas","subtitulo":"Tarjetas Kanban arrastrar y soltar, cierres ganados y perdidos","src":"videos/crm/02-crm-embudo.mp4","poster":"videos/posters/crm-02.jpg","dur":"1:40","seg":100,"mb":7.2,"puntos":["Arrastra tarjetas entre columnas para avanzar o retroceder de etapa comercial.","Suelta abajo en ✓ Ganada o ✕ Perdida (Perdida exige motivo obligatorio y competidor opcional).","Regla de oro: ninguna tarjeta debe quedar etiquetada como «sin próxima acción»."]},{"id":"crm-03","seccion":"crm","orden":3,"badge":"Pestaña 3/14","titulo":"03 · Oportunidades","subtitulo":"Lista completa, crear negocio, enlazar cotización y reabrir","src":"videos/crm/03-crm-oportunidades.mp4","poster":"videos/posters/crm-03.jpg","dur":"1:33","seg":93,"mb":6.6,"puntos":["Consulta abiertas, ganadas y perdidas; filtra por vendedor o exporta a CSV.","«Cotizar» desde la oportunidad avanza sola a Propuesta y se gana automáticamente al aceptarse.","Usa «Reabrir» cuando un negocio perdido o cerrado vuelve a reactivarse."]},{"id":"crm-04","seccion":"crm","orden":4,"badge":"Pestaña 4/14","titulo":"04 · Prospectos","subtitulo":"Puntuación 0–100, control de duplicados y conversión a cliente","src":"videos/crm/04-crm-prospectos.mp4","poster":"videos/posters/crm-04.jpg","dur":"1:50","seg":110,"mb":8.1,"puntos":["Separa prospectos de clientes fiscales hasta que realmente decidan comprar.","Temperatura automática: ≥70 Caliente · 40–69 Tibio · <40 Frío; avisa duplicados por correo, teléfono o RIF.","«Convertir en cliente» traslada oportunidades e historial y fija el contacto principal."]},{"id":"crm-05","seccion":"crm","orden":5,"badge":"Pestaña 5/14","titulo":"05 · Agenda de actividades","subtitulo":"Urgencias, registrar llamadas ocurridas y programar siguiente paso","src":"videos/crm/05-crm-agenda.mp4","poster":"videos/posters/crm-05.jpg","dur":"1:32","seg":92,"mb":6.6,"puntos":["Ordenada por urgencia real: Vencidas → Hoy → Esta semana → Más adelante.","En «+ Actividad» elige «Sí: registrar lo que pasó» para llamadas inesperadas ya ocurridas.","Al pulsar «✓ Hecha» anota «Qué salió» y deja agendado el «Siguiente paso» en la misma ventana."]},{"id":"crm-06","seccion":"crm","orden":6,"badge":"Pestaña 6/14","titulo":"06 · Clientes 360","subtitulo":"Radiografía comercial y financiera completa en una pantalla","src":"videos/crm/06-crm-clientes-360.mp4","poster":"videos/posters/crm-06.jpg","dur":"1:35","seg":95,"mb":7.3,"puntos":["Detecta clientes dormidos (>90 días sin comprar) resaltados en alerta.","Revisa ventas 12 meses, saldo y vencido, contactos (LinkedIn, cumpleaños), visitas y productos favoritos.","Actúa directo desde el pie de la ficha: Cotizar, Mensaje, Secuencia o Actividad."]},{"id":"crm-07","seccion":"crm","orden":7,"badge":"Pestaña 7/14","titulo":"07 · Cotizaciones","subtitulo":"Validez visible en PDF, existencia real y aprobación de descuentos","src":"videos/crm/07-crm-cotizaciones.mp4","poster":"videos/posters/crm-07.jpg","dur":"1:44","seg":104,"mb":7.2,"puntos":["La vigencia sale en grande en el PDF; no deja cotizar sin existencia disponible ni aparta stock.","Descuentos altos (25 %/50 %/75 %) quedan retenidos hasta ser aprobados en «Descuentos por aprobar».","«El cliente la aceptó» conserva la oferta intacta y genera el Pedido en firme (nunca factura directa)."]},{"id":"crm-08","seccion":"crm","orden":8,"badge":"Pestaña 8/14","titulo":"08 · Pedidos y stock apartado","subtitulo":"Reserva de 24 horas hábiles, rechazos y facturación desde CxC","src":"videos/crm/08-crm-pedidos.mp4","poster":"videos/posters/crm-08.jpg","dur":"1:40","seg":100,"mb":7.6,"puntos":["Cada pedido en firme aparta mercancía por 24 horas hábiles (si ya tiene pago no vence).","Rechazar libera stock al instante, agenda aviso al vendedor y reabre la oportunidad ganada.","Un pedido no es factura: administración lo factura en CxC → «Pedidos por facturar»."]},{"id":"crm-09","seccion":"crm","orden":9,"badge":"Pestaña 9/14","titulo":"09 · Carteras de vendedores","subtitulo":"Asignación exclusiva por vendedor y portal móvil privado","src":"videos/crm/09-crm-carteras.mp4","poster":"videos/posters/crm-09.jpg","dur":"1:17","seg":77,"mb":5.8,"puntos":["Cada cliente pertenece a un solo vendedor (define factura impresa y comisiones).","En el portal /vendedores cada vendedor ve únicamente su cartera y «Mi día».","Reasignar un cliente no altera facturas ni comisiones ya emitidas en el pasado."]},{"id":"crm-10","seccion":"crm","orden":10,"badge":"Pestaña 10/14","titulo":"10 · Ruta y visitas en la calle","subtitulo":"Mapa GPS en vivo, geocercas aprobadas, rutas y dictado de voz con IA","src":"videos/crm/10-crm-ruta-y-visitas.mp4","poster":"videos/posters/crm-10.jpg","dur":"2:02","seg":122,"mb":10.1,"puntos":["Supervisa jornadas en mapa con geocercas aprobadas siempre por el supervisor.","Planifica con «Ordenar por cercanía» y «También quedan cerca» (<1 km) enviando a GP Mensajes.","En «Cierre de visitas» activa el Asistente de voz para dictar visitas y que la IA llene el formulario."]},{"id":"crm-11","seccion":"crm","orden":11,"badge":"Pestaña 11/14","titulo":"11 · Comisiones de vendedores","subtitulo":"Cálculo sin IVA por venta/cobro, registro de período y pago bancario","src":"videos/crm/11-crm-comisiones.mp4","poster":"videos/posters/crm-11.jpg","dur":"1:31","seg":91,"mb":6.5,"puntos":["Configura porcentajes por vender, por cobrar o ambos, siempre SIN IVA en moneda base.","«Registrar el período» fija la deuda e impide comisionar dos veces la misma factura.","Se pagan en Órdenes de pago → Comisiones pendientes (requiere ficha de personal vinculada)."]},{"id":"crm-12","seccion":"crm","orden":12,"badge":"Pestaña 12/14","titulo":"12 · Automatización comercial","subtitulo":"Plantillas con variables, secuencias por día, reglas y formularios web","src":"videos/crm/12-crm-automatizacion.mp4","poster":"videos/posters/crm-12.jpg","dur":"1:43","seg":103,"mb":7.4,"puntos":["Plantillas de Correo, WhatsApp y LinkedIn con variables automáticas como {{nombre}}.","Secuencias de seguimiento que cancelan pasos pendientes al cerrar o descartar el negocio.","Formularios web públicos reparten prospectos por turno sin duplicar y con filtro anti-bot."]},{"id":"crm-13","seccion":"crm","orden":13,"badge":"Pestaña 13/14","titulo":"13 · Marketing, segmentos y campañas","subtitulo":"Segmentos dinámicos, envíos medibles, WhatsApp asistido, UTM y bajas","src":"videos/crm/13-crm-marketing.mp4","poster":"videos/posters/crm-13.jpg","dur":"1:36","seg":96,"mb":6.8,"puntos":["Arma segmentos dinámicos (ej. >90 días sin comprar) y valida con «Ver quiénes entran».","Correo con ritmo controlado, tope diario y baja de 1 clic; WhatsApp en cola asistida.","Mide aperturas, clics, cupones y ventas reales atribuidas por etiquetas UTM en Resumen."]},{"id":"crm-14","seccion":"crm","orden":14,"badge":"Pestaña 14/14","titulo":"14 · Ajustes y Asistente del vendedor","subtitulo":"Calibración de etapas, alertas de estancamiento y recordatorios diarios","src":"videos/crm/14-crm-ajustes.mp4","poster":"videos/posters/crm-14.jpg","dur":"1:48","seg":108,"mb":7.8,"puntos":["Define las etapas y probabilidades reales que alimentan el pronóstico ponderado.","Configura umbrales de negocio estancado y días para marcar un cliente como dormido.","Revisa «Lo que se les enviaría hoy» antes de activar los recordatorios del Asistente."]},{"id":"ven-01","seccion":"ventas","orden":1,"badge":"Módulo 01","titulo":"Vendedor (CRM) — Visión general","subtitulo":"Del prospecto a la venta y la jornada en la calle","src":"videos/erp/erp-ent-01-vendedor.mp4","poster":"videos/posters/erp-ent-01.jpg","dur":"3:40","seg":220,"mb":13.8,"puntos":["Recorrido integral de prospección, puntuación, embudo y conversión a cliente.","Planificación de rutas en la calle, check-in por GPS y dictado de visitas por voz.","Complementa este resumen con la pestaña «CRM Paso a Paso (14)» para ver cada botón en detalle."]},{"id":"ven-02","seccion":"ventas","orden":2,"badge":"Módulo 02","titulo":"Cotizaciones","subtitulo":"Ofertas en PDF con vigencia visible, stock real y aprobación","src":"videos/erp/erp-ent-02-cotizaciones.mp4","poster":"videos/posters/erp-ent-02.jpg","dur":"1:46","seg":106,"mb":6.5,"puntos":["Emite ofertas desde la oportunidad o desde Cotizaciones sin comprometer inventario.","Descarga el PDF con vigencia en grande para evitar reclamos por precios vencidos.","Al aceptarse, nace el Pedido en firme que pasa a facturación."]},{"id":"ven-03","seccion":"ventas","orden":3,"badge":"Módulo 03","titulo":"Punto de Venta (POS)","subtitulo":"Venta rápida en mostrador, cobro mixto, caja y ticket","src":"videos/erp/erp-ent-03-pos.mp4","poster":"videos/posters/erp-ent-03.jpg","dur":"2:05","seg":125,"mb":7,"puntos":["Búsqueda instantánea por código o nombre, descuentos controlados y pagos combinados.","Facturación a cliente genérico o con cédula/RIF, emisión de ticket e inventario al segundo.","Cierre de caja diario con arqueo y control de efectivo y divisas."]},{"id":"ven-04","seccion":"ventas","orden":4,"badge":"Módulo 04","titulo":"Tienda en línea","subtitulo":"Catálogo público con IVA incluido, carrito y seguimiento de pedidos","src":"videos/erp/erp-ent-04-tienda.mp4","poster":"videos/posters/erp-ent-04.jpg","dur":"1:57","seg":117,"mb":8.3,"puntos":["Tus clientes compran desde el celular viendo precios actualizados y existencia real.","Cada compra entra en Pedidos apartando mercancía y genera código de seguimiento.","Acepta reporte de comprobante de pago o pasarela integrada."]},{"id":"ven-05","seccion":"ventas","orden":5,"badge":"Guía Móvil","titulo":"Guía del vendedor en la calle (App móvil)","subtitulo":"Portal /vendedores: Mi día, rutas, pedidos, cobros y GP Mensajes","src":"videos/erp/erp-ent-ven-guia.mp4","poster":"videos/posters/erp-ent-ven.jpg","dur":"5:29","seg":329,"mb":13.9,"puntos":["Pensado para compartir directo con tu fuerza de ventas antes de salir a ruta.","Explica inicio de jornada, botón Llegué, dictado de visita, cotizaciones y levantamiento de pedidos.","Recibe su agenda y ruta cada mañana a las 7:00 a. m. en GP Mensajes."]},{"id":"cxc-01","seccion":"cxc","orden":1,"badge":"Módulo 10","titulo":"Clientes","subtitulo":"Ficha fiscal, límites de crédito, bloqueo y vendedor asignado","src":"videos/erp/erp-ent-10-clientes.mp4","poster":"videos/posters/erp-ent-10.jpg","dur":"1:46","seg":106,"mb":6.5,"puntos":["Registro limpio de RIF, dirección fiscal, condiciones de pago, límite de crédito y vendedor.","Estado de cuenta instantáneo y opción de bloqueo automático por morosidad.","Importación masiva de cartera desde Excel/CSV."]},{"id":"cxc-02","seccion":"cxc","orden":2,"badge":"Módulo 05","titulo":"Facturación de clientes","subtitulo":"Desde borrador o pedido aceptado hasta aprobación y envío PDF","src":"videos/erp/erp-ent-05-facturacion-clientes.mp4","poster":"videos/posters/erp-ent-05.jpg","dur":"2:04","seg":124,"mb":7.9,"puntos":["Convierte «Pedidos por facturar» en borrador con un clic y aprueba tras verificar.","Manejo de IVA, exentos, tasa BCV, notas de crédito/débito y envío de PDF por correo.","Al aprobar se descuenta inventario, se contabiliza y nace la cuenta por cobrar."]},{"id":"cxc-03","seccion":"cxc","orden":3,"badge":"Módulo 08","titulo":"Cuentas por cobrar y cobranza","subtitulo":"Antigüedad de saldos, cobros parciales, anticipos e IGTF 3 %","src":"videos/erp/erp-ent-08-cxc.mp4","poster":"videos/posters/erp-ent-08.jpg","dur":"1:58","seg":118,"mb":7.4,"puntos":["Control de cartera vencida (0–30, 31–60, 61–90, >90 días) y cobros multipago.","Cálculo automático del 3 % de IGTF en pagos en divisas para contribuyentes especiales.","Copia siempre la referencia bancaria exacta para el cruce automático en Bancos."]},{"id":"cxc-04","seccion":"cxc","orden":4,"badge":"Módulo 14","titulo":"Comprobantes de pago (Portal clientes)","subtitulo":"Bandeja de pagos reportados por clientes mediante código QR","src":"videos/erp/erp-ent-14-comprobantes.mp4","poster":"videos/posters/erp-ent-14.jpg","dur":"1:28","seg":88,"mb":6,"puntos":["El cliente escanea el QR de su factura y sube su captura/referencia sin necesitar clave.","Tesorería verifica el abono en el banco y aprueba para aplicar automáticamente el cobro.","Elimina los comprobantes perdidos en chats de WhatsApp."]},{"id":"cxc-05","seccion":"cxc","orden":5,"badge":"Módulo 12","titulo":"Autorizaciones y controles","subtitulo":"Aprobación de descuentos, créditos, anulaciones y límites","src":"videos/erp/erp-ent-12-autorizaciones.mp4","poster":"videos/posters/erp-ent-12.jpg","dur":"1:13","seg":73,"mb":4.5,"puntos":["Bandeja única para aprobar excepciones de descuento, límite de crédito o anulaciones.","Cada aprobación o rechazo deja bitácora auditable con usuario, fecha y motivo.","Notificación en tiempo real mediante GP Mensajes."]},{"id":"cxp-01","seccion":"cxp","orden":1,"badge":"Módulo 11","titulo":"Proveedores","subtitulo":"Ficha fiscal, % de retención IVA/ISLR y datos bancarios","src":"videos/erp/erp-ent-11-proveedores.mp4","poster":"videos/posters/erp-ent-11.jpg","dur":"1:28","seg":88,"mb":5.9,"puntos":["Configura una vez si es contribuyente especial, % retención IVA (75 %/100 %) y concepto ISLR.","Registra cuentas bancarias para generar lotes de pago sin errores de transcripción.","Consulta historial completo de compras y saldo pendiente por proveedor."]},{"id":"cxp-02","seccion":"cxp","orden":2,"badge":"Módulo 06","titulo":"Facturación de proveedores (con IA)","subtitulo":"Carga manual o lectura automática de PDF/foto con inteligencia artificial","src":"videos/erp/erp-ent-06-facturacion-proveedores.mp4","poster":"videos/posters/erp-ent-06.jpg","dur":"2:12","seg":132,"mb":8.5,"puntos":["«Importar factura con IA» lee el PDF o la foto y arma el borrador automáticamente.","Si el RIF no existe, prellena la ficha del proveedor nuevo para que solo la completes.","Calcula retenciones de IVA e ISLR y genera comprobantes fiscales listos para entregar."]},{"id":"cxp-03","seccion":"cxp","orden":3,"badge":"Módulo 09","titulo":"Cuentas por pagar y control de deuda","subtitulo":"Vencimientos, calendario de compromisos y comprobantes de retención","src":"videos/erp/erp-ent-09-cxp.mp4","poster":"videos/posters/erp-ent-09.jpg","dur":"1:32","seg":92,"mb":5.7,"puntos":["Visualiza qué facturas vencen esta semana para planificar flujo de caja sin recargos.","Descarga en PDF las retenciones y registros para archivar junto al soporte original.","Filtra obligaciones por moneda, proveedor o estado de aprobación."]},{"id":"cxp-04","seccion":"cxp","orden":4,"badge":"Módulo 07","titulo":"Pago a proveedores y lotes","subtitulo":"Pagos individuales o múltiples, aplicación de retenciones y salida bancaria","src":"videos/erp/erp-ent-07-pago-proveedores.mp4","poster":"videos/posters/erp-ent-07.jpg","dur":"1:48","seg":108,"mb":7,"puntos":["Selecciona varias facturas, revisa el neto a pagar tras retenciones y registra la referencia.","Rebaja automáticamente el banco y la cuenta por pagar con asiento contable en línea.","Soporta pagos parciales, pagos en divisas y comprobante de egreso en PDF."]},{"id":"inv-01","seccion":"inventario","orden":1,"badge":"Módulo 15","titulo":"Inventario","subtitulo":"Artículos, existencias por almacén, Kardex, compras y despachos","src":"videos/erp/erp-ent-15-inventario.mp4","poster":"videos/posters/erp-ent-15.jpg","dur":"1:41","seg":101,"mb":6.5,"puntos":["Control real: Existencia física − Apartado por pedidos (24 h hábiles) = Disponible real.","Kardex auditable movimiento a movimiento con costo promedio ponderado.","Alertas de stock mínimo con botón «Generar por faltantes» para crear órdenes de compra."]},{"id":"inv-02","seccion":"inventario","orden":2,"badge":"Módulo 16","titulo":"Manufactura y recetas","subtitulo":"Listas de materiales (BOM), órdenes de producción y costo unitario","src":"videos/erp/erp-ent-16-manufactura.mp4","poster":"videos/posters/erp-ent-16.jpg","dur":"1:53","seg":113,"mb":6.5,"puntos":["Define fórmulas o kits con sus materias primas e insumos por lote.","Al ejecutar la producción descuenta ingredientes e ingresa el producto terminado con su costo.","Trazabilidad total en Kardex de consumo y rendimiento."]},{"id":"inv-03","seccion":"inventario","orden":3,"badge":"Módulo 17","titulo":"Sucursales y almacenes","subtitulo":"Multi-sede, transferencias entre depósitos y control por encargado","src":"videos/erp/erp-ent-17-sucursales.mp4","poster":"videos/posters/erp-ent-17.jpg","dur":"1:20","seg":80,"mb":4.7,"puntos":["Separa ventas, cajas y almacenes por sucursal consolidando la contabilidad en un solo lugar.","Transferencia entre almacenes mueve unidades sin generar asiento contable de ganancia/pérdida.","Notificaciones al Encargado de despachar en cada almacén."]},{"id":"cos-01","seccion":"costos","orden":1,"badge":"Módulo 23","titulo":"Análisis de costos y precios","subtitulo":"Fichas de costo, margen objetivo, precios sugeridos y analista IA","src":"videos/erp/erp-ent-23-costos.mp4","poster":"videos/posters/erp-ent-23.jpg","dur":"3:48","seg":228,"mb":13.8,"puntos":["Estructura costos directos, gastos operativos y margen deseado por producto o servicio.","Al aprobar una ficha, el costo actualizado pasa al artículo conservando el historial.","Simula escenarios y consulta al analista de costos con IA antes de fijar listas de precios."]},{"id":"cos-02","seccion":"costos","orden":2,"badge":"Módulo 22","titulo":"Importaciones y costo aterrizado","subtitulo":"Expedientes, prorrateo de fletes/aranceles y alertas de feriados","src":"videos/erp/erp-ent-22-importaciones.mp4","poster":"videos/posters/erp-ent-22.jpg","dur":"2:39","seg":159,"mb":11.2,"puntos":["Agrupa factura comercial, flete, seguro, aduana y gastos locales en un expediente.","Prorratea automáticamente todos los gastos sobre cada artículo (el IVA va aparte).","El agente de feriados avisa por GP Mensajes a 60, 30 y 14 días para evitar demoras portuarias."]},{"id":"cos-03","seccion":"costos","orden":3,"badge":"Módulo 21","titulo":"Reportes gerenciales","subtitulo":"Rentabilidad por producto, libros fiscales, Excel y PDF con membrete","src":"videos/erp/erp-ent-21-reportes.mp4","poster":"videos/posters/erp-ent-21.jpg","dur":"1:38","seg":98,"mb":6.7,"puntos":["Indicadores de ventas, márgenes, compras, inventario y estados financieros en segundos.","Impresión estandarizada con membrete de empresa, filtros usados, fecha y usuario.","Exportación limpia a Excel/CSV y PDF."]},{"id":"ban-01","seccion":"bancos","orden":1,"badge":"Módulo 13","titulo":"Bancos y conciliación — Resumen","subtitulo":"Cuentas bancarias, movimientos multimoneda y vista general del módulo","src":"videos/erp/erp-ent-13-bancos.mp4","poster":"videos/posters/erp-ent-13.jpg","dur":"1:45","seg":105,"mb":7.1,"puntos":["Centraliza saldos reales en bolívares y divisas con su historial completo.","Registra transferencias entre cuentas propias, comisiones bancarias e intereses.","Integra automáticamente los cobros de CxC y pagos de CxP."]},{"id":"ban-02","seccion":"bancos","orden":2,"badge":"Paso a paso HD","titulo":"Conciliación bancaria paso a paso","subtitulo":"Del extracto Excel/CSV/PDF al cruce automático y cierre cuadrado en cero","src":"videos/erp/gespro-conciliacion-paso-a-paso.mp4","poster":"videos/posters/ban-02.jpg","dur":"5:50","seg":350,"mb":29.8,"puntos":["Importa el estado de cuenta bancario en Excel, CSV o PDF sin digitar líneas a mano.","Ejecuta el cruce automático por referencia y monto, y concilia partidas pendientes.","Registra notas de débito/comisiones directo desde el panel hasta dejar la diferencia en 0,00."]},{"id":"otr-01","seccion":"otros","orden":1,"badge":"Apertura","titulo":"Visión ejecutiva de GesPro Administrativo","subtitulo":"Cómo se conectan todos los módulos del ERP en tiempo real","src":"videos/erp/erp-comercial.mp4","poster":"videos/posters/erp-comercial.jpg","dur":"4:33","seg":273,"mb":13.8,"puntos":["Panorama general ideal para abrir el entrenamiento y mostrar el mapa completo del ERP.","Explica cómo cada operación comercial impacta inventario, bancos y contabilidad.","Muestra el valor del asistente de IA y los portales móviles."]},{"id":"otr-02","seccion":"otros","orden":2,"badge":"Módulo 18","titulo":"Recursos Humanos y Nómina","subtitulo":"Fichas de personal, deducciones de ley, recibos en PDF y prestaciones","src":"videos/erp/erp-ent-18-rrhh.mp4","poster":"videos/posters/erp-ent-18.jpg","dur":"1:53","seg":113,"mb":7.3,"puntos":["Fichas de personal necesarias también para pagar comisiones de vendedores por banco.","Cálculo de sueldo, cestaticket y aportes de ley (Seguro Social, paro forzoso, FAOV, INCES).","Descarga de recibos individuales en PDF listos para firma."]},{"id":"otr-03","seccion":"otros","orden":3,"badge":"Módulo 19","titulo":"Órdenes de pago","subtitulo":"Lotes consolidados de nómina, comisiones pendientes y pagos bancarios","src":"videos/erp/erp-ent-19-ordenes-pago.mp4","poster":"videos/posters/erp-ent-19.jpg","dur":"1:33","seg":93,"mb":5.5,"puntos":["Agrupa pagos de nómina, comisiones pendientes de vendedores y gastos recurrentes.","Flujo de aprobación claro antes de generar el archivo de pago masivo para el banco.","Contabilización automática del gasto y rebaja bancaria."]},{"id":"otr-04","seccion":"otros","orden":4,"badge":"Módulo 20","titulo":"Contabilidad integrada","subtitulo":"Plan de cuentas, asientos automáticos, libro diario, mayor y balance","src":"videos/erp/erp-ent-20-contabilidad.mp4","poster":"videos/posters/erp-ent-20.jpg","dur":"1:48","seg":108,"mb":6.7,"puntos":["Cada factura, cobro, pago, ajuste o nómina genera su asiento contable automáticamente.","Balance general, estado de resultados, libro diario y mayor con trazabilidad al documento.","Cierres de período y exportación en PDF con folio y membrete."]}],"manuales":[{"id":"m01","seccion":"ventas","icono":"💼","titulo":"Manual 01 · Ventas","subtitulo":"CRM, Cotizaciones, Pedidos, POS y Tienda en línea","href":"manuales/01-Manual-Ventas.html","md":"manuales/md/01-Manual-Ventas.md","badge":"Sección 1"},{"id":"m02","seccion":"cxc","icono":"💵","titulo":"Manual 02 · Cuentas por Cobrar","subtitulo":"Clientes, Facturación, Cobros, IGTF y Portal de comprobantes","href":"manuales/02-Manual-Cuentas-por-Cobrar.html","md":"manuales/md/02-Manual-Cuentas-por-Cobrar.md","badge":"Sección 2"},{"id":"m03","seccion":"cxp","icono":"🧾","titulo":"Manual 03 · Cuentas por Pagar","subtitulo":"Proveedores, Carga con IA, Retenciones IVA/ISLR y Pagos","href":"manuales/03-Manual-Cuentas-por-Pagar.html","md":"manuales/md/03-Manual-Cuentas-por-Pagar.md","badge":"Sección 3"},{"id":"m04","seccion":"inventario","icono":"📦","titulo":"Manual 04 · Inventario","subtitulo":"Artículos, Almacenes, Stock apartado, Kardex y Transferencias","href":"manuales/04-Manual-Inventario.html","md":"manuales/md/04-Manual-Inventario.md","badge":"Sección 4"},{"id":"m05","seccion":"costos","icono":"📊","titulo":"Manual 05 · Análisis de Costos","subtitulo":"Fichas de costo, Márgenes, Precios sugeridos e Importaciones","href":"manuales/05-Manual-Analisis-de-Costos.html","md":"manuales/md/05-Manual-Analisis-de-Costos.md","badge":"Sección 5"},{"id":"m06","seccion":"bancos","icono":"🏦","titulo":"Manual 06 · Bancos y Conciliación","subtitulo":"Cuentas, Importación de extractos, Cruce automático y Cierre","href":"manuales/06-Manual-Bancos-y-Conciliacion.html","md":"manuales/md/06-Manual-Bancos-y-Conciliacion.md","badge":"Sección 6"}]};
+const KEY_WATCHED = 'gespro_academia_watched_v1';
+const KEY_CRM_LEGACY = 'gespro_crm_watched_v1';
+
+// Sincroniza si el usuario ya marcó videos CRM en el portal anterior
+let watched = new Set(JSON.parse(localStorage.getItem(KEY_WATCHED) || '[]'));
+try {
+  const old = JSON.parse(localStorage.getItem(KEY_CRM_LEGACY) || '[]');
+  for (const id of old) watched.add('crm-' + String(id).padStart(2, '0'));
+} catch {}
+
+let currentTab = 'inicio';
+let currentVidBySec = {};
+let currentSpeed = 1;
+let searchQuery = '';
+
+const bySec = (secId) => DATA.videos.filter((v) => v.seccion === secId).sort((a, b) => a.orden - b.orden);
+const secObj = (secId) => DATA.secciones.find((s) => s.id === secId);
+const vidObj = (vidId) => DATA.videos.find((v) => v.id === vidId);
+
+function saveWatched() {
+  localStorage.setItem(KEY_WATCHED, JSON.stringify([...watched]));
+  updateTopProg();
+}
+
+function updateTopProg() {
+  const n = watched.size, tot = DATA.videos.length;
+  const pct = Math.round((n / tot) * 100);
+  document.getElementById('topProg').innerHTML = '<span class="prog-dot"></span><span>' + n + ' / ' + tot + ' vistos (' + pct + '%)</span>';
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+const TABS = [
+  { id: 'inicio', icono: '🏠', label: 'Inicio' },
+  ...DATA.secciones.map((s) => ({ id: s.id, icono: s.icono, label: s.corto, cnt: bySec(s.id).length })),
+  { id: 'manuales', icono: '📚', label: 'Manuales y Slides', cnt: DATA.manuales.length + 3 },
+  { id: 'evaluacion', icono: '✅', label: 'Evaluación CRM' },
+];
+
+function renderTabs() {
+  document.getElementById('tabsBar').innerHTML = TABS.map((t) =>
+    '<button class="tab ' + (currentTab === t.id && !searchQuery ? 'active' : '') + '" onclick="goTab(\'' + t.id + '\')">'
+    + '<span>' + t.icono + '</span><span>' + t.label + '</span>'
+    + (t.cnt ? '<span class="cnt">' + t.cnt + '</span>' : '')
+    + '</button>'
+  ).join('');
+}
+
+function goTab(tabId, skipHash) {
+  searchQuery = '';
+  document.getElementById('q').value = '';
+  document.getElementById('qClr').classList.remove('show');
+  currentTab = tabId;
+  if (!skipHash) history.replaceState(null, '', '#' + tabId);
+  renderTabs();
+  renderMain();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function playVideo(vidId, scrollTop) {
+  const v = vidObj(vidId);
+  if (!v) return;
+  searchQuery = '';
+  document.getElementById('q').value = '';
+  document.getElementById('qClr').classList.remove('show');
+  currentTab = v.seccion;
+  currentVidBySec[v.seccion] = v.id;
+  history.replaceState(null, '', '#video=' + v.id);
+  renderTabs();
+  renderMain(true);
+  if (scrollTop) window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderHome() {
+  const tot = DATA.videos.length, n = watched.size, pct = Math.round((n / tot) * 100);
+  const cards = DATA.secciones.map((s) => {
+    const vids = bySec(s.id);
+    const done = vids.filter((v) => watched.has(v.id)).length;
+    const spct = Math.round((done / vids.length) * 100);
+    return '<div class="mod-card" onclick="goTab(\'' + s.id + '\')">'
+      + '<div class="mod-top"><div class="mod-ico">' + s.icono + '</div><span class="mod-badge">' + vids.length + ' videos</span></div>'
+      + '<h3>' + s.nombre + '</h3>'
+      + '<p>' + s.descripcion + '</p>'
+      + '<div class="mini-bar"><div style="width:' + spct + '%"></div></div>'
+      + '<div class="mod-foot"><span>' + done + ' de ' + vids.length + ' vistos</span><strong style="color:var(--blue)">Abrir sección →</strong></div>'
+      + '</div>';
+  }).join('');
+
+  return '<section class="hero">'
+    + '<div>'
+    + '<div class="hero-kicker">✦ Capacitación Oficial · Acceso Inmediato</div>'
+    + '<h1>Todo tu entrenamiento de GesPro Administrativo en un solo lugar</h1>'
+    + '<p>Explora los 40 videos prácticos organizados por módulo y pestaña, descarga los manuales paso a paso, revisa las diapositivas del curso y valida lo aprendido con la evaluación interactiva del CRM.</p>'
+    + '<div class="hero-actions">'
+    + '<button class="btn primary" onclick="goTab(\'crm\')">🎯 Serie CRM (14 videos)</button>'
+    + '<a class="btn ghost" href="manuales/Manual-Completo-Estudiante-Imprimible.html">📚 Manual Completo PDF</a>'
+    + '<a class="btn ghost" href="evaluacion/Cuestionario-CRM-Interactivo.html">✅ Evaluación CRM</a>'
+    + '<a class="btn ghost" href="presentacion/GesPro-Entrenamiento-Diapositivas.html">🎞 Diapositivas</a>'
+    + '</div></div>'
+    + '<div class="hero-stats">'
+    + '<div class="stat-grid">'
+    + '<div class="stat"><b>' + tot + '</b><span>Videos HD (~' + DATA.totalMin + ' min)</span></div>'
+    + '<div class="stat"><b>14</b><span>Videos CRM pestaña a pestaña</span></div>'
+    + '<div class="stat"><b>6 + 1</b><span>Manuales imprimibles PDF</span></div>'
+    + '<div class="stat"><b>28 + 10</b><span>Preguntas y ensayos CRM</span></div>'
+    + '</div>'
+    + '<div class="bar-lbl"><span>Tu progreso general</span><strong>' + n + ' / ' + tot + ' (' + pct + '%)</strong></div>'
+    + '<div class="bar"><div style="width:' + pct + '%"></div></div>'
+    + '</div></section>'
+    + '<div class="sec-title"><h2>Secciones de Video por Módulo</h2><span>Haz clic en cualquier módulo para ver sus videos y su manual</span></div>'
+    + '<div class="mod-grid">' + cards + '</div>'
+    + '<div class="sec-title"><h2>Manuales, Diapositivas y Evaluación</h2><span>Listos para leer en pantalla, imprimir o guardar en PDF</span></div>'
+    + '<div class="res-grid">'
+    + '<div class="res-card"><h3>📘 Manual Completo del Estudiante</h3><p>Los 6 módulos consolidados en un solo documento imprimible con capturas reales, retos prácticos y hoja de referencia rápida.</p><div class="res-actions"><a class="btn navy sm" href="manuales/Manual-Completo-Estudiante-Imprimible.html">Abrir / Imprimir PDF</a><button class="btn sm" onclick="goTab(\'manuales\')">Ver los 6 por separado</button></div></div>'
+    + '<div class="res-card"><h3>✅ Cuestionario y Ensayos del CRM</h3><p>28 preguntas autocorregibles con repaso por video, 7 casos reales («¿Qué harías tú?») y 10 ensayos guiados con autoguardado.</p><div class="res-actions"><a class="btn ok sm" href="evaluacion/Cuestionario-CRM-Interactivo.html">Iniciar Evaluación</a><a class="btn sm" href="evaluacion/Cuestionario-y-Ensayos-CRM.html">Clave y Rúbrica</a></div></div>'
+    + '<div class="res-card"><h3>🎞 Presentación del Curso</h3><p>Diapositivas interactivas HTML5 con capturas del sistema y descarga nativa en PowerPoint (.pptx) para proyectar en sala.</p><div class="res-actions"><a class="btn navy sm" href="presentacion/GesPro-Entrenamiento-Diapositivas.html">Abrir Diapositivas</a><a class="btn sm" href="presentacion/GesPro-Entrenamiento.pptx" download>⬇ Descargar PPTX</a></div></div>'
+    + '</div>';
+}
+
+function renderVideoSection(secId, autoPlay) {
+  const s = secObj(secId);
+  const vids = bySec(secId);
+  const activeId = currentVidBySec[secId] || vids[0].id;
+  const idx = Math.max(0, vids.findIndex((v) => v.id === activeId));
+  const v = vids[idx];
+  const doneCount = vids.filter((x) => watched.has(x.id)).length;
+  const isDone = watched.has(v.id);
+
+  const plItems = vids.map((item) => {
+    const seen = watched.has(item.id);
+    return '<div class="pl-item ' + (item.id === v.id ? 'active' : '') + '" onclick="playVideo(\'' + item.id + '\', false)">'
+      + '<div class="pl-thumb"><img src="' + item.poster + '" alt="' + item.titulo + '" loading="lazy">'
+      + (seen ? '<div class="pl-done">✓</div>' : '')
+      + '<span class="pl-dur">' + item.dur + '</span></div>'
+      + '<div><div class="pl-t">' + item.titulo + '</div><div class="pl-s">' + item.subtitulo + '</div></div>'
+      + '</div>';
+  }).join('');
+
+  const gridCards = vids.map((item) => {
+    const seen = watched.has(item.id);
+    return '<div class="v-card ' + (item.id === v.id ? 'active' : '') + '" onclick="playVideo(\'' + item.id + '\', true)">'
+      + '<div class="v-card-img"><img src="' + item.poster + '" alt="' + item.titulo + '" loading="lazy">'
+      + '<span class="v-play-pill">▶ ' + item.dur + ' · ' + item.mb + ' MB</span>'
+      + (seen ? '<span class="v-seen-pill">✓ Visto</span>' : '')
+      + '</div>'
+      + '<div class="v-card-body"><span class="b">' + item.badge + '</span><h4>' + item.titulo + '</h4><p>' + item.subtitulo + '</p></div>'
+      + '</div>';
+  }).join('');
+
+  const speeds = [0.75, 1, 1.25, 1.5].map((sp) =>
+    '<button class="spd ' + (currentSpeed === sp ? 'active' : '') + '" onclick="setSpeed(' + sp + ')">' + sp + '×</button>'
+  ).join('');
+
+  const headBtns = (s.manual ? '<a class="btn sm" href="' + s.manual.href + '">📖 Manual del módulo</a>' : '')
+    + (s.ctaExtra ? '<a class="btn ok sm" href="' + s.ctaExtra.href + '">✅ Evaluación CRM</a>' : '');
+
+  const banners = (s.ctaExtra ? '<div class="ctx-banner"><div><h4>🎯 ' + s.ctaExtra.titulo + '</h4><p>' + s.ctaExtra.desc + '</p></div><a class="btn ok" href="' + s.ctaExtra.href + '">' + s.ctaExtra.btn + '</a></div>' : '')
+    + (s.manual ? '<div class="ctx-banner"><div><h4>📖 ' + s.manual.titulo + '</h4><p>' + (s.manual.desc || 'Consulta la guía paso a paso, los ejercicios y la hoja de referencia rápida de este módulo.') + '</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn navy" href="' + s.manual.href + '">Leer Manual / Imprimir PDF</a>' + (s.manual.md ? '<a class="btn" href="' + s.manual.md + '" download>⬇ .md</a>' : '') + '</div></div>' : '');
+
+  const html = '<div class="sec-head"><div><h2>' + s.icono + ' ' + s.nombre + '</h2><p>' + s.descripcion + '</p></div>'
+    + '<div class="sec-head-actions">' + headBtns + '</div></div>'
+    + '<div class="theater">'
+    + '<div class="player-box">'
+    + '<div class="video-frame"><video id="vidPlayer" controls playsinline preload="metadata" poster="' + v.poster + '" src="' + v.src + '"></video></div>'
+    + '<div class="player-meta">'
+    + '<div class="v-kicker">' + s.nombre + ' · ' + v.badge + ' · ' + v.dur + ' · ' + v.mb + ' MB</div>'
+    + '<h3>' + v.titulo + '</h3>'
+    + '<p class="sub">' + v.subtitulo + '</p>'
+    + '<div class="p-controls">'
+    + '<div class="p-group">'
+    + '<button class="btn sm" ' + (idx === 0 ? 'disabled style="opacity:.45"' : 'onclick="playVideo(\'' + vids[Math.max(0, idx - 1)].id + '\',false)"') + '>◀ Anterior</button>'
+    + '<button class="btn sm ' + (isDone ? 'ok' : '') + '" onclick="toggleSeen(\'' + v.id + '\')">' + (isDone ? '✓ Visto' : '✓ Marcar visto') + '</button>'
+    + '<button class="btn sm" ' + (idx === vids.length - 1 ? 'disabled style="opacity:.45"' : 'onclick="playVideo(\'' + vids[Math.min(vids.length - 1, idx + 1)].id + '\',false)"') + '>Siguiente ▶</button>'
+    + '</div>'
+    + '<div class="p-group">'
+    + speeds
+    + '<button class="btn sm" onclick="copyVidLink(\'' + v.id + '\')">🔗 Enlace</button>'
+    + '<a class="btn sm" href="' + v.src + '" download>⬇ MP4</a>'
+    + '</div></div>'
+    + '<div class="pts-box"><h4>Puntos clave para recordar</h4><ul>'
+    + v.puntos.map((p) => '<li>' + p + '</li>').join('')
+    + '</ul></div></div></div>'
+    + '<aside class="playlist-box"><div class="pl-head"><span>Lista del módulo</span><span>' + doneCount + ' / ' + vids.length + ' vistos</span></div>'
+    + '<div class="pl-list">' + plItems + '</div></aside>'
+    + '</div>'
+    + '<div class="sec-title"><h2>Todos los videos de ' + s.nombre + '</h2><span>Haz clic en cualquier tarjeta para reproducir arriba</span></div>'
+    + '<div class="v-grid">' + gridCards + '</div>'
+    + banners;
+
+  setTimeout(() => {
+    const vp = document.getElementById('vidPlayer');
+    if (!vp) return;
+    vp.playbackRate = currentSpeed;
+    vp.addEventListener('ended', () => {
+      watched.add(v.id);
+      saveWatched();
+      toast('✓ Video completado: ' + v.titulo);
+      renderMain(false);
+    });
+    if (autoPlay) vp.play().catch(() => {});
+  }, 0);
+
+  return html;
+}
+
+function renderManuales() {
+  const mCards = DATA.manuales.map((m) =>
+    '<div class="res-card">'
+    + '<div class="mod-top"><div class="mod-ico">' + m.icono + '</div><span class="mod-badge">' + m.badge + '</span></div>'
+    + '<h3>' + m.titulo + '</h3>'
+    + '<p>' + m.subtitulo + '</p>'
+    + '<div class="res-actions">'
+    + '<a class="btn navy sm" href="' + m.href + '">📖 Leer / PDF</a>'
+    + '<a class="btn sm" href="' + m.md + '" download>⬇ .md</a>'
+    + '<button class="btn sm" onclick="goTab(\'' + m.seccion + '\')">▶ Videos</button>'
+    + '</div></div>'
+  ).join('');
+
+  return '<div class="sec-head"><div><h2>📚 Manuales de Estudiantes, Diapositivas y Guías</h2>'
+    + '<p>Lee cualquier manual desde tu navegador o pulsa «Imprimir / Guardar PDF» para llevártelo sin conexión.</p></div></div>'
+    + '<div class="res-grid" style="margin-bottom:22px">'
+    + '<div class="res-card featured">'
+    + '<div style="max-width:720px"><span class="hero-kicker">📘 Todo en un solo documento</span>'
+    + '<h3 style="font-size:22px;margin:4px 0">Manual Completo del Estudiante (6 Módulos Consolidados)</h3>'
+    + '<p>Incluye Ventas, Cuentas por Cobrar, Cuentas por Pagar, Inventario, Análisis de Costos, Bancos, capturas reales del ERP y la hoja de referencia rápida recortable.</p></div>'
+    + '<div class="res-actions"><a class="btn primary" href="manuales/Manual-Completo-Estudiante-Imprimible.html">📖 Abrir Manual Completo / Guardar PDF</a></div>'
+    + '</div>'
+    + mCards
+    + '</div>'
+    + '<div class="sec-title"><h2>Presentación y Guía del Facilitador</h2><span>Material listo para proyectar y dirigir la sesión</span></div>'
+    + '<div class="res-grid">'
+    + '<div class="res-card"><h3>🎞 Diapositivas Interactivas HTML5</h3><p>Presentación completa del curso navegable con teclado/pantalla táctil y capturas reales de GesPro Administrativo.</p><div class="res-actions"><a class="btn navy sm" href="presentacion/GesPro-Entrenamiento-Diapositivas.html">Abrir Presentación</a></div></div>'
+    + '<div class="res-card"><h3>📊 Presentación PowerPoint (.pptx)</h3><p>Archivo nativo editable en PowerPoint, Keynote o Google Slides para proyectar sin depender del navegador.</p><div class="res-actions"><a class="btn navy sm" href="presentacion/GesPro-Entrenamiento.pptx" download>⬇ Descargar .pptx</a></div></div>'
+    + '<div class="res-card"><h3>📋 Plan del Curso para el Instructor</h3><p>Cronograma bloque a bloque, dinámicas prácticas, trampas frecuentes de los usuarios y cierre de sesión.</p><div class="res-actions"><a class="btn sm" href="manuales/Plan-del-Curso-Instructor.html">Abrir Plan del Instructor</a></div></div>'
+    + '</div>';
+}
+
+function renderEvaluacion() {
+  const crmVids = bySec('crm');
+  const crmDone = crmVids.filter((v) => watched.has(v.id)).length;
+  return '<div class="sec-head"><div><h2>✅ Evaluación de Retención y Cuaderno de Ensayos — CRM</h2>'
+    + '<p>Diseñada específicamente sobre los 14 videos del módulo Vendedor (CRM) para reforzar la retención práctica.</p></div>'
+    + '<div class="sec-head-actions"><button class="btn sm" onclick="goTab(\'crm\')">🎯 Repasar los 14 videos CRM (' + crmDone + '/14 vistos)</button></div></div>'
+    + '<div class="res-grid">'
+    + '<div class="res-card featured">'
+    + '<div style="max-width:720px"><span class="hero-kicker">🎯 Evaluación Interactiva con Autocorrección</span>'
+    + '<h3 style="font-size:22px;margin:4px 0">Cuestionario Interactivo + Cuaderno de Ensayos CRM</h3>'
+    + '<p><strong>Parte 1:</strong> 28 preguntas de selección múltiple (2 por cada video) con calificación inmediata y lista exacta de videos a repasar.<br>'
+    + '<strong>Parte 2:</strong> 7 casos integradores reales («¿Qué harías tú?»).<br>'
+    + '<strong>Parte 3:</strong> 10 ensayos guiados con contador de palabras, pistas desplegables, autoguardado local y exportación a PDF.</p></div>'
+    + '<div class="res-actions"><a class="btn primary" href="evaluacion/Cuestionario-CRM-Interactivo.html">🚀 Abrir Cuestionario Interactivo →</a></div>'
+    + '</div>'
+    + '<div class="res-card"><h3>📝 Versión Imprimible + Clave del Evaluador</h3><p>Incluye todas las preguntas, casos y ensayos junto con la clave comentada por video y la rúbrica de calificación (0 a 10 puntos) para corregir los ensayos.</p><div class="res-actions"><a class="btn navy sm" href="evaluacion/Cuestionario-y-Ensayos-CRM.html">Abrir / Imprimir PDF</a><a class="btn sm" href="evaluacion/Cuestionario-y-Ensayos-CRM.md" download>⬇ Descargar .md</a></div></div>'
+    + '<div class="res-card"><h3>🎬 Serie Completa de 14 Videos CRM</h3><p>¿Necesitas repasar alguna pestaña antes de responder? Tienes ya vistos <strong>' + crmDone + ' de 14</strong> videos del módulo CRM.</p><div class="res-actions"><button class="btn sm" onclick="goTab(\'crm\')">Ir a los videos del CRM →</button></div></div>'
+    + '</div>';
+}
+
+function renderSearch(q) {
+  const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const nq = norm(q);
+  const vHits = DATA.videos.filter((v) =>
+    norm(v.titulo + ' ' + v.subtitulo + ' ' + v.puntos.join(' ') + ' ' + v.badge + ' ' + (secObj(v.seccion)?.nombre || '')).includes(nq)
+  );
+  const mHits = DATA.manuales.filter((m) => norm(m.titulo + ' ' + m.subtitulo).includes(nq));
+
+  return '<div class="search-panel"><h2>Resultados para «' + q.replace(/</g, '&lt;') + '» (' + vHits.length + ' videos · ' + mHits.length + ' manuales)</h2>'
+    + (vHits.length ? '<div class="v-grid" style="margin-bottom:20px">' + vHits.map((item) => {
+      const s = secObj(item.seccion);
+      return '<div class="v-card" onclick="playVideo(\'' + item.id + '\', true)">'
+        + '<div class="v-card-img"><img src="' + item.poster + '" alt="' + item.titulo + '" loading="lazy">'
+        + '<span class="v-play-pill">▶ ' + item.dur + '</span></div>'
+        + '<div class="v-card-body"><span class="b">' + s.icono + ' ' + s.nombre + ' · ' + item.badge + '</span><h4>' + item.titulo + '</h4><p>' + item.subtitulo + '</p></div></div>';
+    }).join('') + '</div>' : '<p style="color:var(--muted)">No se encontraron videos con ese término.</p>')
+    + (mHits.length ? '<h3 style="margin:10px 0 12px">Manuales relacionados</h3><div class="res-grid">' + mHits.map((m) =>
+      '<div class="res-card"><h3>' + m.icono + ' ' + m.titulo + '</h3><p>' + m.subtitulo + '</p><div class="res-actions"><a class="btn navy sm" href="' + m.href + '">📖 Abrir Manual</a></div></div>'
+    ).join('') + '</div>' : '')
+    + '</div>';
+}
+
+function renderMain(autoPlay) {
+  const app = document.getElementById('app');
+  if (searchQuery) { app.innerHTML = renderSearch(searchQuery); return; }
+  if (currentTab === 'inicio') app.innerHTML = renderHome();
+  else if (currentTab === 'manuales') app.innerHTML = renderManuales();
+  else if (currentTab === 'evaluacion') app.innerHTML = renderEvaluacion();
+  else app.innerHTML = renderVideoSection(currentTab, !!autoPlay);
+}
+
+window.goTab = goTab;
+window.playVideo = playVideo;
+window.toggleSeen = function(vidId) {
+  if (watched.has(vidId)) watched.delete(vidId); else watched.add(vidId);
+  saveWatched();
+  renderMain(false);
+};
+window.setSpeed = function(sp) {
+  currentSpeed = sp;
+  const vp = document.getElementById('vidPlayer');
+  if (vp) vp.playbackRate = sp;
+  document.querySelectorAll('.spd').forEach((b) => b.classList.toggle('active', b.textContent === sp + '×'));
+};
+window.copyVidLink = function(vidId) {
+  const base = location.href.split('#')[0];
+  const url = base + '#video=' + vidId;
+  navigator.clipboard?.writeText(url).then(() => toast('🔗 Enlace directo copiado')).catch(() => toast(url));
+};
+window.openQr = function() {
+  const url = location.protocol.startsWith('http') ? location.href.split('#')[0] : DATA.publicUrl;
+  document.getElementById('qrUrlTxt').textContent = url;
+  document.getElementById('qrModal').classList.add('open');
+};
+window.closeQr = () => document.getElementById('qrModal').classList.remove('open');
+window.copyUrl = function() {
+  const url = document.getElementById('qrUrlTxt').textContent;
+  navigator.clipboard?.writeText(url).then(() => toast('📋 Enlace del portal copiado')).catch(() => {});
+};
+
+// Búsqueda en vivo
+const qInput = document.getElementById('q');
+const qClr = document.getElementById('qClr');
+qInput.addEventListener('input', () => {
+  searchQuery = qInput.value.trim();
+  qClr.classList.toggle('show', !!searchQuery);
+  renderTabs();
+  renderMain(false);
+});
+qClr.addEventListener('click', () => {
+  searchQuery = ''; qInput.value = ''; qClr.classList.remove('show');
+  renderTabs(); renderMain(false);
+});
+
+// Enrutado inicial por hash (#crm, #ventas, #video=crm-01, etc.)
+function applyHash() {
+  const h = location.hash.replace(/^#/, '');
+  if (h.startsWith('video=')) {
+    const id = h.slice(6);
+    const v = vidObj(id);
+    if (v) { currentTab = v.seccion; currentVidBySec[v.seccion] = v.id; }
+  } else if (TABS.some((t) => t.id === h)) {
+    currentTab = h;
+  }
+  renderTabs();
+  renderMain(false);
+}
+window.addEventListener('hashchange', applyHash);
+updateTopProg();
+applyHash();
+</script>
+</body>
+</html>

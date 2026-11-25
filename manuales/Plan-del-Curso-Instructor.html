@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plan del Curso para el Instructor · Academia GesPro Administrativo</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --navy:#0c1d35; --blue:#1a5da8; --sky:#3892e8; --bg:#f4f7fb; --card:#ffffff;
+    --ink:#162233; --muted:#52657d; --line:#dce5f0; --ok:#0f766e; --warn:#b45309;
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif; background:var(--bg); color:var(--ink); line-height:1.68; }
+  .topbar {
+    position:sticky; top:0; z-index:40; background:linear-gradient(135deg,#091628,#143a68);
+    color:#fff; padding:12px 22px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    box-shadow:0 4px 18px rgba(9,22,40,.18);
+  }
+  .topbar-left { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .back-btn {
+    display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.12); color:#fff;
+    text-decoration:none; padding:7px 13px; border-radius:9px; font-weight:600; font-size:13.5px; border:1px solid rgba(255,255,255,.22);
+  }
+  .back-btn:hover { background:rgba(255,255,255,.22); }
+  .topbar-title { font-weight:700; font-size:15px; display:flex; align-items:center; gap:8px; }
+  .pill { background:rgba(56,146,232,.25); border:1px solid rgba(137,201,255,.4); color:#d8eeff; padding:2px 9px; border-radius:999px; font-size:11.5px; font-weight:700; }
+  .topbar-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .act-btn {
+    border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.12); color:#fff;
+    padding:7px 13px; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+  }
+  .act-btn.primary { background:var(--sky); border-color:transparent; color:#061322; font-weight:700; }
+  .act-btn:hover { filter:brightness(1.08); }
+
+  .shell { max-width:1180px; margin:24px auto; padding:0 18px 56px; display:grid; grid-template-columns:250px minmax(0,1fr); gap:24px; align-items:start; }
+  aside.toc {
+    position:sticky; top:76px; background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px; max-height:calc(100vh - 96px); overflow:auto; box-shadow:0 4px 14px rgba(12,29,53,.04);
+  }
+  aside.toc h4 { margin:0 0 10px; font-size:11.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); }
+  .toc-link { display:block; color:var(--ink); text-decoration:none; font-size:13px; padding:5px 8px; border-radius:7px; line-height:1.35; }
+  .toc-link:hover { background:#eaf2fb; color:var(--blue); }
+  .toc-link.l3 { padding-left:18px; color:var(--muted); font-size:12.5px; }
+
+  article.doc {
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:34px 38px; box-shadow:0 6px 24px rgba(12,29,53,.05);
+  }
+  .doc-hero { border-bottom:2px solid #e6eef7; padding-bottom:18px; margin-bottom:24px; }
+  .doc-hero .kicker { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--blue); }
+  .doc-hero h1 { margin:6px 0 6px; font-size:28px; line-height:1.2; color:var(--navy); }
+  .doc-hero p { margin:0; color:var(--muted); font-size:15.5px; }
+
+  article.doc h1 { font-size:24px; color:var(--navy); margin:28px 0 12px; }
+  article.doc h2 { font-size:20px; color:var(--navy); margin:30px 0 12px; padding-bottom:6px; border-bottom:1px solid #e6eef7; scroll-margin-top:82px; }
+  article.doc h3 { font-size:16.5px; color:var(--blue); margin:22px 0 8px; scroll-margin-top:82px; }
+  article.doc h4 { font-size:15px; color:#2b415d; margin:16px 0 6px; }
+  article.doc p { margin:0 0 12px; }
+  article.doc ul, article.doc ol { margin:0 0 14px; padding-left:22px; }
+  article.doc li { margin-bottom:6px; }
+  article.doc code { background:#eef4fb; color:#113968; padding:1.5px 6px; border-radius:5px; font-size:.9em; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  article.doc pre { background:#0d1c31; color:#e5f0ff; padding:14px 16px; border-radius:10px; overflow:auto; font-size:13px; line-height:1.5; }
+  article.doc pre code { background:none; color:inherit; padding:0; }
+  article.doc hr { border:none; border-top:1px solid var(--line); margin:24px 0; }
+  article.doc a { color:var(--blue); }
+  .chk { font-weight:700; color:var(--blue); }
+  .chk.done { color:var(--ok); }
+
+  .tbl-wrap { overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:10px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  thead { background:#eef4fb; }
+  th { text-align:left; padding:10px 12px; color:var(--navy); font-weight:700; border-bottom:1px solid var(--line); }
+  td { padding:9px 12px; border-bottom:1px solid #edf2f8; vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:nth-child(even) { background:#fafcff; }
+
+  .callout { padding:13px 16px; border-radius:10px; margin:16px 0; border-left:4px solid var(--blue); background:#eef5fd; }
+  .callout p:last-child { margin-bottom:0; }
+  .callout.warn { border-left-color:var(--warn); background:#fff7ed; }
+  .callout.ok { border-left-color:var(--ok); background:#ecfdf5; }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns:1fr; }
+    aside.toc { position:static; max-height:none; }
+    article.doc { padding:22px 18px; }
+  }
+  @media print {
+    .topbar, aside.toc { display:none !important; }
+    body { background:#fff; }
+    .shell { display:block; max-width:none; margin:0; padding:0; }
+    article.doc { border:none; box-shadow:none; padding:0; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-left">
+    <a class="back-btn" href="../index.html#manuales">← Volver al Portal</a>
+    <div class="topbar-title">📋 Plan del Curso para el Instructor <span class="pill">Guía del Facilitador</span></div>
+  </div>
+  <div class="topbar-actions">
+    
+    
+    <button class="act-btn primary" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="toc"><h4>Contenido</h4><a class="toc-link l2" href="#1-filosofia-del-entrenamiento-por-que-no-sera-aburrido">1. Filosofía del entrenamiento (por qué NO será aburrido)</a>
+<a class="toc-link l2" href="#2-preparacion-de-esta-noche-30-minutos-antes-checklist-del-instructor">2. Preparación de esta noche / 30 minutos antes (Checklist del Instructor)</a>
+<a class="toc-link l3" href="#a-levantar-el-entorno-de-practicas-seguro-sin-tocar-produccion">A. Levantar el entorno de prácticas seguro (sin tocar producción)</a></aside>
+  <article class="doc">
+    <div class="doc-hero">
+      <div class="kicker">Academia GesPro Administrativo · Material Oficial</div>
+      <h1>📋 Plan del Curso para el Instructor</h1>
+      <p>Agenda minuto a minuto, dinámicas prácticas, trampas frecuentes y guía de facilitación</p>
+    </div>
+    <h1 id="plan-maestro-del-curso-entrenamiento-practico-en-gespro-administrativo">Plan Maestro del Curso: Entrenamiento Práctico en GesPro Administrativo</h1>
+<div class="callout tip"><p><strong>Versión del sistema:</strong> GesPro Administrativo v5.7.0  </p><p><strong>Duración sugerida:</strong> 1 jornada intensiva (6 horas netas + pausas) — <em>adaptable a 2 medias jornadas de 3 horas</em>  </p><p><strong>Modalidad:</strong> Presencial o virtual en vivo, 100 % práctico (<em>Regla 20 / 20 / 60</em>: 20 % explicación/video, 20 % demo guiada, 60 % manos a la obra)  </p><p><strong>Audiencia:</strong> Equipos de Ventas, Facturación, Cobranza, Compras/CxP, Almacén, Costos, Tesorería y Administración.</p></div>
+<hr>
+<h2 id="1-filosofia-del-entrenamiento-por-que-no-sera-aburrido">1. Filosofía del entrenamiento (por qué NO será aburrido)</h2>
+<p>La mayoría de los entrenamientos de ERP fallan porque son un monólogo de 4 horas haciendo clic por cada botón mientras la gente se duerme. Este curso rompe ese molde con <strong>cinco reglas de oro</strong>:</p>
+<ol><li><strong>Nunca hablar más de 10 minutos seguidos.</strong> Cada explicación se corta con un video corto, una pregunta incómoda, una «Trampa del Día» o un reto cronometrado en la pantalla.</li><li><strong>Un solo hilo conductor realista:</strong> Todas las áreas siguen la misma historia de un día real de operaciones (<strong>«El Día Crítico en Distribuidora Horizonte, C.A.»</strong>). Así el equipo entiende <em>en carne propia</em> la regla central de GesPro: <strong>«Una operación, un solo registro»</strong> (lo que hace Ventas impacta Inventario, CxC, Bancos y Contabilidad al instante).</li><li><strong>Competencia sana — 🏆 Copa GesPro:</strong> Divide a los participantes en parejas o equipos de 3-4 personas (ojalá mezclando áreas). Cada módulo tiene un <strong>Reto Práctico</strong> (+10 pts) y una <strong>Trivia Relámpago / Caza del Error</strong> (+5 pts). El equipo ganador recibe un premio simbólico (café, almuerzo, diploma o mención).</li><li><strong>🚨 «La Trampa del Día» en cada módulo:</strong> En lugar de leer advertencias de memoria, el facilitador <strong>provoca intencionalmente un error clásico</strong> en pantalla y pide al grupo diagnosticarlo. Lo que se descubre resolviendo un problema no se olvida jamás.</li><li><strong>Entorno seguro para equivocarse:</strong> Nadie practica en producción. Todos trabajan sobre una base de demostración desechable donde pueden facturar, anular, equivocarse y aprender sin miedo.</li></ol>
+<hr>
+<h2 id="2-preparacion-de-esta-noche-30-minutos-antes-checklist-del-instructor">2. Preparación de esta noche / 30 minutos antes (Checklist del Instructor)</h2>
+<h3 id="a-levantar-el-entorno-de-practicas-seguro-sin-tocar-produccion">A. Levantar el entorno de prácticas seguro (sin tocar producción)</h3>
+<p>Elige la opción más cómoda para mañana:</p>
+<ul><li><strong>Opción 1 (Recomendada para oficina / Wi-Fi local — sin depender de internet):</strong> ```bash # Crear una base de práctica limpia con 6 meses de datos ficticios export ERP_DATA=/tmp/gespro-entrenamiento rm -rf &quot;$ERP_DATA&quot; node scripts/demo.js</li></ul>
+<p># Arrancar el servidor accesible para todos los laptops de la sala ERP_DATA=/tmp/gespro-entrenamiento PORT=4310 ERP_HOST=0.0.0.0 node src/server.js</p>
+<pre><code>  Luego en otra terminal, corre `npm run direcciones` (o usa `ifconfig`) para proyectar la IP local en la pizarra (ej. `http://192.168.1.45:4310`).
+  &gt; **Usuarios de práctica de `npm run demo`:**
+  &gt; - `admin` / `admin123` (ve todo — ideal para el instructor y para practicar libremente)
+  &gt; - `contador` / `contador123` (Contabilidad, documentos, tesorería, inventario, costeo)
+  &gt; - `tesoreria` / `tesoreria123` (Bancos, pagos, cobros, comprobantes, lotes)
+  &gt; - `almacen` / `almacen123` (Inventario, almacenes, manufactura, costeo)
+
+- **Opción 2 (Demostración pública en la nube, si hay buen internet):**
+  - Cada estudiante abre **`demo.gespro.ai`** y pulsa **«Entrar a la demostración»**. Cada persona recibe **su propia copia aislada** por 3 horas (nadie pisa los datos de nadie y al salir se borra).
+
+- **Opción 3 (Demo industrial METAX con botón «Reiniciar demo» en 1 clic):**</code></pre>
+<p>npm run demo:metax ERP_DATA=data-demo ERP_MODO_DEMO=1 ERP_SIN_PRUEBAS=1 PORT=4310 npm start</p>
+<pre><code>
+### B. Checklist técnico antes de empezar
+- [ ] Probar el proyector/TV con la presentación `entrenamiento/presentacion/GesPro-Entrenamiento-Diapositivas.html` (tecla `F` pantalla completa, `N` notas del presentador, `O` mapa de diapositivas) o `GesPro-Entrenamiento.pptx`.
+- [ ] Probar audio de los parlantes y ejecutar el script de playlist en `01-GUIA-VIDEOS-ENTRENAMIENTO.md` para tener ordenados en una carpeta del Escritorio los **videos individuales por módulo** (`erp-ent-01` a `erp-ent-23`, `Guia-del-vendedor`, `GesPro-Administrativo-Comercial.mp4` y `video/gespro-conciliacion.mp4`), más las versiones livianas `-WhatsApp.mp4` para compartir al grupo del curso.
+- [ ] Tener a mano el archivo real de práctica bancaria: **`ejemplos/extracto-mercantil-agosto.txt`** (pásalo por WhatsApp/correo/USB a los asistentes para el Módulo 6).
+- [ ] Tener una imagen o PDF de factura de proveedor de ejemplo (puede ser un recibo o factura ficticia) para la demo en vivo de **«Importar factura con IA»** en el Módulo 3.
+- [ ] Entregar a los asistentes el **Manual Consolidado del Estudiante** (`entrenamiento/manuales/Manual-Completo-Estudiante-Imprimible.html` abierto en navegador → `Cmd+P` → Guardar como PDF o imprimir) o los 6 manuales por módulo.
+- [ ] Preparar una pizarra o hoja visible para el marcador de la **🏆 Copa GesPro**.
+
+---
+
+## 3. Agenda Cronometrada (6 horas netas · 1 día completo)
+
+&gt; **¿Prefieres darlo en 2 medias jornadas?**  
+&gt; - **Día 1 (Mañana · 3h 15m):** Apertura + Módulo 1 (Ventas) + Módulo 2 (CxC) + Módulo 3 (CxP)  
+&gt; - **Día 2 (Mañana · 3h 15m):** Repaso relámpago + Módulo 4 (Inventario) + Módulo 5 (Análisis de Costos) + Módulo 6 (Bancos) + Reto Final Integrador
+
+| Horario | Bloque | Duración | Actividad clave | Videos modulares a proyectar |
+|---|---|---|---|---|
+| **08:30 – 08:50** | **Apertura y Rompehielo** | 20 min | Pregunta detonante, «Una operación, un solo registro», tour del Panel, botón `ⓘ`, botón `?` (Ayuda IA) y formación de equipos Copa GesPro | **`GesPro-Administrativo-Comercial.mp4`** (`4:33`) |
+| **08:50 – 09:50** | **Módulo 1 · Ventas** | 60 min | CRM (Embudo, Prospectos, Agenda, Clientes 360), Cotizaciones (aprobación de descuentos ≥25%), Pedidos y mercancía apartada 24h, POS (y modo sin conexión), Tienda en línea y Portal Vendedores (`/vendedores`) | **`01-Vendedor`** (`3:40`) · **`02-Cotizaciones`** (`1:46`) · **`03-Punto-de-venta`** (`2:05`) · *opc. `04-Tienda-en-linea` (`1:57`)* · *WhatsApp calle: `Guia-del-vendedor` (`5:29`)* |
+| **09:50 – 10:05** | ☕ Pausa activa | 15 min | Café y dudas rápidas | — |
+| **10:05 – 11:05** | **Módulo 2 · Cuentas por Cobrar** | 60 min | Ficha de clientes, Pedidos por facturar, Borrador vs Aprobado, numeración fiscal y equivalente en divisa, Cobros multimoneda con IGTF 3% y Retenciones recibidas, Portal de Clientes (`/portal`) + Comprobantes de pago, Cartera/Antigüedad, Bloqueo por mora y Autorizaciones | **Bloque A:** `10-Clientes` (`1:46`) · `05-Facturacion-de-clientes` (`2:04`)&lt;br&gt;**Bloque B:** `08-Cuentas-por-cobrar` (`1:58`) · `14-Comprobantes-de-pago` (`1:28`) · `12-Autorizaciones` (`1:13`) |
+| **11:05 – 12:05** | **Módulo 3 · Cuentas por Pagar** | 60 min | Ficha de proveedores (4 datos bancarios), Factura proveedor manual vs **Importar con IA**, Comprobante previo (`CPR-…`), Pagar facturas con retenciones IVA e ISLR (Decreto 1.808), Comprobantes fiscales, **Retenciones por reintegrar**, Factura pagada por accionista, Lotes al banco y segregación de tareas | **Bloque A:** `11-Proveedores` (`1:28`) · `06-Facturacion-de-proveedores` (`2:12`)&lt;br&gt;**Bloque B:** `09-Cuentas-por-pagar` (`1:31`) · `07-Pago-a-proveedores` (`1:48`) |
+| **12:05 – 13:05** | 🍽️ Almuerzo | 60 min | Descanso | — |
+| **13:05 – 14:00** | **Módulo 4 · Inventario** | 55 min | Catálogo, Costo promedio ponderado, **Costo inicial**, Kardex valorado, Existencias y **Apartado por pedidos (24h)**, Alertas de stock y Órdenes de compra/Recepción, Transferencias, **Notas de despacho** (Orden de entrega / Guía con solicitante), Manufactura | **`15-Inventario`** (`1:41`) · *opc. `16-Manufactura` (`1:53`) y `17-Sucursales` (`1:20`)* |
+| **14:00 – 14:55** | **Módulo 5 · Análisis de Costos** | 55 min | Módulo `Análisis de costos`: 4 modalidades (Importado, Elaborado, Servicio, Mixto), **Desde una importación**, llenado con **IA Gemini** (cifras en amarillo), `Al costo` vs solo para precio, fórmula de Precio Sugerido, Aprobación y Revalorización en Kardex + Reporte **Utilidad Bruta (Promedio vs PEPS)** | **`23-Analisis-de-costos`** (`3:48`) · *opc. `22-Importaciones` (`2:39`) y `21-Reportes` (`1:38`)* + **Simulador Diap. 23** |
+| **14:55 – 15:10** | ☕ Pausa activa | 15 min | Estiramiento y café | — |
+| **15:10 – 16:15** | **Módulo 6 · Bancos y Conciliación** | 65 min | Cuentas y columna **Devaluación**, Libro bancario, Importar extracto real (`extracto-mercantil-agosto.txt`), Conciliación en 7 pasos (Cruce automático, manual, notas del banco, **compensar transferencias devueltas**, cierre en 0,00), Pago masivo al banco y **Agente de conciliación** | **`13-Bancos-y-conciliacion`** (`1:45`) + **`video/gespro-conciliacion.mp4`** (`5:50` — paso a paso completo) |
+| **16:15 – 16:40** | **Gran Reto Final + Premiación** | 25 min | «Caza del Error» (4 casos reales), premiación 🏆 Copa GesPro, envío de cápsulas `-WhatsApp.mp4` al grupo y compromiso del día 1 | — |
+
+---
+
+## 4. Guion Pedagógico Detallado Módulo por Módulo
+
+### 🎬 APERTURA · «¿Cuánto nos deben hoy?» (20 min)
+
+- **Gancho (3 min):** Antes de abrir GesPro, pregunta a la sala: *«Si el gerente entra ahora mismo y pregunta: ¿cuánto nos deben, qué clientes tienen más de 30 días vencidos y cuánto dinero real hay en los bancos en dólares y bolívares? ¿Cuántos archivos de Excel tendrían que abrir hoy para contestar?»* Escucha 2 respuestas reales (genera risas y conexión inmediata).
+- **Video (4 min 33 s):** Proyecta **`GesPro-Administrativo-Comercial.mp4`** *(en `…/TODOS-LOS-VIDEOS/3 GesPro Administrativo (ERP)/`)*.
+- **Regla de oro (4 min):** Explica en la pizarra las 3 verdades de GesPro:
+  1. **BORRADOR ≠ Contabilidad:** En borrador puedes editar y borrar sin gastar número fiscal. **APROBAR** es el momento real: descuenta inventario, genera número fiscal y crea el asiento cuadrado.
+  2. **Nunca se borra, se anula por reverso:** Así todo queda auditable (excepto la última factura no impresa con botón especial de administrador).
+  3. **Nadie se queda pegado en una pantalla:** Muestra en vivo el ícono **`ⓘ`** junto a cada campo, el botón **`?`** arriba a la derecha (Ayuda con IA) y el **Manual de usuario** integrado en el menú.
+- **Armado de equipos (5 min):** Forma los equipos de la **🏆 Copa GesPro** y confirma que todos lograron entrar a la instancia de práctica.
+
+---
+
+### 📦 MÓDULO 1 · VENTAS (60 min)
+*Secciones del sistema: `Vendedor (CRM)` · `Cotizaciones` · `Punto de venta` · `Tienda en línea` · `Portal de vendedores (/vendedores)`*
+
+1. **Gancho (3 min):** *«¿Cuántas veces un vendedor cotizó un producto que ya no había en almacén, o dio un descuento del 35 % sin consultar, o vendió la última caja que ya otro vendedor había prometido?»*
+2. **Videos modulares (5–9 min repartidos en micro-cápsulas):** Proyecta **`GesPro-Entrenamiento-01-Vendedor.mp4`** (`3:40`) y **`GesPro-Entrenamiento-02-Cotizaciones.mp4`** (`1:46`). Si la empresa usa mostrador, suma **`03-Punto-de-venta.mp4`** (`2:05`); si usa tienda web, suma **`04-Tienda-en-linea.mp4`** (`1:57`). *(Para vendedores de calle, comparte por WhatsApp **`GesPro-Administrativo-Guia-del-vendedor-WhatsApp.mp4`**, `5:29`).*
+3. **Demo en vivo guiada (15 min):** Recorre el ciclo comercial completo en vivo:
+   - Crea un **Prospecto** en `Vendedor (CRM) → Prospectos` (muestra la puntuación automática 0–100: Frío/Tibio/Caliente y el detector de duplicados).
+   - Arrastra una tarjeta en el **Embudo** y abre **Clientes 360**.
+   - Crea una **Cotización** (enfatiza: *no deja cotizar artículos sin existencia en ningún almacén*, lleva validez visible en grande en el PDF y si excede el % configurado en `Configuración → Descuentos` —25% / 50% / 75%— queda *Descuento por aprobar* y avisa por GP Mensajes).
+   - Pulsa **«El cliente la aceptó»** → nace el **Pedido** y **aparta la mercancía por 24 horas hábiles** (fines de semana no cuentan).
+   - En **Punto de venta (`POS`)**: abre turno, vende con pago mixto (ej. dólares + bolívares con vuelto y cálculo de IGTF automático) y explica qué pasa si se cae internet (*comprobante provisional `PRV-…`* que se factura solo al volver la red).
+   - Menciona el **Portal de vendedores (`/vendedores`)**: «Mi día», levantar pedidos en la calle, cargar comprobantes de pago y el cierre de visitas con **asistente de voz**.
+4. **🚨 La Trampa del Día (5 min):** Intenta facturar directamente una cotización sin aceptarla primero, o intenta cotizar 9.999 unidades de un producto. Pregunta: *«¿Por qué GesPro me frena aquí?»* (Respuesta: las cotizaciones son ofertas inmutables; primero se acepta → nace pedido → se factura el pedido; y el sistema protege contra vender lo que no existe).
+5. **🛠️ Reto Práctico Copa GesPro — «La Venta Relámpago» (25 min):**
+   - Cada equipo debe:
+     1. Registrar un prospecto nuevo en CRM (con nombre, teléfono, origen) y agendarle una llamada para mañana.
+     2. Abrir una oportunidad para un cliente existente y crearle una **Cotización** con 2 artículos del catálogo y validez de 5 días.
+     3. Marcar la cotización como **Aceptada** y comprobar que apareció en **Pedidos** con su contador de reserva de 24h.
+     4. Entrar a **Punto de venta**, abrir turno con fondo de caja, hacer 1 venta con **dos formas de pago** y emitir el ticket.
+   - *Verificación rápida (+10 pts al equipo que muestre el pedido creado y el ticket de POS).*
+6. **⚡ Trivia Relámpago (5 min):** *(Proyectada en la Diapositiva interactiva del Módulo 1).*
+
+---
+
+### 💰 MÓDULO 2 · CUENTAS POR COBRAR (60 min)
+*Secciones del sistema: `Facturación de clientes` · `Cuentas por cobrar` · `Clientes` · `Autorizaciones` · `Comprobantes de pago` · `Portal de clientes (/portal)`*
+
+1. **Gancho (3 min):** *«Vender es la mitad del juego; la otra mitad es cobrar sin perder retenciones ni perseguir pagos por WhatsApp.»*
+2. **Videos modulares en 2 bloques (`8:29` total):**
+   - *Bloque 2A (antes de facturar):* **`GesPro-Entrenamiento-10-Clientes.mp4`** (`1:46`) + **`05-Facturacion-de-clientes.mp4`** (`2:04`).
+   - *Bloque 2B (antes de cobrar):* **`08-Cuentas-por-cobrar.mp4`** (`1:58`) + **`14-Comprobantes-de-pago.mp4`** (`1:28`) + **`12-Autorizaciones.mp4`** (`1:13`).
+3. **Demo en vivo guiada (15 min):**
+   - Abre la ficha de un cliente (`Clientes`): explica **Condición fiscal** automática según el RIF (`V/P`, `J/C`, `G`, `E`), el campo obligatorio **Vendedor** (quien comisiona), **Días de crédito**, y **Bloqueo por facturas vencidas**.
+   - Ve a `Cuentas por cobrar` (o `Facturación de clientes`) → tarjeta **«Pedidos por facturar»** → pulsa **«Crear factura»**.
+   - Muestra el **repaso de precios** (avisa con `⚠` si se modificó el precio de lista), el estado **BORRADOR** (`BORRADOR-…` sin gastar correlativo), el campo **Equivalente en divisa** (tasa BCV guardada en piedra) y pulsa **«Aprobar y contabilizar»** (muestra que en ese instante se asigna el número fiscal + número de control, sale del inventario y se crea el asiento).
+   - **Registrar un cobro** parcial en divisas: muestra el **IGTF 3 %** automático y cómo se registra una **Retención recibida** en la pestaña `Retenciones recibidas` (comprobante de 14 dígitos del cliente que va directo al Libro de Ventas).
+   - Muestra el **Portal de clientes (`/portal`)** y el código **QR al pie de la factura** → cómo el pago reportado cae en `Comprobantes de pago` (`RECIBIDO → EN REVISIÓN → VERIFICADO → APLICADO`) y la regla de oro: **nunca aplicar sin confirmar en el banco**.
+   - Recorre las 3 joyas gerenciales: **Antigüedad de saldos**, **Panel de clientes** (aviso de concentración &gt;70 %) y **Reporte por cliente** (días promedio de pago reales vs crédito otorgado).
+4. **🚨 La Trampa del Día (5 min):** Pon `0` en «Bloqueo por facturas vencidas» de un cliente y pregunta: *«¿Esto significa que no le tolero NI UNA factura vencida?»* → **¡TRAMPA!** `0` significa **SIN TOPE**. Para bloquearlo apenas tenga 1 factura vencida hay que escribir **`1`** (y entonces pasa por la bandeja de **`Autorizaciones`** del gerente, válida solo para esa factura).
+5. **🛠️ Reto Práctico Copa GesPro — «Del Pedido al Dinero en Mano» (27 min):**
+   - Cada equipo debe:
+     1. Convertir el pedido creado en el Módulo 1 desde **Pedidos por facturar**, verificar el repaso de precios y **Aprobar y contabilizar** la factura.
+     2. Abrir el PDF de la factura y verificar el código QR del portal al pie.
+     3. Registrar un **cobro parcial (50 %)** en una cuenta bancaria copiando la referencia exacta (ej. `REF-EQ1-001`).
+     4. Registrar una **Retención recibida de IVA** (comprobante de 14 dígitos, ej. `20261100000001`) por el 75 % del IVA de esa factura y comprobar cómo bajó el saldo.
+     5. Abrir **Antigüedad de saldos** y **Reporte por cliente**, e identificar al cliente más moroso de la empresa demo.
+6. **⚡ Trivia Relámpago (5 min):** *(En diapositiva interactiva).*
+
+---
+
+### 🧾 MÓDULO 3 · CUENTAS POR PAGAR (60 min)
+*Secciones del sistema: `Facturación de proveedores` · `Cuentas por pagar` · `Pago a proveedores` · `Proveedores` · `Importaciones`*
+
+1. **Gancho (3 min):** *«¿Cuánto tiempo pierden transcribiendo facturas de proveedores a mano, calculando si aplica 75 % o 100 % de retención de IVA y qué fila del Decreto 1.808 toca de ISLR, y luego tecleando 30 transferencias una por una en el banco?»*
+2. **Videos modulares (`6:59` en 2 bloques) + Demo WOW (18 min):**
+   - *Bloque 3A (registro):* Proyecta **`GesPro-Entrenamiento-11-Proveedores.mp4`** (`1:28`) + **`06-Facturacion-de-proveedores.mp4`** (`2:12`).
+   - *Bloque 3B (pagos y lotes):* Proyecta **`09-Cuentas-por-pagar.mp4`** (`1:31`) + **`07-Pago-a-proveedores.mp4`** (`1:48`), y luego haz la demo en vivo en el sistema:
+   - **Ficha de Proveedor (`Proveedores`):** muestra la tarjeta **«Sin datos para pagarles»** (los 4 datos obligatorios para lotes bancarios: banco, cuenta, titular y documento — salvo si se marca «Se le paga en efectivo») y sus porcentajes de retención IVA / concepto ISLR.
+   - **Momento WOW — «Importar factura con IA»:** Sube una factura de proveedor (PDF o foto) y muestra cómo GesPro lee RIF, número, control, fecha, moneda y renglones creando el **Borrador** con el archivo original adjunto para comparar lado a lado.
+   - **Comprobante de pago y retención previo (`CPR-…`):** Al guardar la factura del proveedor, GesPro lo genera solo con el neto a pagar y un **enlace de 30 días** para que el proveedor valide antes de asentar.
+   - **Pagar facturas (`Pago a proveedores` o `CxP → Pagar facturas`):** Marca 2 facturas del proveedor, observa cómo calcula retención de IVA e ISLR (incluyendo la **Tarifa 2 acumulativa** para empresas no domiciliadas), genera el pago y emite el **Comprobante de retención fiscal** (PDF con logo, firma, sello y botón **Enviar por correo**).
+   - **Dos casos reales que enamoran al contador:**
+     - **«Pagada por un accionista»:** En la factura aprobada → mueve la deuda del proveedor a la cuenta de accionistas sin sacar dinero del banco ni duplicar gasto.
+     - **«Retenciones por reintegrar»:** Para el proveedor que exige cobrar la factura completa y devuelve luego lo retenido (se controla lo que debe devolver o se descuenta de su próxima factura).
+   - **Lotes al banco y Segregación de tareas:** Muestra el ciclo `BORRADOR → GENERADO → ENVIADO → CONFIRMADO` y por qué Compras postea el pago pero **Tesorería** genera el archivo TXT/CSV del banco.
+3. **🚨 La Trampa del Día (5 min):** Crea un pago para un proveedor al que le falta el número de cuenta bancaria e intenta meterlo en un lote al banco (o intenta poner la cuenta de accionistas directo en un renglón de factura de compra). Pregunta al grupo por qué GesPro bloquea lo primero y por qué lo segundo sería un error contable grave.
+4. **🛠️ Reto Práctico Copa GesPro — «Cero Errores con Proveedores» (27 min):**
+   - Cada equipo debe:
+     1. Revisar en `Proveedores` el filtro **«Sin datos para pagarles»** y completar los datos bancarios de 1 proveedor incompleto.
+     2. Registrar una factura de compra (con número y número de control del proveedor) que ingrese 10 unidades de un artículo al almacén principal.
+     3. Abrir el **Comprobante previo (`CPR-…`)**, verificar el neto a pagar y **Aprobar/Asentar** la factura.
+     4. Ir a **Pagar facturas**, seleccionar la factura, generar el pago con sus retenciones y emitir el **Comprobante de retención de IVA**.
+     5. Como usuario con acceso a Tesorería, abrir **Lotes al banco**, previsualizar el archivo y ver el ciclo de vida.
+5. **⚡ Trivia Relámpago (5 min).**
+
+---
+
+### 📦 MÓDULO 4 · INVENTARIO (55 min)
+*Secciones del sistema: `Inventario` (11 pestañas) · `Manufactura` · `Sucursales`*
+
+1. **Gancho (3 min):** *«El sistema dice que hay 20 cajas, el almacén dice que hay 14, y el vendedor vendió 8. ¿De dónde salió la diferencia? Hoy vamos a aprender a encontrar la verdad en 30 segundos.»*
+2. **Video modular (`1:41` + opcionales) + Demo en vivo (15 min):**
+   - Proyecta **`GesPro-Entrenamiento-15-Inventario.mp4`** (`1:41`). *(Si la empresa fabrica o tiene varias sedes, añade **`16-Manufactura.mp4`** (`1:53`) y/o **`17-Sucursales.mp4`** (`1:20`)).*
+   - En vivo en **`Inventario`**:
+     - **Artículos:** Explica **Costo promedio ponderado** (por qué nunca se escribe a mano), la alerta roja de artículos **con existencia y sin costo** → pestaña **`Costo inicial`** (evitar el desastre de promediar contra cero!), y los **adjuntos** en la ficha del artículo (garantía, ficha técnica, certificado).
+     - **Existencias por almacén:** Muestra el cuadro clave **«Apartado por pedidos»** (Existencia − Apartado = Disponible real durante 24 h hábiles).
+     - **Kardex:** Abre el kardex del artículo comprado en el Módulo 3 y vendido en el Módulo 2 → ¡ahí están las 2 huellas automáticas con su costo promedio!
+     - **Alertas de stock → Órdenes de compra → Recepción de mercancía:** Pulsa **«Generar por faltantes»** (borrador agrupado por proveedor habitual), aprueba y recibe mercancía.
+     - **Transferencias vs Ajustes:** Explica la diferencia contable clave (**Transferencia** = sin asiento, solo mueve almacén; **Ajuste** = sí genera asiento contra mermas/apertura).
+     - **Notas de despacho:** Muestra cómo una factura de venta crea automáticamente su **Orden de entrega** (sin mover stock dos veces), y cómo crear una **Guía de despacho** por *Muestra* o *Donación* exigiendo el **Solicitante** (para medir cuánto pide cada quien).
+     - **Breve vista de Manufactura** (si aplica a la empresa): Recetas + Orden de producción (Iniciar → Producción en proceso → Terminar al costo real).
+3. **🚨 La Trampa del Día (5 min):** Pregunta: *«Trajimos 100 unidades del sistema viejo sin costo (costo = 0). Hoy compramos 100 unidades nuevas a $20. ¿Cuál queda siendo el costo promedio si no cargamos primero el Costo inicial?»* → **¡$10 en lugar de $20!** Eso infla falsamente la utilidad y destruye los reportes. Solución: usar **`Inventario → Costo inicial`** antes de operar.
+4. **🛠️ Reto Práctico Copa GesPro — «Detective del Almacén» (27 min):**
+   - Cada equipo debe:
+     1. Entrar a **Kardex** y rastrear el artículo que compraron (Mód. 3) y vendieron (Mód. 2), anotando existencia inicial, movimiento y costo promedio final.
+     2. Hacer una **Transferencia** de 3 unidades desde el Almacén Principal a un segundo almacén y verificar en Contabilidad que **no** generó asiento.
+     3. Emitir una **Nota de despacho** por motivo **Muestra** (1 unidad) indicando un **Solicitante**, imprimirla (ver leyenda *SIN DERECHO A CRÉDITO FISCAL*) y marcarla **Despachada**.
+     4. Ir a **Órdenes de compra** y pulsar **«Generar por faltantes»** para ver las reposiciones sugeridas.
+5. **⚡ Trivia Relámpago (5 min).**
+
+---
+
+### 📊 MÓDULO 5 · ANÁLISIS DE COSTOS (55 min)
+*Secciones del sistema: `Operaciones → Análisis de costos` · `Importaciones` · `Reportes → Utilidad bruta (Promedio vs PEPS)` · `Configuración → Agentes (Rentabilidad y Costos)`*
+
+&gt; **🎬 Videos dedicados de este módulo:** ¡Sí tienes video oficial de este módulo nuevo! Proyecta **`GesPro-Entrenamiento-23-Analisis-de-costos.mp4`** (`3:48`) *(y si la empresa importa, suma **`22-Importaciones.mp4`**, `2:39`, más **`21-Reportes.mp4`**, `1:38` para repaso)*. Luego usa el **Simulador Interactivo de la Diapositiva 23** antes de pasar al sistema.
+
+1. **Gancho (4 min):** *«Pregunta de examen real de negocios: Si un producto te cuesta $70 y quieres ganar el 30 % sobre el precio de venta, ¿en cuánto lo vendes? ¿En $91? ¡ERROR! $70 × 1,30 = $91 solo te deja 23 % de margen… y si además pagas 12 % de gastos generales y 3 % de comisión al vendedor, ¡estás perdiendo dinero sin saberlo!»*
+2. **Video (`3:48`) + Simulador Interactivo en Diapositiva (8 min):** Proyecta **`GesPro-Entrenamiento-23-Analisis-de-costos.mp4`** (`3:48`) y luego usa el simulador integrado en la Diapositiva 23 para demostrar en vivo la fórmula exacta de GesPro:
+   $$\text{Precio sugerido} = \frac{\text{Costo completo}}{1 - \text{Margen} - \sum \%\text{ sobre precio}}$$
+   Ejemplo real del manual: Costo del artículo $13,86 + Gastos generales 12 % del precio + Comisión 3 % del precio + Margen deseado 30 % → `13,86 ÷ (1 − 0,30 − 0,12 − 0,03) = 13,86 ÷ 0,55 =` **$25,20**.
+3. **Demo en vivo guiada (15 min):**
+   - Abre `Operaciones → Análisis de costos`: muestra las **4 modalidades** (*Importado, Elaborado, Servicio, Mixto*).
+   - Pulsa **«Nueva ficha de costo»**: muestra las 3 formas de llenarla (**Datos del sistema y la IA**, **Sólo datos del sistema**, **Manual**).
+   - Explica la diferencia vital de la casilla **`Al costo`**:
+     - ✅ **Marcada (`Al costo`):** Compra (FOB), Flete, Seguro, Aranceles (sobre CIF), Aduana, Transporte al almacén, Materiales, Mano de obra → **entra al valor del inventario**.
+     - ⬜ **Desmarcada:** Gastos generales (calculados solos de los últimos 3 meses de contabilidad), Comisiones de venta → **solo cuentan para calcular el precio sugerido**, no inflan el inventario contable.
+   - Muestra las filas **en amarillo (`Estimado`)** cuando interviene la IA Gemini: el sistema nunca aprueba a ciegas; exige revisión humana.
+   - Muestra la pestaña **«Desde una importación»**: repartir flete, seguro y aduana por *valor* o por *unidades* y generar borradores masivos con **«Preparar las fichas de todos»**.
+   - Pulsa **«Aprobar…»**: muestra el resumen previo (nuevo costo, impacto en valorización del inventario, cuenta contrapartida, línea **`REVALORIZACION`** en Kardex sin cambiar unidades, y la casilla opcional **«Actualizar también el Precio 1»**).
+   - Cierra mostrando **`Reportes → Utilidad bruta`**: compara **Costo Promedio** vs **PEPS** (primero en entrar, primero en salir) para analizar rentabilidad real en contextos inflacionarios.
+4. **🚨 La Trampa del Día (5 min):** Marca **`Al costo`** en el renglón de *«Comisiones de venta (3 %)»* y pregunta al grupo qué daño contable ocurriría si se aprueba así (Respuesta: las normas contables prohíben capitalizar comisiones de venta o gastos administrativos en el valor del inventario; siempre deben ir sin marcar `Al costo`, solo para fijar precio).
+5. **🛠️ Reto Práctico Copa GesPro — «¿Ganamos o Perdemos?» (20 min):**
+   - Cada equipo debe:
+     1. Crear una **Nueva ficha de costo** en `Análisis de costos` para 1 artículo (modalidad Importado o Mixto) con al menos: Compra FOB, Flete, Arancel (% del CIF), Gastos generales (% del precio) y Comisión de venta (% del precio).
+     2. Fijar un **margen objetivo del 30 %** y anotar: *Costo del artículo*, *Costo completo*, *Precio sugerido* y cuánto margen deja el *Precio 1 de hoy*.
+     3. Guardar y **Aprobar** la ficha (revisando el asiento de revalorización) y luego verificar la línea `REVALORIZACION` en el **Kardex** del artículo.
+     4. Abrir `Reportes → Utilidad bruta` y leer la diferencia entre utilidad a Costo Promedio y PEPS.
+6. **⚡ Trivia Relámpago (5 min).**
+
+---
+
+### 🏦 MÓDULO 6 · BANCOS Y CONCILIACIÓN (65 min)
+*Secciones del sistema: `Tesorería → Bancos y conciliación` · `Comprobantes de pago` · `Configuración → Agentes → Conciliación bancaria`*
+
+1. **Gancho (3 min):** *«Levante la mano quien ha pasado un viernes entero hasta las 8 de la noche punteando un estado de cuenta del banco con resaltador amarillo buscando una diferencia de 4 bolívares… Hoy eso se acaba.»*
+2. **🎬 Dúo de Videos (`1:45` + `5:50`):** Arranca con el resumen rápido **`GesPro-Entrenamiento-13-Bancos-y-conciliacion.mp4`** (`1:45`) y luego proyecta completo el tutorial profundo **`video/gespro-conciliacion.mp4`** (`5:50`, HD 1920×1080) que recorre los 7 pasos + devoluciones + el Agente automático.
+3. **Demo en vivo rápida enfocada en trucos avanzados (12 min):**
+   - Pestaña **Cuentas y saldos**: enseña la columna **Devaluación** (cuánto perdió el saldo quieto en bolívares en % y dinero desde la última tasa BCV — oro puro para gerencia). Explica cuándo se puede editar el saldo inicial y por qué se bloquea al existir una conciliación cerrada.
+   - Pestaña **Extracto del banco**: importa el archivo real **`ejemplos/extracto-mercantil-agosto.txt`** (211 movimientos posicionales sin encabezados). Muestra las 3 validaciones automáticas: cuenta correcta, moneda correcta, y cuadre matemático (`SI + créditos − débitos = SF`). Destaca que `SI`/`SF` no se duplican y reimportar no crea repetidos.
+   - Pestaña **Conciliación**:
+     - **Cruce automático** (en 1 clic cruza la gran mayoría).
+     - **Cruce manual** (1 fila izquierda + 1 derecha).
+     - **Botón `Registrar`** sobre una comisión bancaria → crea el movimiento, genera el asiento contable y la concilia en el acto.
+     - **«Compensar con su devolución»** para transferencias devueltas por el banco (las concilia entre sí **sin crear asientos falsos**; y si hubo una segunda transferencia buena, en Pagos se usa **«Corregir referencia»** sin anular el pago).
+     - **Cierre en 0,00** → partidas bloqueadas y auditables en el Histórico.
+   - Muestra el **Agente de conciliación bancaria** (`Configuración → Agentes`): recuerda subir el extracto, cruza solo al llegar y separa los pendientes por área (CxC, CxP, Bancos) sin contabilizar ni cerrar nada por su cuenta.
+4. **🚨 La Trampa del Día (5 min):** Pregunta: *«El banco rechazó una transferencia a un proveedor por $500 y nos devolvió los $500 el mismo día. ¿Debemos crear un asiento de gasto y un asiento de ingreso para que la conciliación cuadre?»* → **¡NO!** Eso infla ingresos y egresos ficticios. En GesPro se usa **«Compensar con su devolución»** (y se corrige la referencia del pago real con **«Corregir referencia»**).
+5. **🛠️ Reto Práctico Copa GesPro — «Diferencia 0,00 en Tiempo Récord» (35 min):**
+   - Cada equipo debe:
+     1. Revisar en `Bancos → Cuentas y saldos` la cuenta bancaria en bolívares o dólares con movimientos pendientes.
+     2. Importar el estado de cuenta de ejemplo (`ejemplos/extracto-mercantil-agosto.txt` en la cuenta correspondiente, o crear una cuenta/extracto corto en la demo) y comprobar el resumen de validación.
+     3. Abrir una **Nueva conciliación** con la fecha de corte y el saldo final declarado por el banco.
+     4. Ejecutar **Cruce automático**, hacer al menos **1 cruce manual**, y pulsar **Registrar** en una comisión bancaria eligiendo la cuenta de *Comisiones y gastos bancarios*.
+     5. Llevar la diferencia a **0,00** (luz verde) y pulsar **Cerrar conciliación** *(o explicar las partidas en tránsito restantes)*.
+     6. Revisar la pestaña **Pago masivo (archivo al banco)** y comprobar qué dice el panel del **Agente de conciliación**.
+6. **⚡ Trivia Relámpago (5 min).**
+
+---
+
+## 5. Gran Cierre: «Caza del Error» + Premiación (25 min)
+
+Para cerrar con energía alta (y asegurar que la gente realmente entendió el sistema), proyecta la diapositiva de **«Caza del Error»** y da 2 minutos por caso para que los equipos debatan y den la solución exacta:
+
+1. **Caso 1 (Ventas / Inventario):** *«El cliente dice que le enviamos una cotización hace 3 días, pero el almacén dice que ya no queda mercancía porque otro vendedor la facturó ayer. ¿Falló GesPro?»*
+   - **Solución:** No. Las **cotizaciones** son ofertas y **no apartan mercancía**. Solo los **pedidos en firme** (cuando el cliente acepta la cotización) apartan stock por **24 horas hábiles**.
+2. **Caso 2 (CxC):** *«Un cliente subió su captura de pago móvil al Portal de Clientes y el vendedor quiere que se aplique ya para poder facturarle más. ¿Qué debe hacer Tesorería?»*
+   - **Solución:** Verificar primero que el dinero entró realmente en el banco (o usar la verificación automática de Banco Mercantil). Un comprobante es lo que el cliente *afirma*; aplicarlo sin confirmar cancela una deuda real con un pago que podría no existir.
+3. **Caso 3 (CxP):** *«Tesorería fue a armar el lote masivo de pagos al banco y el sistema no le dejó incluir al proveedor Ferretería Central, aunque su factura ya está aprobada y pagada en CxP. ¿Por qué?»*
+   - **Solución:** A Ferretería Central le falta al menos uno de los **4 datos bancarios obligatorios** (banco, número de cuenta, titular o documento) o está marcado como «Se le paga en efectivo». Se detecta antes con el indicador **«Sin datos para pagarles»** en Proveedores.
+4. **Caso 4 (Costos / Bancos):** *«Un usuario cerró la conciliación de octubre y al día siguiente descubrió que el saldo inicial de esa cuenta bancaria estaba mal por $100. Intentó editar el saldo inicial y el sistema se lo bloqueó. ¿Qué hace ahora?»*
+   - **Solución:** No se toca el saldo inicial porque invalidaría una conciliación firmada. Debe registrar un **«Movimiento manual»** (Movimiento del libro) por los $100 con su fecha, concepto y asiento contable trazable.
+
+**Cierre (5 min):**
+- Conteo final de puntos y premiación **🏆 Copa GesPro**.
+- Recordatorio de los 3 salvavidas diarios desde mañana mismo:
+  1. Ícono **`ⓘ`** en cada campo.
+  2. Botón **`?`** (Ayuda IA que responde según la pantalla donde estás).
+  3. **Manual de usuario** en el menú lateral y los 6 manuales entregados hoy.
+- Pregunta de salida (1 frase por persona): *«¿Cuál es la primera cosa que vas a aplicar mañana en tu puesto con GesPro?»*
+
+---
+
+## 6. Índice de Materiales Entregables de este Kit
+
+| Archivo | Para qué sirve |
+|---|---|
+| `00-PLAN-DEL-CURSO-INSTRUCTOR.md` | Esta guía maestra para ti como facilitador |
+| `01-GUIA-VIDEOS-ENTRENAMIENTO.md` | Mapa exacto de los 6 videos del repositorio: cuáles usar, en qué minuto, cuáles descartar y comandos de render |
+| `manuales/01-Manual-Ventas.md` | Manual práctico para el usuario — Ventas |
+| `manuales/02-Manual-Cuentas-por-Cobrar.md` | Manual práctico para el usuario — Cuentas por Cobrar |
+| `manuales/03-Manual-Cuentas-por-Pagar.md` | Manual práctico para el usuario — Cuentas por Pagar |
+| `manuales/04-Manual-Inventario.md` | Manual práctico para el usuario — Inventario |
+| `manuales/05-Manual-Analisis-de-Costos.md` | Manual práctico para el usuario — Análisis de Costos |
+| `manuales/06-Manual-Bancos-y-Conciliacion.md` | Manual práctico para el usuario — Bancos y Conciliación |
+| `manuales/Manual-Completo-Estudiante-Imprimible.html` | Manual consolidado ilustrado con capturas reales, listo para abrir en navegador e imprimir / exportar a PDF (`Cmd+P`) |
+| `presentacion/GesPro-Entrenamiento-Diapositivas.html` | Presentación interactiva HD 16:9 con capturas reales, quizzes en vivo, simulador de costos y notas del presentador (`N`) |
+| `presentacion/GesPro-Entrenamiento.pptx` | Presentación nativa de PowerPoint / Keynote lista para editar o proyectar |
+</code></pre>
+  </article>
+</div>
+</body>
+</html>

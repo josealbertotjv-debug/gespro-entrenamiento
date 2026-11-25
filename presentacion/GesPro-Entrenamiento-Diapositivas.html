@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrenamiento Práctico · GesPro Administrativo v5.7.0</title>
+<style>
+  :root {
+    --navy: #0a2140;
+    --navy2: #0e3159;
+    --navy3: #07172e;
+    --blue: #1a5da8;
+    --sky: #3a8ae0;
+    --sky-lt: #8cc8ff;
+    --sky-txt: #cfe2f7;
+    --ok: #10b981;
+    --warn: #f59e0b;
+    --err: #ef4444;
+    --card: rgba(255,255,255,.07);
+    --card-bd: rgba(255,255,255,.15);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; background: #050f1f; color: #fff;
+    font: 400 16px/1.45 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+
+  /* Stage */
+  .stage {
+    position: fixed; inset: 0 0 54px 0; display: grid; place-items: center; padding: 14px;
+    background: radial-gradient(circle at 50% 40%, #102a4d 0%, #050f1f 100%);
+  }
+  .deck {
+    position: relative; width: min(100%, calc((100vh - 82px) * 16 / 9));
+    aspect-ratio: 16 / 9; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 30px 90px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.12);
+    background:
+      radial-gradient(900px 620px at 80% 15%, rgba(58,138,224,.30), transparent 62%),
+      radial-gradient(700px 520px at 10% 90%, rgba(24,86,152,.28), transparent 60%),
+      linear-gradient(152deg, #0a2140 0%, #0e3159 54%, #081c36 100%);
+  }
+  .deck::before {
+    content: ""; position: absolute; inset: 0; opacity: .045; pointer-events: none;
+    background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* Slides */
+  .slide {
+    position: absolute; inset: 0; padding: 4.2% 5.2% 5%;
+    display: flex; flex-direction: column; justify-content: center;
+    opacity: 0; pointer-events: none; transform: translateX(28px);
+    transition: opacity .28s ease, transform .28s ease;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; transform: translateX(0); }
+  .slide.center { text-align: center; align-items: center; }
+
+  /* Typography scaled responsively with cqw */
+  .deck { container-type: inline-size; }
+  .kicker {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 1.15cqw; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--sky-lt); padding: .45cqw 1.3cqw; border-radius: 999px;
+    border: 1px solid rgba(140,200,255,.38); background: rgba(58,138,224,.14);
+    margin-bottom: 1.4cqw; align-self: flex-start;
+  }
+  .slide.center .kicker { align-self: center; }
+  .kicker.video { color: #fde68a; border-color: rgba(245,158,11,.55); background: rgba(245,158,11,.16); }
+  .kicker.star { color: #6ee7b7; border-color: rgba(16,185,129,.55); background: rgba(16,185,129,.16); }
+
+  h1 { font-size: 4.5cqw; font-weight: 800; letter-spacing: -.03em; line-height: 1.08; }
+  h2 { font-size: 2.85cqw; font-weight: 750; letter-spacing: -.02em; line-height: 1.15; margin-bottom: 1.3cqw; }
+  h3 { font-size: 1.55cqw; font-weight: 700; color: var(--sky-lt); margin-bottom: .6cqw; }
+  .sub { font-size: 1.65cqw; color: var(--sky-txt); margin-top: 1cqw; max-width: 78%; }
+  .lead { font-size: 1.35cqw; color: var(--sky-txt); margin-bottom: 1.4cqw; }
+
+  /* Layouts */
+  .two { display: grid; grid-template-columns: 46% 54%; gap: 3cqw; align-items: center; height: 100%; }
+  .two.eq { grid-template-columns: 1fr 1fr; }
+  .two.wide-img { grid-template-columns: 40% 60%; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4cqw; width: 100%; }
+  .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.3cqw; width: 100%; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.1cqw; width: 100%; }
+
+  /* Cards & Lists */
+  .card {
+    background: var(--card); border: 1px solid var(--card-bd); border-radius: 1.1cqw;
+    padding: 1.4cqw 1.6cqw; text-align: left;
+  }
+  .card.ok { border-color: rgba(16,185,129,.45); background: rgba(16,185,129,.1); }
+  .card.warn { border-color: rgba(245,158,11,.5); background: rgba(245,158,11,.11); }
+  .card.err { border-color: rgba(239,68,68,.5); background: rgba(239,68,68,.11); }
+  .card p, .card li { font-size: 1.18cqw; color: #dbeafe; line-height: 1.45; }
+  .card strong { color: #fff; }
+
+  ul.pts { list-style: none; display: flex; flex-direction: column; gap: .95cqw; }
+  ul.pts li { display: flex; gap: .85cqw; align-items: flex-start; font-size: 1.25cqw; color: #e2eefc; line-height: 1.38; }
+  ul.pts li::before {
+    content: "✓"; flex: none; width: 1.75cqw; height: 1.75cqw; border-radius: 50%;
+    background: rgba(58,138,224,.28); color: var(--sky-lt); font-weight: 800; font-size: 1cqw;
+    display: grid; place-items: center; margin-top: .15cqw;
+  }
+  ul.pts.warn li::before { content: "!"; background: rgba(245,158,11,.28); color: #fcd34d; }
+
+  /* Screenshots */
+  .shot {
+    border-radius: 1cqw; overflow: hidden; border: 1px solid rgba(255,255,255,.18);
+    box-shadow: 0 22px 50px rgba(0,0,0,.5); background: #fff;
+  }
+  .shot img { display: block; width: 100%; height: auto; max-height: 36cqw; object-fit: cover; object-position: top center; }
+  .shot.phone {
+    width: 19cqw; margin: 0 auto; padding: .7cqw; border-radius: 2.2cqw; background: #071324;
+  }
+  .shot.phone img { max-height: 35cqw; border-radius: 1.6cqw; object-fit: contain; }
+  .cap { font-size: .95cqw; color: #9ec2e8; text-align: center; margin-top: .6cqw; }
+
+  /* Flow chain */
+  .flow { display: flex; align-items: center; justify-content: center; gap: .6cqw; flex-wrap: wrap; margin: 1.2cqw 0; }
+  .node {
+    background: rgba(58,138,224,.18); border: 1px solid rgba(140,200,255,.4);
+    border-radius: .8cqw; padding: .8cqw 1.2cqw; font-size: 1.15cqw; font-weight: 700; text-align: center;
+  }
+  .node small { display: block; font-size: .9cqw; font-weight: 400; color: #bae6fd; margin-top: .2cqw; }
+  .arrow { font-size: 1.6cqw; color: var(--sky-lt); font-weight: 700; }
+
+  /* Badges */
+  .pill-row { display: flex; gap: .8cqw; flex-wrap: wrap; justify-content: center; margin-top: 2cqw; }
+  .pill {
+    padding: .65cqw 1.3cqw; border-radius: 999px; font-size: 1.15cqw; font-weight: 600;
+    background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.2); color: #eaf3ff;
+  }
+  .trap {
+    margin-top: 1.2cqw; padding: 1cqw 1.3cqw; border-radius: .9cqw;
+    background: rgba(245,158,11,.15); border-left: .38cqw solid var(--warn);
+    font-size: 1.12cqw; color: #fef3c7;
+  }
+  .trap strong { color: #fde68a; }
+
+  /* Interactive Quiz */
+  .quiz-box { background: rgba(7,23,46,.72); border: 1px solid rgba(140,200,255,.32); border-radius: 1.1cqw; padding: 1.5cqw 1.8cqw; }
+  .quiz-q { font-size: 1.3cqw; font-weight: 700; margin-bottom: 1cqw; color: #fff; }
+  .quiz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: .75cqw; }
+  .qbtn {
+    text-align: left; padding: .85cqw 1.1cqw; border-radius: .75cqw; cursor: pointer;
+    border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.07);
+    color: #eaf3ff; font-size: 1.08cqw; transition: all .15s; font-family: inherit;
+  }
+  .qbtn:hover { background: rgba(58,138,224,.28); border-color: var(--sky-lt); }
+  .qbtn.right { background: rgba(16,185,129,.28); border-color: #34d399; color: #ecfdf5; font-weight: 700; }
+  .qbtn.wrong { background: rgba(239,68,68,.25); border-color: #f87171; color: #fee2e2; }
+  .quiz-fb { margin-top: .9cqw; font-size: 1.08cqw; min-height: 2.2cqw; color: #bae6fd; }
+
+  /* Interactive Cost Simulator */
+  .sim-grid { display: grid; grid-template-columns: 52% 48%; gap: 2cqw; align-items: start; }
+  .sim-row { display: grid; grid-template-columns: 1fr 7cqw; align-items: center; gap: .8cqw; margin-bottom: .75cqw; }
+  .sim-row label { font-size: 1.12cqw; color: #dbeafe; }
+  .sim-row label small { color: #93c5fd; display: block; font-size: .88cqw; }
+  .sim-row input {
+    width: 100%; padding: .45cqw .65cqw; border-radius: .5cqw; border: 1px solid rgba(140,200,255,.45);
+    background: rgba(7,23,46,.85); color: #fff; font-size: 1.18cqw; font-weight: 700; text-align: right;
+  }
+  .sim-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: .9cqw; margin-bottom: 1cqw; }
+  .skpi { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: .9cqw; padding: 1cqw 1.2cqw; }
+  .skpi.hi { background: linear-gradient(135deg, rgba(16,185,129,.24), rgba(58,138,224,.22)); border-color: #34d399; }
+  .skpi span { display: block; font-size: .92cqw; color: #a9c8ea; text-transform: uppercase; letter-spacing: .06em; }
+  .skpi strong { display: block; font-size: 2.1cqw; margin-top: .2cqw; color: #fff; }
+  .skpi small { display: block; font-size: .92cqw; color: #cbd5e1; }
+
+  /* Error hunt accordion */
+  .case-card {
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.18); border-radius: .9cqw;
+    padding: 1cqw 1.2cqw; cursor: pointer; text-align: left; transition: border-color .15s;
+  }
+  .case-card:hover { border-color: var(--sky-lt); }
+  .case-card .ctitle { font-size: 1.12cqw; font-weight: 700; color: #fde68a; margin-bottom: .35cqw; }
+  .case-card .cbody { font-size: 1.03cqw; color: #e2eefc; }
+  .case-card .cans {
+    margin-top: .65cqw; padding-top: .55cqw; border-top: 1px dashed rgba(110,231,183,.4);
+    font-size: 1.02cqw; color: #6ee7b7; display: none;
+  }
+  .case-card.open .cans { display: block; }
+
+  /* Slide footer watermark */
+  .sfoot {
+    position: absolute; left: 5.2%; right: 5.2%; bottom: 1.9%;
+    display: flex; justify-content: space-between; font-size: .92cqw; color: rgba(169,200,234,.62);
+  }
+
+  /* Bottom Control Bar */
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; height: 54px;
+    background: #071428; border-top: 1px solid rgba(255,255,255,.1);
+    display: flex; align-items: center; justify-content: space-between; padding: 0 20px; gap: 14px;
+    z-index: 80;
+  }
+  .bar-group { display: flex; align-items: center; gap: 8px; }
+  .bar button {
+    background: rgba(255,255,255,.08); color: #e2eefc; border: 1px solid rgba(255,255,255,.14);
+    padding: 7px 13px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;
+  }
+  .bar button:hover { background: rgba(58,138,224,.35); color: #fff; }
+  .bar button.active-btn { background: var(--sky); color: #fff; border-color: var(--sky-lt); }
+  .prog-wrap { flex: 1; max-width: 420px; display: flex; align-items: center; gap: 10px; }
+  .prog { flex: 1; height: 6px; border-radius: 99px; background: rgba(255,255,255,.12); overflow: hidden; }
+  .prog-fill { height: 100%; background: linear-gradient(90deg, #3a8ae0, #34d399); transition: width .25s; }
+  .counter { font-size: 13px; font-weight: 700; color: #a9c8ea; min-width: 58px; text-align: right; }
+
+  /* Speaker Notes Drawer */
+  .notes-panel {
+    position: fixed; right: 16px; bottom: 66px; width: min(500px, 92vw); max-height: 36vh;
+    background: rgba(7,20,40,.96); backdrop-filter: blur(10px);
+    border: 1px solid rgba(140,200,255,.35); border-radius: 14px; padding: 16px 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6); z-index: 90; overflow-y: auto; display: none;
+  }
+  .notes-panel.open { display: block; }
+  .notes-panel h4 { font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--sky-lt); margin-bottom: 8px; }
+  .notes-panel p { font-size: 14px; color: #e2eefc; line-height: 1.5; }
+
+  /* Overview Grid */
+  .overview {
+    position: fixed; inset: 0 0 54px 0; background: rgba(5,15,31,.96); z-index: 85;
+    padding: 28px; overflow-y: auto; display: none;
+  }
+  .overview.open { display: block; }
+  .overview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; max-width: 1280px; margin: 14px auto; }
+  .ov-item {
+    background: #0e294d; border: 1px solid rgba(255,255,255,.16); border-radius: 10px;
+    padding: 14px; cursor: pointer; transition: transform .15s, border-color .15s;
+  }
+  .ov-item:hover { transform: translateY(-2px); border-color: var(--sky-lt); }
+  .ov-item.cur { border-color: #34d399; box-shadow: 0 0 0 2px rgba(52,211,153,.35); }
+  .ov-item .ov-n { font-size: 11px; color: var(--sky-lt); font-weight: 700; text-transform: uppercase; }
+  .ov-item .ov-t { font-size: 14px; font-weight: 700; color: #fff; margin-top: 4px; }
+
+  /* Print all slides as 16:9 PDF */
+  @media print {
+    @page { size: 13.33in 7.5in; margin: 0; }
+    html, body { height: auto; overflow: visible; background: #0a2140; }
+    .bar, .notes-panel, .overview { display: none !important; }
+    .stage { position: static; padding: 0; display: block; background: none; }
+    .deck { width: 13.33in; aspect-ratio: auto; box-shadow: none; border-radius: 0; overflow: visible; }
+    .slide {
+      position: relative; opacity: 1 !important; transform: none !important; pointer-events: auto;
+      width: 13.33in; height: 7.5in; page-break-after: always; break-after: page;
+      background: linear-gradient(152deg, #0a2140 0%, #0e3159 54%, #081c36 100%);
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .case-card .cans { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<main class="stage">
+  <div class="deck" id="deck">
+
+    <!-- SLIDE 1: PORTADA -->
+    <section class="slide center active" data-title="Portada · GesPro Administrativo" data-notes="Bienvenida cálida (2 min). Preséntate, explica que hoy NO será una charla aburrida de diapositivas: 60 % del día estarán practicando en vivo en equipos (Copa GesPro). Atajos para ti: F = Pantalla completa, N = Notas del presentador, O = Mapa de diapositivas.">
+      <div class="kicker">Entrenamiento Oficial · 100 % Práctico · v5.7.0</div>
+      <h1>GesPro Administrativo<br>en Acción</h1>
+      <p class="sub">Del primer contacto con el cliente hasta la conciliación bancaria en cero — sin hojas de cálculo duplicadas ni cierres eternos.</p>
+      <div class="pill-row">
+        <span class="pill">1 · Ventas</span>
+        <span class="pill">2 · Cuentas por Cobrar</span>
+        <span class="pill">3 · Cuentas por Pagar</span>
+        <span class="pill">4 · Inventario</span>
+        <span class="pill">5 · Análisis de Costos</span>
+        <span class="pill">6 · Bancos</span>
+      </div>
+      <div class="sfoot"><span>© 2026 J@RTechnologies · GesPro Administrativo</span><span>Pulsa → o Espacio para avanzar · [N] Notas · [F] Pantalla completa</span></div>
+    </section>
+
+    <!-- SLIDE 2: ROMPEHIELO + VIDEO APERTURA -->
+    <section class="slide center" data-title="Rompehielo · Una operación, un solo registro" data-notes="DINÁMICA (3 min): Haz la pregunta de arriba en voz alta y escucha 2 respuestas reales. Luego PROYECTA el video comercial de apertura: GesPro-Administrativo-Comercial.mp4 (4 min 33 s). Cierra remarcando la promesa central: Una operación, un solo registro.">
+      <div class="kicker video">🎬 Video de Apertura: GesPro-Administrativo-Comercial.mp4 (4:33)</div>
+      <h1>¿Cuántos archivos de Excel tendrías que abrir hoy?</h1>
+      <p class="sub">Si la gerencia entra ahora mismo y pregunta: <strong>¿cuánto nos deben, qué vendimos hoy y cuánto hay real en cada banco?</strong></p>
+      <div class="flow" style="margin-top:2.4cqw">
+        <div class="node">1 Operación<small>Factura / Cobro / Compra</small></div>
+        <div class="arrow">→</div>
+        <div class="node">Inventario<small>Descuenta o ingresa + Kardex</small></div>
+        <div class="arrow">+</div>
+        <div class="node">Saldos &amp; Bancos<small>Cliente / Proveedor / Caja</small></div>
+        <div class="arrow">+</div>
+        <div class="node">Contabilidad<small>Asiento cuadrado al instante</small></div>
+      </div>
+      <div class="sfoot"><span>Apertura · Filosofía GesPro</span><span>Diapositiva 2</span></div>
+    </section>
+
+    <!-- SLIDE 3: AGENDA Y COPA GESPRO -->
+    <section class="slide" data-title="Agenda y Copa GesPro" data-notes="Explica la regla 20/20/60 (nunca más de 10 min hablando seguido). Forma los equipos de la Copa GesPro (parejas o tríos mezclando áreas). Confirma que todos pueden abrir la dirección de práctica en su navegador (sin tocar datos reales).">
+      <div class="kicker star">🏆 Dinámica del Día · Regla 20 / 20 / 60</div>
+      <h2>Cómo vamos a aprender hoy (cero aburrimiento)</h2>
+      <div class="grid3" style="margin-bottom:1.4cqw">
+        <div class="card">
+          <h3>⚡ 20 % Video / Idea clave</h3>
+          <p>Cápsulas cortas de 1 a 5 min + una historia real de empresa que conecta los 6 módulos de principio a fin.</p>
+        </div>
+        <div class="card warn">
+          <h3>🚨 20 % Demo + Trampa</h3>
+          <p>En cada módulo provocaremos un <strong>error clásico</strong> en pantalla para que el equipo lo detecte antes de practicar.</p>
+        </div>
+        <div class="card ok">
+          <h3>🛠️ 60 % Manos a la obra</h3>
+          <p>Cada equipo compite en la <strong>🏆 Copa GesPro</strong>: <strong>+10 pts</strong> por Reto Práctico y <strong>+5 pts</strong> por Trivia Relámpago.</p>
+        </div>
+      </div>
+      <div class="grid3">
+        <div class="card"><strong>08:50 · Módulo 1:</strong> Ventas (CRM, POS, Tienda)</div>
+        <div class="card"><strong>10:05 · Módulo 2:</strong> Cuentas por Cobrar &amp; IGTF</div>
+        <div class="card"><strong>11:05 · Módulo 3:</strong> Cuentas por Pagar &amp; IA</div>
+        <div class="card"><strong>13:05 · Módulo 4:</strong> Inventario &amp; Despachos</div>
+        <div class="card"><strong>14:00 · Módulo 5:</strong> Análisis de Costos &amp; PEPS</div>
+        <div class="card"><strong>15:10 · Módulo 6:</strong> Bancos &amp; Conciliación</div>
+      </div>
+      <div class="sfoot"><span>Ruta de Entrenamiento · 6 Horas Netas (o 2 Medias Jornadas)</span><span>Diapositiva 3</span></div>
+    </section>
+
+    <!-- SLIDE 4: REGLAS DE ORO Y SALVAVIDAS -->
+    <section class="slide" data-title="Las 3 Reglas de Oro y 3 Salvavidas" data-notes="Muestra en vivo el Panel de control y enseña los 3 salvavidas (ⓘ, botón ? Ayuda IA, Manual de usuario en el menú). Deja grabada a fuego la regla BORRADOR vs APROBADO.">
+      <div class="two wide-img">
+        <div>
+          <div class="kicker">Antes de hacer el primer clic</div>
+          <h2>3 Reglas de Oro<br>y 3 Salvavidas</h2>
+          <ul class="pts">
+            <li><strong>BORRADOR ≠ Contabilidad:</strong> En borrador editas y borras sin gastar número. <strong>APROBAR</strong> mete la operación en libros e inventario.</li>
+            <li><strong>Nunca se borra, se anula por reverso:</strong> El historial siempre cuadra y queda auditado.</li>
+            <li><strong>Tus 3 salvavidas en pantalla:</strong> ícono <strong>ⓘ</strong> en cada campo, botón <strong>? (Ayuda IA)</strong> arriba y <strong>Manual de usuario</strong> en el menú.</li>
+          </ul>
+          <div class="trap"><strong>💡 Dato clave:</strong> El menú izquierdo se adapta a tu rol/secciones. Si algo no aparece, revisa los filtros y pulsa <strong>Limpiar</strong>.</div>
+        </div>
+        <div>
+          <div class="shot"><img src="img/panel.png" alt="Panel de control GesPro"></div>
+          <div class="cap">Panel de control: saldos, bancos por moneda, vencidos y alertas en tiempo real</div>
+        </div>
+      </div>
+      <div class="sfoot"><span>Fundamentos · Panel y Navegación</span><span>Diapositiva 4</span></div>
+    </section>
+
+    <!-- SLIDE 5: PORTADA MÓDULO 1 VENTAS -->
+    <section class="slide center" data-title="Módulo 1 · Ventas" data-notes="GANCHO (3 min): Pregunta cuántas veces se cotizó algo sin stock o se dio un descuento sin permiso. VIDEOS MODULARES: Proyecta 01-Vendedor (3:40) + 02-Cotizaciones (1:46) + 03-Punto-de-venta (2:05) y opcional 04-Tienda-en-linea (1:57). Comparte por WhatsApp Guia-del-vendedor-WhatsApp.mp4 (5:29) a vendedores de calle.">
+      <div class="kicker">Módulo 01 · Ciclo Comercial</div>
+      <h1>Ventas sin Fugas</h1>
+      <p class="sub">Vendedor (CRM) · Cotizaciones · Pedidos y Reservas 24h · Punto de Venta (POS) · Tienda en Línea · Portal Móvil</p>
+      <div class="kicker video" style="margin-top:2.2cqw">🎬 Videos: 01-Vendedor (3:40) · 02-Cotizaciones (1:46) · 03-POS (2:05) · opc. 04-Tienda (1:57)</div>
+      <div class="sfoot"><span>Módulo 1 · Ventas</span><span>Diapositiva 5</span></div>
+    </section>
+
+    <!-- SLIDE 6: VENTAS CRM, COTIZACIONES Y PEDIDOS -->
+    <section class="slide" data-title="Ventas · CRM, Cotizaciones y Pedidos" data-notes="DEMO EN VIVO (10 min): Enseña Prospecto (puntuación 0-100), Embudo drag&drop, Clientes 360 y crea una Cotización. TRAMPA DEL DÍA: Intenta facturar la cotización directo o cotizar 9.999 cajas sin stock.">
+      <div class="two wide-img">
+        <div>
+          <div class="kicker">Módulo 01 · Control Comercial</div>
+          <h2>Del Prospecto al Pedido en Firme</h2>
+          <ul class="pts">
+            <li><strong>CRM ordenado:</strong> Prospectos puntuados (0–100: 🔥 Caliente ≥70), Embudo arrastrar y soltar, Agenda y <strong>Clientes 360</strong>.</li>
+            <li><strong>Cotizaciones blindadas:</strong> No cotiza sin existencia; validez en grande en PDF; descuentos <strong>≥25 % / 50 % / 75 %</strong> piden aprobación por GP Mensajes.</li>
+            <li><strong>Mercancía apartada 24 h hábiles:</strong> Al aceptar la cotización nace el <strong>Pedido</strong> y bloquea ese stock para que nadie más lo venda.</li>
+            <li><strong>Comisiones sin discusión:</strong> Calculadas sobre monto <strong>SIN IVA</strong>, por vender y/o cobrar.</li>
+          </ul>
+          <div class="trap"><strong>🚨 Trampa del día:</strong> Una cotización NUNCA se factura directo ni aparta stock. Primero: <em>«El cliente la aceptó»</em> → Pedido → Factura en CxC.</div>
+        </div>
+        <div>
+          <div class="shot"><img src="img/pedidos.png" alt="Bandeja de pedidos"></div>
+          <div class="cap">Bandeja de Pedidos: nada levantado desde la calle entra a contabilidad sin aprobación</div>
+        </div>
+      </div>
+      <div class="sfoot"><span>Módulo 1 · Vendedor (CRM), Cotizaciones y Pedidos</span><span>Diapositiva 6</span></div>
+    </section>
+
+    <!-- SLIDE 7: POS, TIENDA Y PORTAL MÓVIL -->
+    <section class="slide" data-title="Ventas · POS, Tienda y Vendedores" data-notes="Muestra en vivo el POS: abrir turno, pago combinado dólares+bolívares con vuelto e IGTF, y explica el modo SIN CONEXIÓN (comprobante provisional PRV-…). Menciona Tienda (pasarelas) y Portal Vendedores (/vendedores) con «Mi día» y dictado por voz.">
+      <div class="two">
+        <div>
+          <div class="kicker">Módulo 01 · Omnicanalidad</div>
+          <h2>Mostrador, Tienda Web y Calle</h2>
+          <div class="card" style="margin-bottom:1cqw">
+            <h3>🖥️ Punto de Venta (POS)</h3>
+            <p>Pago mixto multimoneda + vuelto + IGTF automático + impresora térmica/gaveta. <strong>¿Se cayó internet?</strong> Sigue vendiendo con comprobante <code>PRV-…</code> y factura solo al volver la red.</p>
+          </div>
+          <div class="card" style="margin-bottom:1cqw">
+            <h3>🛒 Tienda en Línea</h3>
+            <p>Stock real, cupones de descuento y pagos con <strong>Stripe, PayPal, Binance Pay y Pago Móvil C2P Mercantil</strong> verificados solos.</p>
+          </div>
+          <div class="card ok">
+            <h3>📱 Portal de Vendedores (<code>/vendedores</code>)</h3>
+            <p>Asistente <strong>«Mi día»</strong>, pedidos en calle, carga de comprobantes y <strong>«Contar la visita»</strong> (dictado por voz IA).</p>
+          </div>
+        </div>
+        <div>
+          <div class="shot phone"><img src="img/portal-vendedores.png" alt="Portal de vendedores móvil"></div>
+          <div class="cap">Portal móvil: cada vendedor ve solo su cartera y agenda</div>
+        </div>
+      </div>
+      <div class="sfoot"><span>Módulo 1 · POS, Tienda en Línea y Portal de Vendedores</span><span>Diapositiva 7</span></div>
+    </section>
+
+    <!-- SLIDE 8: RETO 1 + TRIVIA VENTAS -->
+    <section class="slide" data-title="Reto 1 y Trivia · Ventas" data-notes="Da 20 min a los equipos para completar el Reto Práctico 1 (+10 pts). Luego haz clic en vivo en la Trivia Relámpago (+5 pts).">
+      <div class="kicker star">🏆 Copa GesPro · Módulo 1</div>
+      <h2>Manos a la Obra + Trivia Relámpago</h2>
+      <div class="two eq">
+        <div class="card ok">
+          <h3>🛠️ Reto 1: «La Venta Relámpago» (20 min · +10 pts)</h3>
+          <ul class="pts" style="margin-top:.8cqw">
+            <li>Crea 1 <strong>Prospecto</strong> en CRM con tus iniciales y agéndale llamada.</li>
+            <li>Emite 1 <strong>Cotización</strong> (2 artículos, validez 5 días) y descarga su PDF.</li>
+            <li>Pulsa <strong>«El cliente la aceptó»</strong> y anota el número de Pedido <code>PED-…</code>.</li>
+            <li>Abre turno en <strong>POS</strong> y registra 1 venta con <strong>2 formas de pago</strong>.</li>
+          </ul>
+        </div>
+        <div class="quiz-box" data-quiz>
+          <div class="quiz-q">⚡ Trivia (+5 pts): Si un cliente acepta una cotización un viernes a las 5:00 p. m., ¿hasta cuándo queda apartada la mercancía sin pago?</div>
+          <div class="quiz-opts">
+            <button class="qbtn" data-ok="0">A) Sábado a las 5:00 p. m.</button>
+            <button class="qbtn" data-ok="1">B) Lunes a las 5:00 p. m. (24 h hábiles)</button>
+            <button class="qbtn" data-ok="0">C) Se aparta para siempre</button>
+            <button class="qbtn" data-ok="0">D) Los pedidos no apartan stock</button>
+          </div>
+          <div class="quiz-fb" data-ok-msg="✅ ¡Exacto! Las reservas duran 24 horas HÁBILES (sábado y domingo no cuentan). Si el cliente ya pagó, no vence." data-err-msg="❌ Casi… Recuerda: son 24 horas HÁBILES (fines de semana no cuentan). Vuelve a intentar."></div>
+        </div>
+      </div>
+      <div class="sfoot"><span>Módulo 1 · Práctica y Evaluación</span><span>Diapositiva 8</span></div>
+    </section>
+
+    <!-- SLIDE 9: PORTADA MÓDULO 2 CXC -->
+    <section class="slide center" data-title="Módulo 2 · Cuentas por Cobrar" data-notes="VIDEOS MODULARES en 2 bloques: Bloque A (antes de facturar): 10-Clientes (1:46) + 05-Facturacion-de-clientes (2:04). Bloque B (antes de cobrar): 08-Cuentas-por-cobrar (1:58) + 14-Comprobantes-de-pago (1:28) + 12-Autorizaciones (1:13).">
+      <div class="kicker">Módulo 02 · Facturación y Cobranza</div>
+      <h1>Cuentas por Cobrar<br>al Día</h1>
+      <p class="sub">Facturación blindada · Numeración fiscal · IGTF 3 % · Retenciones recibidas · Portal de Clientes · Cartera inteligente</p>
+      <div class="kicker video" style="margin-top:2.2cqw">🎬 Videos: 10-Clientes · 05-Fact. Clientes · 08-CxC · 14-Comprobantes · 12-Autorizaciones</div>
+      <div class="sfoot"><span>Módulo 2 · Cuentas por Cobrar</span><span>Diapositiva 9</span></div>
+    </section>
+
+    <!-- SLIDE 10: FACTURACIÓN Y BLOQUEO -->
+    <section class="slide" data-title="CxC · Facturación y Bloqueo por Mora" data-notes="DEMO EN VIVO: Factura desde «Pedidos por facturar», enseña el repaso de precios alterados (⚠), Equivalente en divisa (tasa BCV fija para reimpresiones) y aprueba. TRAMPA DEL DÍA: Enseña el campo «Bloqueo por facturas vencidas» con 0 vs 1.">
+      <div class="two wide-img">
+        <div>
+          <div class="kicker">Módulo 02 · Emisión sin Errores</div>
+          <h2>Facturar con Seguridad Fiscal</h2>
+          <ul class="pts">
+            <li><strong>Pedidos por facturar:</strong> Convierte pedidos a borrador en 1 clic sin volver a teclear nada.</li>
+            <li><strong>Numeración limpia:</strong> En <code>BORRADOR</code> no gasta serie; al <strong>Aprobar</strong> asigna N° factura y N° control consecutivos.</li>
+            <li><strong>Repaso de precios + Divisa:</strong> Avisa con <code>⚠</code> si el precio difiere de la lista; guarda fija la tasa BCV en <em>Equivalente en divisa</em> (Art. 25).</li>
+            <li><strong>Factura no impresa por error:</strong> Solo si es la última y no salió, Admin puede usar <em>Eliminar (no impresa)</em>; si no, siempre <em>Anular</em>.</li>
+          </ul>
+          <div class="trap"><strong>🚨 Trampa del día:</strong> En «Bloqueo por facturas vencidas», <strong><code>0</code> = SIN TOPE</strong>. Para frenar desde la primera vencida escribe <strong><code>1</code></strong> (destraba Gerencia en <em>Autorizaciones</em>, para UNA sola factura).</div>
+        </div>
+        <div>
+          <div class="shot"><img src="img/cxc-factura.png" alt="Editor de factura CxC"></div>
+          <div class="cap">Editor de factura: inventario, vencimiento y asiento contable al aprobar</div>
+        </div>
+      </div>
+      <div class="sfoot"><span>Módulo 2 · Facturación de Clientes</span><span>Diapositiva 10</span></div>
+    </section>
+
+    <!-- SLIDE 11: COBROS, IGTF, RETENCIONES Y CARTERA -->
+    <section class="slide" data-title="CxC · Cobros, IGTF, Portal y Cartera" data-notes="Enfatiza: 1) Cobrar el neto que entra al banco + cargar comprobante de 14 dígitos en Retenciones recibidas. 2) Regla del Portal (/portal) y Comprobantes: NUNCA aplicar sin verificar en banco. 3) Muestra Antigüedad, Panel (>70 % concentración) y Reporte por cliente (días reales de pago).">
+      <div class="two wide-img">
+        <div>
+          <div class="kicker">Módulo 02 · Cobranza Inteligente</div>
+          <h2>Cobros, Retenciones y Cartera</h2>
+          <ul class="pts">
+            <li><strong>IGTF 3 % automático:</strong> En cobros en divisas de contribuyentes especiales, $103 cubren $100 de factura + $3 de IGTF.</li>
+            <li><strong>Retenciones recibidas:</strong> Cobra el neto en banco y carga el comprobante de <strong>14 dígitos</strong> en <em>Retenciones recibidas</em> → directo al Libro de Ventas.</li>
+            <li><strong>Portal de clientes (QR en factura):</strong> El cliente reporta su pago sin clave → cae en <strong>Comprobantes de pago</strong> (verifica en banco antes de aplicar).</li>
+            <li><strong>A quién llamar hoy:</strong> <em>Antigüedad de saldos</em>, <em>Panel de clientes</em> (alerta concentración &gt;70 %) y <em>Reporte por cliente</em> (días reales de pago).</li>
+          </ul>
+        </div>
+        <div>
+          <div class="shot"><img src="img/cxc-antiguedad.png" alt="Antigüedad de saldos"></div>
+          <div class="cap">Antigüedad de saldos: prioriza cobranzas por tramos de mora en segundos</div>
+        </div>
+      </div>
+      <div class="sfoot"><span>Módulo 2 · Cobranza, Portal y Reportes de Cartera</span><span>Diapositiva 11</span></div>
+    </section>
+
+    <!-- SLIDE 12: RETO 2 + TRIVIA CXC -->
+    <section class="slide" data-title="Reto 2 y Trivia · CxC" data-notes="25 min para el Reto 2 (+10 pts) usando el pedido creado en el Módulo 1. Luego haz la Trivia en vivo (+5 pts).">
+      <div class="kicker star">🏆 Copa GesPro · Módulo 2</div>
+      <h2>Manos a la Obra + Trivia Relámpago</h2>
+      <div class="two eq">
+        <div class="card ok">
+          <h3>🛠️ Reto 2: «Del Pedido al Dinero» (25 min · +10 pts)</h3>
+          <ul class="pts" style="margin-top:.8cqw">
+            <li>Convierte tu pedido <code>PED-…</code> desde <strong>Pedidos por facturar</strong> y <strong>Aprueba</strong> la factura.</li>
+            <li>Abre el PDF e identifica el <strong>código QR del Portal de Clientes</strong> al pie.</li>
+            <li>Registra un <strong>cobro parcial del 50 %</strong> con referencia exacta (ej. <code>COB-EQ1-101</code>).</li>
+            <li>Carga 1 <strong>Retención recibida de IVA</strong> (14 dígitos) por el 75 % del IVA y busca al cliente más moroso en <strong>Antigüedad</strong>.</li>
+          </ul>
+        </div>
+        <div class="quiz-box" data-quiz>
+          <div class="quiz-q">⚡ Trivia (+5 pts): Un cliente envía su captura de pago móvil por el Portal. ¿Qué debe hacer Tesorería antes de pulsar «Aplicar»?</div>
+          <div class="quiz-opts">
+            <button class="qbtn" data-ok="0">A) Aplicarlo de inmediato para darle crédito</button>
+            <button class="qbtn" data-ok="1">B) Confirmar que el dinero entró en el banco</button>
+            <button class="qbtn" data-ok="0">C) Borrar la factura pendiente</button>
+            <button class="qbtn" data-ok="0">D) Pedirle al vendedor que lo apruebe</button>
+          </div>
+          <div class="quiz-fb" data-ok-msg="✅ ¡Correcto! Un comprobante es lo que el cliente AFIRMA; aplicarlo sin verificar cancela deuda real con un pago que podría no existir." data-err-msg="❌ ¡Peligro! Nunca se aplica un comprobante sin confirmar el abono real en el extracto o banca en línea."></div>
+        </div>
+      </div>
+      <div class="sfoot"><span>Módulo 2 · Práctica y Evaluación</span><span>Diapositiva 12</span></div>
+    </section>
+
+    <!-- SLIDE 13: PORTADA MÓDULO 3 CXP -->
+    <section class="slide center" data-title="Módulo 3 · Cuentas por Pagar" data-notes="VIDEOS MODULARES en 2 bloques: Bloque A: 11-Proveedores (1:28) + 06-Facturacion-de-proveedores (2:12). Bloque B: 09-Cuentas-por-pagar (1:31) + 07-Pago-a-proveedores (1:48). Luego haz la demo WOW en vivo de Importar factura con IA.">
+      <div class="kicker">Módulo 03 · Compras, Retenciones y Pagos</div>
+      <h1>Cuentas por Pagar<br>sin Teclear Doble</h1>
+      <p class="sub">Importar facturas con IA · Comprobante previo CPR · Retenciones IVA e ISLR (Decreto 1.808) · Reintegros · Lotes al Banco</p>
+      <div class="kicker video" style="margin-top:2.2cqw">🎬 Videos: 11-Proveedores · 06-Fact. Proveedores · 09-CxP · 07-Pago a Proveedores</div>
+      <div class="sfoot"><span>Módulo 3 · Cuentas por Pagar</span><span>Diapositiva 13</span></div>
+    </section>
+
+    <!-- SLIDE 14: CXP IA, CPR Y RETENCIONES -->
+    <section class="slide" data-title="CxP · IA, Comprobante Previo y Retenciones" data-notes="DEMO WOW (12 min): Sube un PDF/foto en «Importar factura con IA» y abre «Ver factura original». Enseña el Comprobante Previo (CPR-…) con enlace de 30 días para el proveedor. Muestra Pagar facturas y el cálculo de IVA e ISLR (incluyendo Tarifa 2 acumulativa).">
+      <div class="two wide-img">
+        <div>
+          <div class="kicker">Módulo 03 · Automatización Fiscal</div>
+          <h2>IA + Retenciones sin Errores</h2>
+          <ul class="pts">
+            <li><strong>🚀 Importar factura con IA:</strong> Sube el PDF o foto (hasta 8 MB). Lee RIF, N°, control, fecha y renglones creando el <strong>Borrador</strong> con el original adjunto.</li>
+            <li><strong>Comprobante previo (<code>CPR-…</code>):</strong> Nace al guardar el borrador con un <strong>enlace de 30 días</strong> para que el proveedor valide el neto antes de asentar.</li>
+            <li><strong>Retenciones IVA e ISLR automáticas:</strong> Tabulador <strong>Decreto 1.808</strong> completo (incluye Tarifa 2 acumulativa anual para no domiciliadas).</li>
+            <li><strong>Comprobantes fiscales en 1 clic:</strong> PDF con logo, firma, sello y envío directo por correo al proveedor.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="shot"><img src="img/cxp-listado.png" alt="Cuentas por pagar listado"></div>
+          <div class="cap">Cuentas por pagar: control total de facturas, comprobantes previos y vencimientos</div>
+        </div>
+      </div>
+      <div class="sfoot"><span>Módulo 3 · Registro con IA y Retenciones Fiscales</span><span>Diapositiva 14</span></div>
+    </section>
+
+    <!-- SLIDE 15: CASOS ESPECIALES + LOTES AL BANCO -->
+    <section class="slide" data-title="CxP · Accionistas, Reintegros y Lotes" data-notes="Explica los 2 casos reales que aman los contadores (Pagada por accionista y Retenciones por reintegrar) y la segregación de tareas en Lotes al banco. TRAMPA DEL DÍA: ¿Por qué un proveedor no entra al lote? (Faltan 4 datos bancarios).">
+      <div class="two wide-img">
+        <div>
+          <div class="kicker">Módulo 03 · Control Interno</div>
+          <h2>Casos Reales y Lotes al Banco</h2>
+          <div class="card" style="margin-bottom:.9cqw">
+            <h3>👤 «Pagada por un accionista»</h3>
+            <p>Aprueba el gasto normal y pulsa el botón en la factura: salda al proveedor y traslada la deuda al socio <strong>sin mover bancos</strong>.</p>
+          </div>
+          <div class="card" style="margin-bottom:.9cqw">
+            <h3>🔄 «Retenciones por reintegrar»</h3>
+            <p>Si el proveedor cobró el 100 % y devolverá lo retenido, controla aquí la devolución o <strong>descuéntalo de otra factura</strong>.</p>
+          </div>
+          <div class="card ok">
+            <h3>🏦 Lotes al banco (Segregación de tareas)</h3>
+            <p><strong>Compras</strong> postea pagos → <strong>Tesorería</strong> arma el archivo (<code>BORRADOR → GENERADO → ENVIADO → CONFIRMADO</code> con huella SHA-256).</p>
+          </div>
+          <div class="trap"><strong>🚨 Trampa:</strong> Revisa en <em>Proveedores</em> la tarjeta <strong>«Sin datos para pagarles»</strong> (4 datos obligatorios) antes del día de pago.</div>
+        </div>
+        <div>
+          <div class="shot"><img src="img/cxp-lotes.png" alt="Lotes de pago al banco"></div>
+          <div class="cap">Pago masivo: vista previa del layout bancario y trazabilidad completa</div>
+        </div>
+      </div>
+      <div class="sfoot"><span>Módulo 3 · Casos Especiales y Pagos por Lote</span><span>Diapositiva 15</span></div>
+    </section>
+
+    <!-- SLIDE 16: RETO 3 + TRIVIA CXP -->
+    <section class="slide" data-title="Reto 3 y Trivia · CxP" data-notes="25 min para el Reto 3 (+10 pts) + Trivia Relámpago (+5 pts). ¡Buen momento justo antes del almuerzo!">
+      <div class="kicker star">🏆 Copa GesPro · Módulo 3</div>
+      <h2>Manos a la Obra + Trivia Relámpago</h2>
+      <div class="two eq">
+        <div class="card ok">
+          <h3>🛠️ Reto 3: «Cero Errores en CxP» (25 min · +10 pts)</h3>
+          <ul class="pts" style="margin-top:.8cqw">
+            <li>Verifica en <strong>Proveedores</strong> que tu proveedor tenga los <strong>4 datos bancarios</strong> completos.</li>
+            <li>Registra una factura de compra (N° y control del proveedor) ingresando <strong>10 unidades</strong> al almacén principal.</li>
+            <li>Abre el <strong>Comprobante previo (<code>CPR-…</code>)</strong> y luego <strong>Aprueba</strong> la factura.</li>
+            <li>Ve a <strong>Pagar facturas</strong>, genera el pago con retenciones y emite el <strong>Comprobante fiscal de IVA</strong>.</li>
+          </ul>
+        </div>
+        <div class="quiz-box" data-quiz>
+          <div class="quiz-q">⚡ Trivia (+5 pts): Un socio pagó de su bolsillo una factura de electricidad de la empresa. ¿Cómo se registra correctamente?</div>
+          <div class="quiz-opts">
+            <button class="qbtn" data-ok="0">A) Poniendo la cuenta de Accionistas en el renglón del gasto</button>
+            <button class="qbtn" data-ok="1">B) Aprobando el gasto normal y pulsando «Pagada por un accionista»</button>
+            <button class="qbtn" data-ok="0">C) No se registra en el sistema</button>
+            <button class="qbtn" data-ok="0">D) Creando un pago desde la caja chica</button>
+          </div>
+          <div class="quiz-fb" data-ok-msg="✅ ¡Bravo! Así el gasto y el IVA quedan en sus cuentas reales y la deuda pasa de Proveedores a Accionistas sin tocar bancos." data-err-msg="❌ ¡Cuidado! Si pones Accionistas en el renglón de la factura va al DEBE (bajaría la deuda al socio y borraría el gasto)."></div>
+        </div>
+      </div>
+      <div class="sfoot"><span>Módulo 3 · Práctica y Evaluación</span><span>Diapositiva 16</span></div>
+    </section>
+
+    <!-- SLIDE 17: PORTADA MÓDULO 4 INVENTARIO -->
+    <section class="slide center" data-title="Módulo 4 · Inventario" data-notes="De vuelta del almuerzo: proyecta el video modular 15-Inventario (1:41) — y opcionalmente 16-Manufactura (1:53) / 17-Sucursales (1:20) si aplica a la empresa — y pasa directo a la demo de Kardex, Costo inicial y Notas de despacho.">
+      <div class="kicker">Módulo 04 · Operaciones y Almacén</div>
+      <h1>Inventario con<br>Cuentas Claras</h1>
+      <p class="sub">Costo promedio ponderado · Costo inicial · Kardex valorado · Apartado por pedidos · Reposición · Notas de despacho · Manufactura</p>
+      <div class="kicker video" style="margin-top:2.2cqw">🎬 Videos: 15-Inventario (1:41) · opc. 16-Manufactura (1:53) · 17-Sucursales (1:20)</div>
+      <div class="sfoot"><span>Módulo 4 · Inventario</span><span>Diapositiva 17</span></div>
+    </section>
+
+    <!-- SLIDE 18: COSTO PROMEDIO, COSTO INICIAL Y KARDEX -->
+    <section class="slide" data-title="Inventario · Kardex y Costo Inicial" data-notes="TRAMPA DEL DÍA: Pregunta en voz alta: 100 uds a $0 + 100 uds compradas a $20 = ¿cuánto da el promedio? ($10 en vez de $20). Enseña la pestaña «Costo inicial» y el cuadro «Apartado por pedidos» en Existencias.">
+      <div class="two wide-img">
+        <div>
+          <div class="kicker">Módulo 04 · La Lupa del Almacén</div>
+          <h2>Kardex, Costo Inicial y Reservas</h2>
+          <ul class="pts">
+            <li><strong>Costo promedio ponderado:</strong> Se recalcula solo en cada compra; nunca se teclea a mano.</li>
+            <li><strong>🚨 Pestaña «Costo inicial»:</strong> Si migraste stock en <code>$0</code>, cárgale aquí su costo antes de comprar (hace 1 asiento contra apertura y crea línea <code>COSTO INICIAL</code>).</li>
+            <li><strong>Kardex valorado:</strong> Muestra entrada, salida, documento origen y saldo inicial arrastrado por fecha.</li>
+            <li><strong>Apartado por pedidos:</strong> <code>Disponible = Existencia − Apartado (24 h hábiles)</code>. Impide sobrevender.</li>
+          </ul>
+          <div class="trap"><strong>🚨 Trampa:</strong> 10 uds en $0 + 10 compradas a $20 = promedio falso de <strong>$10</strong>. ¡Usa siempre <em>Costo inicial</em> primero!</div>
+        </div>
+        <div>
+          <div class="shot"><img src="img/inventario-kardex.png" alt="Kardex valorado de inventario"></div>
+          <div class="cap">Kardex: cuando algo no cuadra en almacén, la respuesta siempre está aquí</div>
+        </div>
+      </div>
+      <div class="sfoot"><span>Módulo 4 · Valorización, Costo Inicial y Kardex</span><span>Diapositiva 18</span></div>
+    </section>
+
+    <!-- SLIDE 19: TRANSFERENCIAS, REPOSICIÓN Y DESPACHOS -->
+    <section class="slide" data-title="Inventario · Reposición y Notas de Despacho" data-notes="Aclara la gran diferencia contable: Transferir (0 asientos) vs Ajustar (sí genera asiento). Enseña «Generar por faltantes» en Órdenes de compra y las Notas de despacho (Orden de entrega automática vs Guía de muestras/donaciones con Solicitante).">
+      <div class="kicker">Módulo 04 · Movimientos y Control Físico</div>
+      <h2>Movimientos, Reposición y Notas de Despacho</h2>
+      <div class="grid3">
+        <div class="card">
+          <h3>🔀 Transferir vs Ajustar</h3>
+          <p><strong>Transferir:</strong> Mueve stock entre almacenes con <strong>0 asientos</strong> (no cambia el valor total).<br><br><strong>Ajustar existencia:</strong> Mermas, roturas o conteo físico → <strong>sí genera asiento contable</strong>.</p>
+        </div>
+        <div class="card ok">
+          <h3>🛒 Órdenes de Compra</h3>
+          <p><strong>«Generar por faltantes»</strong> crea borradores agrupados por proveedor con lo que llegó al stock mínimo.<br><br>Al aprobar, se recibe el camión en <strong>Recepción de mercancía</strong> (total o parcial).</p>
+        </div>
+        <div class="card warn">
+          <h3>🚚 Notas de Despacho</h3>
+          <p>Leyenda <em>SIN DERECHO A CRÉDITO FISCAL</em>.<br>• <strong>Venta:</strong> Nace sola (<em>Orden de entrega</em>).<br>• <strong>Muestra / Donación:</strong> Pide <strong>Solicitante</strong> obligatorio para medir cuánto pide cada persona.</p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:1.2cqw;display:flex;justify-content:space-between;align-items:center;gap:1.5cqw">
+        <div><strong>🏭 ¿Fabrican o ensamblan?</strong> En <strong>Manufactura</strong> defines recetas con merma y órdenes de producción (<em>Planificar → Iniciar → Terminar</em> al costo real).</div>
+        <div style="white-space:nowrap;color:#8cc8ff;font-weight:700">📎 Adjunta garantías y fichas en cada artículo</div>
+      </div>
+      <div class="sfoot"><span>Módulo 4 · Reposición, Despachos y Manufactura</span><span>Diapositiva 19</span></div>
+    </section>
+
+    <!-- SLIDE 20: RETO 4 + TRIVIA INVENTARIO -->
+    <section class="slide" data-title="Reto 4 y Trivia · Inventario" data-notes="25 min para el Reto 4 (+10 pts) + Trivia Relámpago (+5 pts).">
+      <div class="kicker star">🏆 Copa GesPro · Módulo 4</div>
+      <h2>Manos a la Obra + Trivia Relámpago</h2>
+      <div class="two eq">
+        <div class="card ok">
+          <h3>🛠️ Reto 4: «Detective del Almacén» (25 min · +10 pts)</h3>
+          <ul class="pts" style="margin-top:.8cqw">
+            <li>Abre <strong>Kardex</strong> y rastrea el artículo que compraste (Mód. 3) y vendiste (Mód. 2).</li>
+            <li>Haz una <strong>Transferencia</strong> de 2 unidades entre dos almacenes.</li>
+            <li>Crea una <strong>Nota de despacho</strong> por motivo <strong>Muestra</strong> (1 unidad) indicando tu nombre como <strong>Solicitante</strong> y márcala <em>Despachada</em>.</li>
+            <li>En <strong>Órdenes de compra</strong> pulsa <strong>«Generar por faltantes»</strong>.</li>
+          </ul>
+        </div>
+        <div class="quiz-box" data-quiz>
+          <div class="quiz-q">⚡ Trivia (+5 pts): Si mueves 50 cajas del Almacén Caracas al Almacén Valencia usando «Transferir», ¿qué asiento contable genera GesPro?</div>
+          <div class="quiz-opts">
+            <button class="qbtn" data-ok="0">A) Gasto por flete contra Inventario</button>
+            <button class="qbtn" data-ok="0">B) Merma de inventario contra Caja</button>
+            <button class="qbtn" data-ok="1">C) Ninguno — el valor total del inventario no cambia</button>
+            <button class="qbtn" data-ok="0">D) Una factura de venta interna</button>
+          </div>
+          <div class="quiz-fb" data-ok-msg="✅ ¡Exacto! Una transferencia cambia de ubicación física pero NO cambia el valor total del inventario de la empresa." data-err-msg="❌ Incorrecto: trasladar mercancía propia entre tus almacenes NO genera asiento contable. Solo los Ajustes contabilizan."></div>
+        </div>
+      </div>
+      <div class="sfoot"><span>Módulo 4 · Práctica y Evaluación</span><span>Diapositiva 20</span></div>
+    </section>
+
+    <!-- SLIDE 21: PORTADA MÓDULO 5 ANÁLISIS DE COSTOS -->
+    <section class="slide center" data-title="Módulo 5 · Análisis de Costos" data-notes="GANCHO (4 min): Pregunta a la sala: si algo cuesta $70 y quieres ganar 30 % sobre el precio de venta, ¿lo vendes en $91? ¡NO! $91 solo deja 23 %. VIDEO DEDICADO: Proyecta 23-Analisis-de-costos (3:48) — y si importan, 22-Importaciones (2:39) + opc. 21-Reportes (1:38) — y luego usa el Simulador Interactivo de la Diapositiva 23.">
+      <div class="kicker star">⭐ Módulo 05 · Análisis de Costos · Video + Simulador en Vivo</div>
+      <h1>Análisis de Costos<br>y Margen Real</h1>
+      <p class="sub">¿Cuánto te cuesta de verdad cada producto o servicio? · 4 Modalidades · IA Gemini · Reparto de Importaciones · Revalorización · PEPS</p>
+      <div class="kicker video" style="margin-top:2.2cqw">🎬 Videos: 23-Analisis-de-costos (3:48) · opc. 22-Importaciones (2:39) · 21-Reportes (1:38)</div>
+      <div class="sfoot"><span>Módulo 5 · Operaciones → Análisis de Costos</span><span>Diapositiva 21</span></div>
+    </section>
+
+    <!-- SLIDE 22: LAS 4 MODALIDADES Y AL COSTO -->
+    <section class="slide" data-title="Costos · 4 Modalidades, IA y Revalorización" data-notes="Explica las 4 modalidades, el atajo masivo «Desde una importación», la regla sagrada de la casilla «Al costo», las filas amarillas estimadas por Gemini y qué pasa al aprobar (línea REVALORIZACION en kardex + asiento). Menciona Reportes → Utilidad bruta (Promedio vs PEPS).">
+      <div class="kicker">Módulo 05 · Anatomía de una Ficha de Costo</div>
+      <h2>4 Modalidades, IA Gemini y Regla «Al Costo»</h2>
+      <div class="grid4" style="margin-bottom:1.2cqw">
+        <div class="card"><h3>🚢 Importado</h3><p>Factura + gastos de <strong>Importación</strong> (flete, seguro, arancel CIF, aduana).</p></div>
+        <div class="card"><h3>🏭 Elaborado</h3><p>Toma la <strong>Receta</strong> de Manufactura con merma, mano de obra e indirectos.</p></div>
+        <div class="card"><h3>🧑‍🔧 Servicio</h3><p>Costo/hora real de <strong>RRHH</strong> (<code>sueldo ÷ 173,33 h</code>) + insumos/terceros.</p></div>
+        <div class="card"><h3>🧩 Mixto</h3><p>Combina compras, receta y horas de personal en un solo cálculo.</p></div>
+      </div>
+      <div class="grid2">
+        <div class="card ok">
+          <h3>✅ Casilla «Al costo» MARCADA vs ⬜ SIN MARCAR</h3>
+          <p>• <strong>Marcada ✅ (Costo del artículo):</strong> FOB, flete, seguro, arancel, aduana, transporte, materiales, mano de obra → <strong>entra al inventario</strong>.<br>
+          • <strong>Sin marcar ⬜ (Solo precio):</strong> Gastos generales (3 meses contables) y comisiones → <strong>solo fijan el precio sugerido</strong>.</p>
+        </div>
+        <div class="card warn">
+          <h3>✨ IA Gemini + Aprobación + PEPS</h3>
+          <p>• Lo que estima la IA sale en <strong>amarillo (<code>Estimado</code>)</strong>: nada se aprueba solo.<br>
+          • Al <strong>Aprobar</strong>: crea línea <code>REVALORIZACION</code> en Kardex + asiento contable (y opcional actualiza <em>Precio 1</em>).<br>
+          • Analiza rentabilidad real en <strong>Reportes → Utilidad bruta (Promedio vs PEPS)</strong>.</p>
+        </div>
+      </div>
+      <div class="sfoot"><span>Módulo 5 · Fichas de Costo, Importaciones y Utilidad Bruta</span><span>Diapositiva 22</span></div>
+    </section>
+
+    <!-- SLIDE 23: SIMULADOR INTERACTIVO DE COSTOS + RETO 5 -->
+    <section class="slide" data-title="Simulador en Vivo · Análisis de Costos" data-notes="¡MOMENTO INTERACTIVO ESTRELLA! Cambia los números en vivo frente a la sala (ej. sube el arancel al 20 % o el margen al 35 %) y señala cuánto perdería quien usa la fórmula ingenua ×1,30. Luego da 20 min para el Reto Práctico 5.">
+      <div class="kicker star">🧮 Simulador en Vivo · Fórmula Exacta de GesPro</div>
+      <h2>Prueba la Fórmula y Lánzate al Reto 5</h2>
+      <div class="sim-grid">
+        <div class="card">
+          <div class="sim-row"><label>Precio de compra FOB (USD) <small>Al costo ✅</small></label><input id="s-fob" type="number" step="0.1" value="10.00"></div>
+          <div class="sim-row"><label>Flete + Seguro (USD) <small>Al costo ✅ · Base CIF = FOB + Flete</small></label><input id="s-flete" type="number" step="0.1" value="2.05"></div>
+          <div class="sim-row"><label>Arancel (% sobre CIF) <small>Al costo ✅</small></label><input id="s-arancel" type="number" step="0.5" value="15"></div>
+          <div class="sim-row"><label>Gastos generales (% del precio) <small>Solo para precio ⬜</small></label><input id="s-gg" type="number" step="0.5" value="12"></div>
+          <div class="sim-row"><label>Comisión de venta (% del precio) <small>Solo para precio ⬜</small></label><input id="s-com" type="number" step="0.5" value="3"></div>
+          <div class="sim-row"><label>Margen deseado (% del precio) <small>Ganancia neta objetivo</small></label><input id="s-margen" type="number" step="1" value="30"></div>
+        </div>
+        <div>
+          <div class="sim-kpis">
+            <div class="skpi"><span>Costo del artículo</span><strong id="o-costo">$13.86</strong><small>Va al inventario</small></div>
+            <div class="skpi hi"><span>Precio sugerido</span><strong id="o-precio">$25.20</strong><small id="o-margen-txt">Margen real 30.0 %</small></div>
+          </div>
+          <div class="card warn" id="o-alerta" style="margin-bottom:1cqw">
+            <p id="o-comp"></p>
+          </div>
+          <div class="card ok">
+            <h3>🛠️ Reto 5 (20 min · +10 pts)</h3>
+            <p>Crea 1 <strong>Ficha de costo</strong> en <em>Análisis de costos</em> (FOB + Flete + Arancel CIF + Gastos generales + Comisión), fija <strong>30 % margen</strong>, apruébala y busca <code>REVALORIZACION</code> en el <strong>Kardex</strong>. Luego compara <strong>Promedio vs PEPS</strong> en <em>Utilidad bruta</em>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="sfoot"><span>Precio = Costo completo ÷ (1 − Margen − % sobre precio)</span><span>Diapositiva 23</span></div>
+    </section>
+
+    <!-- SLIDE 24: PORTADA MÓDULO 6 BANCOS -->
+    <section class="slide center" data-title="Módulo 6 · Bancos y Conciliación" data-notes="🎬 DÚO DE VIDEOS: 1) Arranca con el resumen rápido 13-Bancos-y-conciliacion (1:45). 2) Luego proyecta completo el tutorial profundo video/gespro-conciliacion.mp4 (5:50 — 7 pasos + devoluciones + Agente). Puedes pausar brevemente en el Paso 4 (02:51) y Paso 7 (04:07).">
+      <div class="kicker">Módulo 06 · Tesorería y Control del Dinero</div>
+      <h1>Bancos y Conciliación<br>en Minutos</h1>
+      <p class="sub">Cuentas y Devaluación · Extracto automático · Conciliación en 7 pasos · Transferencias devueltas · Agente automático</p>
+      <div class="kicker video" style="margin-top:2.2cqw">🎬 Videos: 13-Bancos-y-conciliacion (1:45) + video/gespro-conciliacion.mp4 (5:50)</div>
+      <div class="sfoot"><span>Módulo 6 · Tesorería → Bancos y Conciliación</span><span>Diapositiva 24</span></div>
+    </section>
+
+    <!-- SLIDE 25: LOS 7 PASOS + DEVALUACIÓN + AGENTE -->
+    <section class="slide" data-title="Bancos · 7 Pasos, Devoluciones y Agente" data-notes="Tras ver el video, destaca en vivo: 1) Columna Devaluación en cuentas en Bs. 2) Regla del Saldo Inicial (bloqueado tras cerrar conciliación). 3) TRAMPA: Transferencia devuelta = Corregir referencia + Compensar sin asiento falso. 4) Archivo real ejemplos/extracto-mercantil-agosto.txt.">
+      <div class="two wide-img">
+        <div>
+          <div class="kicker">Módulo 06 · Diferencia en Cero</div>
+          <h2>7 Pasos + 3 Superpoderes</h2>
+          <ul class="pts">
+            <li><strong>Extracto inteligente:</strong> Lee Excel/CSV/TXT (incluso Mercantil sin títulos), valida cuenta/moneda y cuadre <code>SI + Cr − Déb = SF</code> sin duplicar.</li>
+            <li><strong>Cruce automático + Notas al vuelo:</strong> Cruza el 80–95 % en 1 clic; <strong>«Registrar»</strong> contabiliza y concilia comisiones sin salir de la pantalla.</li>
+            <li><strong>Transferencia devuelta:</strong> <em>Corregir referencia</em> en el pago + <strong>«Compensar con su devolución»</strong> (cero asientos ficticios).</li>
+            <li><strong>Columna Devaluación + Agente diario:</strong> Ve cuánto pierden tus bolívares quietos y recibe informe diario por área (CxC/CxP/Bancos).</li>
+          </ul>
+          <div class="trap"><strong>🚨 Regla de cierre:</strong> Solo cierra en <strong><code>0,00</code></strong> (verde). Al cerrar bloquea partidas y saldo inicial.</div>
+        </div>
+        <div style="display:grid;gap:.9cqw">
+          <div class="shot"><img src="img/08-cruce-auto.png" style="max-height:17.5cqw" alt="Cruce automático"></div>
+          <div class="shot"><img src="img/12-cuadrada.png" style="max-height:17.5cqw" alt="Conciliación cuadrada en cero"></div>
+        </div>
+      </div>
+      <div class="sfoot"><span>Módulo 6 · Conciliación Bancaria y Agente Automático</span><span>Diapositiva 25</span></div>
+    </section>
+
+    <!-- SLIDE 26: RETO 6 + GRAN CIERRE CAZA DEL ERROR -->
+    <section class="slide" data-title="Reto 6 y Gran Cierre · Caza del Error" data-notes="Primero da 30 min para el Reto 6 con ejemplos/extracto-mercantil-agosto.txt (+10 pts). Luego haz el GRAN CIERRE «Caza del Error» (15 min): haz clic en cada tarjeta para revelar la respuesta después de que los equipos debatan. ¡Suma puntos y premia la Copa GesPro!">
+      <div class="kicker star">🏆 Reto 6 + Gran Cierre: «Caza del Error» (Haz clic en cada caso)</div>
+      <h2>Práctica Bancaria y Desafío Final</h2>
+      <div class="card ok" style="margin-bottom:1.1cqw;padding:1cqw 1.4cqw">
+        <p><strong>🛠️ Reto 6 (30 min · +10 pts):</strong> Importa <code>ejemplos/extracto-mercantil-agosto.txt</code> → Abre conciliación → Lanza <strong>Cruce automático</strong> → Haz 1 cruce manual + pulsa <strong>Registrar</strong> en una comisión bancaria → Verifica el <strong>Histórico</strong> y el <strong>Agente</strong>.</p>
+      </div>
+      <div class="grid2">
+        <div class="case-card" onclick="this.classList.toggle('open')">
+          <div class="ctitle">🔍 Caso 1 · Ventas / Inventario (Clic para ver solución)</div>
+          <div class="cbody">Cotizamos hace 3 días y hoy otro vendedor vendió esa mercancía. ¿Falló el apartado?</div>
+          <div class="cans">✅ NO. Las <strong>cotizaciones</strong> son ofertas y no apartan stock. Solo un <strong>Pedido en firme</strong> (cotización aceptada) aparta por 24 h hábiles.</div>
+        </div>
+        <div class="case-card" onclick="this.classList.toggle('open')">
+          <div class="ctitle">🔍 Caso 2 · Cuentas por Cobrar (Clic para ver solución)</div>
+          <div class="cbody">Cliente con 4 facturas vencidas pudo facturar aunque le pusimos <code>0</code> en «Bloqueo por vencidas».</div>
+          <div class="cans">✅ <code>0</code> significa <strong>SIN TOPE</strong>. Hay que escribir <strong><code>1</code></strong> para detener desde la primera factura vencida.</div>
+        </div>
+        <div class="case-card" onclick="this.classList.toggle('open')">
+          <div class="ctitle">🔍 Caso 3 · Cuentas por Pagar (Clic para ver solución)</div>
+          <div class="cbody">Un pago aprobado de proveedor no aparece disponible al armar el Lote al banco.</div>
+          <div class="cans">✅ Le falta alguno de los <strong>4 datos bancarios obligatorios</strong> (banco, cuenta, titular, documento) o está marcado «En efectivo».</div>
+        </div>
+        <div class="case-card" onclick="this.classList.toggle('open')">
+          <div class="ctitle">🔍 Caso 4 · Bancos (Clic para ver solución)</div>
+          <div class="cbody">Cerramos octubre y hoy vimos que el saldo inicial estaba mal por $100, pero el campo está bloqueado.</div>
+          <div class="cans">✅ Correcto: no se altera una conciliación firmada. Se corrige con <strong>«Movimiento manual»</strong> trazable con fecha y asiento.</div>
+        </div>
+      </div>
+      <div class="sfoot"><span>🎉 ¡Gracias! Recuerda tus salvavidas diarios: ⓘ · ? Ayuda IA · Manual de usuario</span><span>Diapositiva 26 / 26</span></div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Speaker Notes Drawer -->
+<aside class="notes-panel" id="notesPanel">
+  <h4>📝 Notas del Instructor (Diapositiva <span id="notesNum">1</span>)</h4>
+  <p id="notesBody"></p>
+</aside>
+
+<!-- Overview Modal -->
+<div class="overview" id="overview">
+  <div style="max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center">
+    <h2 style="font-size:20px;margin:0">Mapa de Diapositivas (haz clic para saltar)</h2>
+    <button onclick="toggleOverview()" style="background:#1a5da8;color:#fff;border:0;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:700">Cerrar [O]</button>
+  </div>
+  <div class="overview-grid" id="ovGrid"></div>
+</div>
+
+<!-- Bottom Bar -->
+<footer class="bar">
+  <div class="bar-group">
+    <button onclick="go(cur - 1)" title="Anterior (←)">◀ Anterior</button>
+    <button onclick="go(cur + 1)" title="Siguiente (→)">Siguiente ▶</button>
+  </div>
+  <div class="prog-wrap">
+    <div class="prog"><div class="prog-fill" id="progFill"></div></div>
+    <span class="counter" id="counter">1 / 26</span>
+  </div>
+  <div class="bar-group">
+    <button id="btnNotes" onclick="toggleNotes()" title="Notas del instructor (N)">📝 Notas [N]</button>
+    <button id="btnOv" onclick="toggleOverview()" title="Vista general (O)">▦ Mapa [O]</button>
+    <button onclick="toggleFull()" title="Pantalla completa (F)">⛶ Full [F]</button>
+    <button onclick="window.print()" title="Exportar a PDF">🖨️ PDF</button>
+  </div>
+</footer>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  let cur = 0;
+
+  function go(idx) {
+    cur = Math.max(0, Math.min(slides.length - 1, idx));
+    slides.forEach((s, i) => s.classList.toggle('active', i === cur));
+    document.getElementById('counter').textContent = `${cur + 1} / ${slides.length}`;
+    document.getElementById('progFill').style.width = `${((cur + 1) / slides.length) * 100}%`;
+    document.getElementById('notesNum').textContent = cur + 1;
+    document.getElementById('notesBody').textContent = slides[cur].dataset.notes || 'Sin notas adicionales.';
+    document.querySelectorAll('.ov-item').forEach((o, i) => o.classList.toggle('cur', i === cur));
+  }
+
+  function toggleNotes() {
+    const p = document.getElementById('notesPanel');
+    p.classList.toggle('open');
+    document.getElementById('btnNotes').classList.toggle('active-btn', p.classList.contains('open'));
+  }
+  function toggleOverview() {
+    const o = document.getElementById('overview');
+    o.classList.toggle('open');
+    document.getElementById('btnOv').classList.toggle('active-btn', o.classList.contains('open'));
+  }
+  function toggleFull() {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+    else document.exitFullscreen?.();
+  }
+
+  // Build Overview grid
+  const ovGrid = document.getElementById('ovGrid');
+  slides.forEach((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'ov-item';
+    d.innerHTML = `<div class="ov-n">Diapositiva ${i + 1}</div><div class="ov-t">${s.dataset.title || ''}</div>`;
+    d.onclick = () => { go(i); toggleOverview(); };
+    ovGrid.appendChild(d);
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'Home') go(0);
+    else if (e.key === 'End') go(slides.length - 1);
+    else if (e.key.toLowerCase() === 'n') toggleNotes();
+    else if (e.key.toLowerCase() === 'o') toggleOverview();
+    else if (e.key.toLowerCase() === 'f') toggleFull();
+    else if (e.key === 'Escape') {
+      document.getElementById('overview').classList.remove('open');
+      document.getElementById('btnOv').classList.remove('active-btn');
+    }
+  });
+
+  // Interactive Quizzes
+  document.querySelectorAll('[data-quiz]').forEach((box) => {
+    const fb = box.querySelector('.quiz-fb');
+    box.querySelectorAll('.qbtn').forEach((btn) => {
+      btn.onclick = () => {
+        box.querySelectorAll('.qbtn').forEach((b) => b.classList.remove('right', 'wrong'));
+        const ok = btn.dataset.ok === '1';
+        btn.classList.add(ok ? 'right' : 'wrong');
+        fb.textContent = ok ? fb.dataset.okMsg : fb.dataset.errMsg;
+      };
+    });
+  });
+
+  // Interactive Cost Analysis Simulator (exact GesPro formula from public/js/costeo-calculo.js)
+  const ids = ['s-fob', 's-flete', 's-arancel', 's-gg', 's-com', 's-margen'];
+  function recalcSim() {
+    const fob = Math.max(0, Number(document.getElementById('s-fob').value) || 0);
+    const flete = Math.max(0, Number(document.getElementById('s-flete').value) || 0);
+    const arancelPct = Math.max(0, Number(document.getElementById('s-arancel').value) || 0);
+    const ggPct = Math.max(0, Number(document.getElementById('s-gg').value) || 0);
+    const comPct = Math.max(0, Number(document.getElementById('s-com').value) || 0);
+    const margen = Math.max(0, Number(document.getElementById('s-margen').value) || 0);
+
+    const cif = fob + flete;
+    const arancel = cif * (arancelPct / 100);
+    const costoArt = cif + arancel;
+    const resto = 1 - (margen + ggPct + comPct) / 100;
+
+    document.getElementById('o-costo').textContent = `$${costoArt.toFixed(2)}`;
+    const oPrecio = document.getElementById('o-precio');
+    const oMargenTxt = document.getElementById('o-margen-txt');
+    const oComp = document.getElementById('o-comp');
+
+    if (resto <= 0.05) {
+      oPrecio.textContent = '⚠ Error';
+      oMargenTxt.textContent = 'Margen + % sobre precio ≥ 95 %';
+      oComp.innerHTML = '<strong>Bloqueo de GesPro:</strong> El margen y los gastos sobre precio se comen el precio entero. Bájalos para poder despejar.';
+      return;
+    }
+    const precio = costoArt / resto;
+    const precioIngenuo = costoArt * (1 + margen / 100);
+    const ggDinero = precioIngenuo * (ggPct / 100);
+    const comDinero = precioIngenuo * (comPct / 100);
+    const gananciaIngenua = precioIngenuo - costoArt - ggDinero - comDinero;
+    const margenRealIngenuo = precioIngenuo > 0 ? (gananciaIngenua / precioIngenuo) * 100 : 0;
+
+    oPrecio.textContent = `$${precio.toFixed(2)}`;
+    oMargenTxt.textContent = `Con ${margen.toFixed(1)} % de margen neto real`;
+    oComp.innerHTML = `<strong>🚨 Comparación que abre los ojos:</strong> Si multiplicaras el costo × ${(1 + margen/100).toFixed(2)} venderías a <strong>$${precioIngenuo.toFixed(2)}</strong> — tras pagar ${ggPct}% de gastos generales y ${comPct}% de comisión, tu margen real sería apenas <strong>${margenRealIngenuo.toFixed(1)} %</strong> (${gananciaIngenua < 0 ? '¡PÉRDIDA!' : 'muy lejos de tu meta'}).`;
+  }
+  ids.forEach((id) => document.getElementById(id)?.addEventListener('input', recalcSim));
+  recalcSim();
+  go(0);
+</script>
+
+<style>
+  .gespro-portal-back{position:fixed;bottom:16px;left:16px;z-index:99999;display:inline-flex;align-items:center;gap:7px;
+    background:#0c1d35;color:#fff !important;text-decoration:none !important;padding:9px 15px;border-radius:999px;
+    font:600 13px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:1px solid rgba(137,201,255,.45);
+    box-shadow:0 8px 24px rgba(0,0,0,.28);transition:transform .15s,background .15s}
+  .gespro-portal-back:hover{background:#1a5da8;transform:translateY(-1px)}
+  @media print{.gespro-portal-back{display:none !important}}
+  
+</style>
+<a class="gespro-portal-back" href="../index.html#manuales" title="Volver al portal principal de entrenamiento">← Portal GesPro</a>
+</body>
+</html>

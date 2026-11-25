@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cuestionario, Casos y Ensayos CRM (Versión Imprimible y Clave) · Academia GesPro Administrativo</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --navy:#0c1d35; --blue:#1a5da8; --sky:#3892e8; --bg:#f4f7fb; --card:#ffffff;
+    --ink:#162233; --muted:#52657d; --line:#dce5f0; --ok:#0f766e; --warn:#b45309;
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif; background:var(--bg); color:var(--ink); line-height:1.68; }
+  .topbar {
+    position:sticky; top:0; z-index:40; background:linear-gradient(135deg,#091628,#143a68);
+    color:#fff; padding:12px 22px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    box-shadow:0 4px 18px rgba(9,22,40,.18);
+  }
+  .topbar-left { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .back-btn {
+    display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.12); color:#fff;
+    text-decoration:none; padding:7px 13px; border-radius:9px; font-weight:600; font-size:13.5px; border:1px solid rgba(255,255,255,.22);
+  }
+  .back-btn:hover { background:rgba(255,255,255,.22); }
+  .topbar-title { font-weight:700; font-size:15px; display:flex; align-items:center; gap:8px; }
+  .pill { background:rgba(56,146,232,.25); border:1px solid rgba(137,201,255,.4); color:#d8eeff; padding:2px 9px; border-radius:999px; font-size:11.5px; font-weight:700; }
+  .topbar-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .act-btn {
+    border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.12); color:#fff;
+    padding:7px 13px; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+  }
+  .act-btn.primary { background:var(--sky); border-color:transparent; color:#061322; font-weight:700; }
+  .act-btn:hover { filter:brightness(1.08); }
+
+  .shell { max-width:1180px; margin:24px auto; padding:0 18px 56px; display:grid; grid-template-columns:250px minmax(0,1fr); gap:24px; align-items:start; }
+  aside.toc {
+    position:sticky; top:76px; background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px; max-height:calc(100vh - 96px); overflow:auto; box-shadow:0 4px 14px rgba(12,29,53,.04);
+  }
+  aside.toc h4 { margin:0 0 10px; font-size:11.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); }
+  .toc-link { display:block; color:var(--ink); text-decoration:none; font-size:13px; padding:5px 8px; border-radius:7px; line-height:1.35; }
+  .toc-link:hover { background:#eaf2fb; color:var(--blue); }
+  .toc-link.l3 { padding-left:18px; color:var(--muted); font-size:12.5px; }
+
+  article.doc {
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:34px 38px; box-shadow:0 6px 24px rgba(12,29,53,.05);
+  }
+  .doc-hero { border-bottom:2px solid #e6eef7; padding-bottom:18px; margin-bottom:24px; }
+  .doc-hero .kicker { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--blue); }
+  .doc-hero h1 { margin:6px 0 6px; font-size:28px; line-height:1.2; color:var(--navy); }
+  .doc-hero p { margin:0; color:var(--muted); font-size:15.5px; }
+
+  article.doc h1 { font-size:24px; color:var(--navy); margin:28px 0 12px; }
+  article.doc h2 { font-size:20px; color:var(--navy); margin:30px 0 12px; padding-bottom:6px; border-bottom:1px solid #e6eef7; scroll-margin-top:82px; }
+  article.doc h3 { font-size:16.5px; color:var(--blue); margin:22px 0 8px; scroll-margin-top:82px; }
+  article.doc h4 { font-size:15px; color:#2b415d; margin:16px 0 6px; }
+  article.doc p { margin:0 0 12px; }
+  article.doc ul, article.doc ol { margin:0 0 14px; padding-left:22px; }
+  article.doc li { margin-bottom:6px; }
+  article.doc code { background:#eef4fb; color:#113968; padding:1.5px 6px; border-radius:5px; font-size:.9em; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  article.doc pre { background:#0d1c31; color:#e5f0ff; padding:14px 16px; border-radius:10px; overflow:auto; font-size:13px; line-height:1.5; }
+  article.doc pre code { background:none; color:inherit; padding:0; }
+  article.doc hr { border:none; border-top:1px solid var(--line); margin:24px 0; }
+  article.doc a { color:var(--blue); }
+  .chk { font-weight:700; color:var(--blue); }
+  .chk.done { color:var(--ok); }
+
+  .tbl-wrap { overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:10px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  thead { background:#eef4fb; }
+  th { text-align:left; padding:10px 12px; color:var(--navy); font-weight:700; border-bottom:1px solid var(--line); }
+  td { padding:9px 12px; border-bottom:1px solid #edf2f8; vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:nth-child(even) { background:#fafcff; }
+
+  .callout { padding:13px 16px; border-radius:10px; margin:16px 0; border-left:4px solid var(--blue); background:#eef5fd; }
+  .callout p:last-child { margin-bottom:0; }
+  .callout.warn { border-left-color:var(--warn); background:#fff7ed; }
+  .callout.ok { border-left-color:var(--ok); background:#ecfdf5; }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns:1fr; }
+    aside.toc { position:static; max-height:none; }
+    article.doc { padding:22px 18px; }
+  }
+  @media print {
+    .topbar, aside.toc { display:none !important; }
+    body { background:#fff; }
+    .shell { display:block; max-width:none; margin:0; padding:0; }
+    article.doc { border:none; box-shadow:none; padding:0; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-left">
+    <a class="back-btn" href="../index.html#evaluacion">← Volver al Portal</a>
+    <div class="topbar-title">📝 Cuestionario, Casos y Ensayos CRM (Versión Imprimible y Clave) <span class="pill">Evaluación y Rúbrica</span></div>
+  </div>
+  <div class="topbar-actions">
+    <a class="act-btn" href="../index.html#crm">▶ Ver videos del módulo</a>
+    <a class="act-btn" href="Cuestionario-y-Ensayos-CRM.md" download>⬇ Descargar .md</a>
+    <button class="act-btn primary" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="toc"><h4>Contenido</h4><a class="toc-link l2" href="#parte-i-preguntas-de-seleccion-multiple-28-preguntas-1-pt-c-u">Parte I · Preguntas de Selección Múltiple (28 preguntas · 1 pt c/u)</a>
+<a class="toc-link l3" href="#01-tablero-01-crm-tablero-mp4">01 · Tablero (`01-crm-tablero.mp4`)</a>
+<a class="toc-link l3" href="#02-embudo-02-crm-embudo-mp4">02 · Embudo (`02-crm-embudo.mp4`)</a>
+<a class="toc-link l3" href="#03-oportunidades-03-crm-oportunidades-mp4">03 · Oportunidades (`03-crm-oportunidades.mp4`)</a>
+<a class="toc-link l3" href="#04-prospectos-04-crm-prospectos-mp4">04 · Prospectos (`04-crm-prospectos.mp4`)</a>
+<a class="toc-link l3" href="#05-agenda-05-crm-agenda-mp4">05 · Agenda (`05-crm-agenda.mp4`)</a>
+<a class="toc-link l3" href="#06-clientes-360-06-crm-clientes-360-mp4">06 · Clientes 360 (`06-crm-clientes-360.mp4`)</a>
+<a class="toc-link l3" href="#07-cotizaciones-07-crm-cotizaciones-mp4">07 · Cotizaciones (`07-crm-cotizaciones.mp4`)</a>
+<a class="toc-link l3" href="#08-pedidos-08-crm-pedidos-mp4">08 · Pedidos (`08-crm-pedidos.mp4`)</a>
+<a class="toc-link l3" href="#09-carteras-09-crm-carteras-mp4">09 · Carteras (`09-crm-carteras.mp4`)</a>
+<a class="toc-link l3" href="#10-ruta-y-visitas-10-crm-ruta-y-visitas-mp4">10 · Ruta y visitas (`10-crm-ruta-y-visitas.mp4`)</a>
+<a class="toc-link l3" href="#11-comisiones-11-crm-comisiones-mp4">11 · Comisiones (`11-crm-comisiones.mp4`)</a>
+<a class="toc-link l3" href="#12-automatizacion-12-crm-automatizacion-mp4">12 · Automatización (`12-crm-automatizacion.mp4`)</a>
+<a class="toc-link l3" href="#13-marketing-13-crm-marketing-mp4">13 · Marketing (`13-crm-marketing.mp4`)</a>
+<a class="toc-link l3" href="#14-ajustes-14-crm-ajustes-mp4">14 · Ajustes (`14-crm-ajustes.mp4`)</a>
+<a class="toc-link l2" href="#parte-ii-7-casos-integrados-que-harias-tu-2-pts-c-u-14-pts">Parte II · 7 Casos Integrados «¿Qué Harías Tú?» (2 pts c/u · 14 pts)</a>
+<a class="toc-link l2" href="#parte-iii-10-preguntas-de-ensayo-y-aplicacion-practica-10-pts-c-u">Parte III · 10 Preguntas de Ensayo y Aplicación Práctica (10 pts c/u)</a>
+<a class="toc-link l3" href="#rubrica-de-evaluacion-para-los-ensayos-10-puntos-por-ensayo">Rúbrica de Evaluación para los Ensayos (10 puntos por ensayo)</a>
+<a class="toc-link l2" href="#parte-iv-clave-de-respuestas-comentadas-solo-para-el-evaluador">Parte IV · Clave de Respuestas Comentadas (Solo para el Evaluador)</a>
+<a class="toc-link l3" href="#resumen-de-respuestas-esperadas-parte-ii-casos-integrados">Resumen de respuestas esperadas — Parte II (Casos Integrados)</a></aside>
+  <article class="doc">
+    <div class="doc-hero">
+      <div class="kicker">Academia GesPro Administrativo · Material Oficial</div>
+      <h1>📝 Cuestionario, Casos y Ensayos CRM (Versión Imprimible y Clave)</h1>
+      <p>28 preguntas, 7 casos integradores, 10 ensayos guiados, clave comentada y rúbrica 0–10</p>
+    </div>
+    <h1 id="cuestionario-de-retencion-y-ensayos-practicos-vendedor-crm">Cuestionario de Retención y Ensayos Prácticos: Vendedor (CRM)</h1>
+<p><strong>GesPro Administrativo v5.7.0 · Evaluación Integral de la Serie de 14 Videos del CRM</strong></p>
+<div class="callout tip"><p><strong>Objetivo:</strong> Fijar en la memoria todo lo visto en los 14 videos del módulo <strong>Vendedor (CRM)</strong> pasando de la teoría a decisiones reales de trabajo.  </p><p><strong>Estructura:</strong> 28 preguntas de opción múltiple (2 por cada video/pestaña) · 7 casos integrados «¿Qué harías tú?» · 10 ensayos aplicados con rúbrica · Clave comentada al final.  </p><p><strong>Versión interactiva autocorregible (con guardado automático y exportación a PDF):</strong> abre <code>entrenamiento/crm/Cuestionario-CRM-Interactivo.html</code> en cualquier navegador.</p></div>
+<hr>
+<h2 id="parte-i-preguntas-de-seleccion-multiple-28-preguntas-1-pt-c-u">Parte I · Preguntas de Selección Múltiple (28 preguntas · 1 pt c/u)</h2>
+<p><em>Marca la única opción correcta. El número entre corchetes indica el video de la serie al que corresponde cada pregunta.</em></p>
+<h3 id="01-tablero-01-crm-tablero-mp4">01 · Tablero (<code>01-crm-tablero.mp4</code>)</h3>
+<p><strong>1. [Video 01]</strong> Tienes una oportunidad abierta de $10.000 en la etapa «Propuesta», cuya probabilidad configurada es del 50 %. ¿Cuánto aporta esa oportunidad al <strong>Pronóstico ponderado</strong> del Tablero?</p>
+<ul><li>A) $10.000</li><li>B) $5.000</li><li>C) $0 hasta que se facture</li><li>D) $15.000</li></ul>
+<p><strong>2. [Video 01]</strong> ¿Qué botón del Tablero te permite hacer consultas en lenguaje natural sobre las cifras que estás viendo en pantalla?</p>
+<ul><li>A) «Exportar CSV»</li><li>B) «✦ Preguntar a la IA»</li><li>C) «Recalcular pronóstico»</li><li>D) «Generar orden»</li></ul>
+<h3 id="02-embudo-02-crm-embudo-mp4">02 · Embudo (<code>02-crm-embudo.mp4</code>)</h3>
+<p><strong>3. [Video 02]</strong> En el Embudo, arrastras una tarjeta de negocio y la sueltas en la caja inferior <strong>✕ Perdida</strong>. ¿Qué dato exige obligatoriamente GesPro antes de cerrarla?</p>
+<ul><li>A) La factura anulada</li><li>B) El motivo de pérdida (y opcionalmente el competidor)</li><li>C) La aprobación del gerente por GP Mensajes</li><li>D) El código de autorización del cliente</li></ul>
+<p><strong>4. [Video 02]</strong> ¿Qué alerta visual en una tarjeta del Embudo te advierte que un negocio corre riesgo de enfriarse por falta de seguimiento programado?</p>
+<ul><li>A) «bloqueado por mora»</li><li>B) «sin próxima acción» (o «N d sin movimiento»)</li><li>C) «borrador pendiente»</li><li>D) «sin comprobante»</li></ul>
+<h3 id="03-oportunidades-03-crm-oportunidades-mp4">03 · Oportunidades (<code>03-crm-oportunidades.mp4</code>)</h3>
+<p><strong>5. [Video 03]</strong> Abres una oportunidad de un cliente existente y pulsas <strong>«Cotizar»</strong>. ¿Qué hace GesPro automáticamente cuando emites esa cotización y luego el cliente la acepta?</p>
+<ul><li>A) No cambia nada; debes mover la etapa manualmente</li><li>B) Al emitirla pasa sola a etapa de Propuesta y, cuando el cliente la acepta, la oportunidad se marca <strong>Ganada</strong> sola</li><li>C) Emite la factura fiscal de inmediato sin pasar por borrador</li><li>D) Elimina al prospecto del sistema</li></ul>
+<p><strong>6. [Video 03]</strong> Un negocio que habías dado por perdido hace un mes vuelve a reactivarse porque el cliente te llamó de nuevo. ¿Qué debes hacer en la pestaña Oportunidades?</p>
+<ul><li>A) Crear otro cliente con un RIF distinto</li><li>B) Filtrar por «Perdidas», abrir la oportunidad y pulsar <strong>«Reabrir»</strong></li><li>C) Borrar el historial anterior</li><li>D) Facturarlo directo sin oportunidad</li></ul>
+<h3 id="04-prospectos-04-crm-prospectos-mp4">04 · Prospectos (<code>04-crm-prospectos.mp4</code>)</h3>
+<p><strong>7. [Video 04]</strong> ¿Por qué en GesPro un prospecto NO se registra directamente como cliente hasta que va a comprar?</p>
+<ul><li>A) Porque los clientes no tienen teléfono</li><li>B) Para no llenar la cartera, los reportes y el directorio fiscal con personas que nunca compraron</li><li>C) Porque los prospectos no pueden tener actividades en Agenda</li><li>D) Porque el límite máximo de clientes es 50</li></ul>
+<p><strong>8. [Video 04]</strong> Según la puntuación automática de prospectos (0 a 100), ¿a partir de qué puntaje un prospecto se clasifica como <strong>🔥 Caliente</strong>?</p>
+<ul><li>A) 40 puntos o más</li><li>B) 50 puntos o más</li><li>C) 70 puntos o más</li><li>D) 90 puntos o más</li></ul>
+<h3 id="05-agenda-05-crm-agenda-mp4">05 · Agenda (<code>05-crm-agenda.mp4</code>)</h3>
+<p><strong>9. [Video 05]</strong> Acabas de recibir una llamada inesperada de un cliente y quieres dejar constancia de lo que hablaron. Al pulsar <strong>«+ Actividad»</strong>, ¿qué eliges en el campo <strong>«¿Ya se hizo?»</strong>?</p>
+<ul><li>A) «No: agendarla» con fecha de ayer</li><li>B) «Sí: registrar lo que pasó» para anotar el resultado de una vez</li><li>C) No se pueden registrar llamadas ya ocurridas</li><li>D) Debes crear primero una factura</li></ul>
+<p><strong>10. [Video 05]</strong> Al pulsar <strong>«✓ Hecha»</strong> en una actividad pendiente de tu Agenda, ¿cuál es la buena práctica que la propia ventana te invita a hacer antes de guardar?</p>
+<ul><li>A) Borrar las actividades anteriores</li><li>B) Anotar «Qué salió» y dejar programado el <strong>«Siguiente paso»</strong> con fecha en la misma ventana</li><li>C) Cambiar el vendedor del cliente</li><li>D) Cerrar sesión y volver a entrar</li></ul>
+<h3 id="06-clientes-360-06-crm-clientes-360-mp4">06 · Clientes 360 (<code>06-crm-clientes-360.mp4</code>)</h3>
+<p><strong>11. [Video 06]</strong> En la lista de <strong>Clientes 360</strong>, ¿qué columna te avisa visualmente (en etiqueta de alerta) que un cliente lleva demasiado tiempo sin comprar?</p>
+<ul><li>A) «Sin comprar» (resalta en alerta al superar los días configurados, ej. &gt;90 días)</li><li>B) «Código postal»</li><li>C) «Moneda base»</li><li>D) «Número de control»</li></ul>
+<p><strong>12. [Video 06]</strong> ¿Cuál de estos datos NO aparece dentro de la ficha de <strong>Clientes 360</strong>?</p>
+<ul><li>A) Ventas 12 meses, saldo por cobrar y monto vencido</li><li>B) Contactos (con cargo, cumpleaños y LinkedIn), negocios e historial de actividades</li><li>C) Artículos que más compra, facturas recientes y visitas en la calle</li><li>D) El saldo bancario de la cuenta personal del vendedor</li></ul>
+<h3 id="07-cotizaciones-07-crm-cotizaciones-mp4">07 · Cotizaciones (<code>07-crm-cotizaciones.mp4</code>)</h3>
+<p><strong>13. [Video 07]</strong> Tu empresa configuró aprobación de descuentos (25 % / 50 % / 75 %) y un vendedor crea una cotización con 30 % de descuento en un renglón. ¿Qué sucede mientras el Aprobador 1 no decide?</p>
+<ul><li>A) El vendedor puede imprimirla y el cliente puede aceptarla igual</li><li>B) Queda en estado <em>«Descuento por aprobar»</em> y <strong>no se puede imprimir ni aceptar</strong></li><li>C) Se borra automáticamente a los 5 minutos</li><li>D) Se convierte en factura sin descuento</li></ul>
+<p><strong>14. [Video 07]</strong> ¿Se puede convertir una cotización directamente en factura fiscal, o aceptar una cotización que ya venció?</p>
+<ul><li>A) Sí a ambas cosas</li><li>B) No: primero el cliente la acepta (nace un <strong>Pedido en firme</strong>) y si ya venció no se puede aceptar — debe emitirse una nueva con precios de hoy</li><li>C) Sólo si el monto es menor a $100</li><li>D) Sí, desde la pestaña Embudo</li></ul>
+<h3 id="08-pedidos-08-crm-pedidos-mp4">08 · Pedidos (<code>08-crm-pedidos.mp4</code>)</h3>
+<p><strong>15. [Video 08]</strong> Un vendedor levanta un pedido el <strong>viernes a las 5:00 p. m.</strong> (sin pago registrado todavía). ¿Hasta cuándo queda apartada su mercancía?</p>
+<ul><li>A) Sábado a las 5:00 p. m.</li><li>B) Lunes a las 5:00 p. m. (<strong>24 horas hábiles</strong>, sábado y domingo no cuentan)</li><li>C) Indefinidamente hasta que alguien lo rechace</li><li>D) Los pedidos nunca apartan mercancía</li></ul>
+<p><strong>16. [Video 08]</strong> Si administración <strong>rechaza</strong> un pedido que había ganado una oportunidad del CRM, ¿qué hace GesPro automáticamente?</p>
+<ul><li>A) Libera el stock, agenda hoy al vendedor una tarea para avisar al cliente con el motivo y <strong>vuelve a abrir la oportunidad</strong></li><li>B) Deja la mercancía apartada por 7 días más</li><li>C) Elimina la ficha del cliente</li><li>D) Genera una nota de crédito contable</li></ul>
+<h3 id="09-carteras-09-crm-carteras-mp4">09 · Carteras (<code>09-crm-carteras.mp4</code>)</h3>
+<p><strong>17. [Video 09]</strong> Creas un usuario nuevo con rol <code>vendedor</code>, le pasas el enlace <code>/vendedores</code>, pero todavía no le asignas ningún cliente en <strong>Carteras</strong> (ni en las fichas de clientes). ¿Qué verá al entrar?</p>
+<ul><li>A) Todos los clientes de la empresa</li><li>B) Su portal aparecerá <strong>vacío</strong> (cada vendedor ve únicamente los clientes de su cartera)</li><li>C) Los clientes del vendedor con más ventas</li><li>D) Solo las facturas de proveedores</li></ul>
+<p><strong>18. [Video 09]</strong> Si cambias hoy el vendedor asignado a un cliente en su ficha o en <strong>Carteras</strong>, ¿qué ocurre con las facturas que ya se emitieron el mes pasado?</p>
+<ul><li>A) Cambian automáticamente al vendedor nuevo</li><li>B) Se anulan todas</li><li>C) Conservan al vendedor que tenía el cliente cuando se emitieron</li><li>D) Pierden el número de control</li></ul>
+<h3 id="10-ruta-y-visitas-10-crm-ruta-y-visitas-mp4">10 · Ruta y visitas (<code>10-crm-ruta-y-visitas.mp4</code>)</h3>
+<p><strong>19. [Video 10]</strong> ¿Quién fija y aprueba las ubicaciones (geocercas) de los clientes en <strong>Ruta y visitas → Ubicaciones</strong>?</p>
+<ul><li>A) El propio vendedor sin revisión</li><li>B) Siempre el <strong>supervisor</strong> (el vendedor puede proponer la ubicación de un cliente sin coordenadas, pero no se mide contra una geocerca que él mismo fijó)</li><li>C) El cliente desde el portal de pagos</li><li>D) El cajero del punto de venta</li></ul>
+<p><strong>20. [Video 10]</strong> En <strong>Ruta y visitas → Cierre de visitas</strong>, ¿qué hace el <strong>Asistente de voz</strong> cuando la empresa lo enciende?</p>
+<ul><li>A) Graba permanentemente las llamadas del vendedor todo el día</li><li>B) Permite al vendedor pulsar <em>«Contar la visita»</em> en voz alta para que la IA rellene el formulario de cierre (y él lo revisa antes de guardar; la grabación no se guarda)</li><li>C) Envía correos masivos sin permiso</li><li>D) Aprueba descuentos automáticamente</li></ul>
+<h3 id="11-comisiones-11-crm-comisiones-mp4">11 · Comisiones (<code>11-crm-comisiones.mp4</code>)</h3>
+<p><strong>21. [Video 11]</strong> ¿Sobre qué base calcula GesPro las comisiones por vender y por cobrar?</p>
+<ul><li>A) Sobre el total con IVA incluido</li><li>B) Siempre sobre el importe <strong>SIN IVA</strong>, convertido a la moneda base</li><li>C) Sobre el saldo pendiente sin cobrar</li><li>D) Sobre el costo de inventario</li></ul>
+<p><strong>22. [Video 11]</strong> Una vez revisadas las comisiones del mes y pulsado <strong>«Registrar el período»</strong>, ¿dónde se genera el pago hacia el banco?</p>
+<ul><li>A) Se transfiere solo sin autorización</li><li>B) En <strong>Personal → Órdenes de pago → «Generar orden» → Comisiones pendientes</strong> (requiere que el vendedor tenga asignada su ficha de personal)</li><li>C) En Inventario → Notas de despacho</li><li>D) En Contabilidad → Plan de cuentas</li></ul>
+<h3 id="12-automatizacion-12-crm-automatizacion-mp4">12 · Automatización (<code>12-crm-automatizacion.mp4</code>)</h3>
+<p><strong>23. [Video 12]</strong> Inscribiste a un prospecto en una <strong>Secuencia</strong> de 4 pasos (días 0, 2, 5 y 10), pero el día 3 decides <strong>descartar</strong> al prospecto porque no tiene presupuesto. ¿Qué ocurre con los pasos de los días 5 y 10?</p>
+<ul><li>A) Siguen apareciendo vencidos en tu agenda para siempre</li><li>B) Se <strong>cancelan solos</strong> automáticamente al cerrarse el negocio o descartarse el prospecto</li><li>C) Se envían igual a otro cliente</li><li>D) Debes llamar a soporte técnico para borrarlos</li></ul>
+<p><strong>24. [Video 12]</strong> ¿Qué hace un <strong>Formulario web</strong> de GesPro cuando alguien que ya existía en el CRM vuelve a llenarlo desde Instagram?</p>
+<ul><li>A) Crea un duplicado y borra el historial viejo</li><li>B) <strong>No lo duplica</strong>; lo asocia sin repetir ficha y mantiene el reparto por turno y la protección anti-robots</li><li>C) Bloquea la cuenta de Instagram</li><li>D) Lo convierte en proveedor</li></ul>
+<h3 id="13-marketing-13-crm-marketing-mp4">13 · Marketing (<code>13-crm-marketing.mp4</code>)</h3>
+<p><strong>25. [Video 13]</strong> ¿Por qué las campañas de <strong>WhatsApp</strong> en GesPro funcionan como una <strong>cola asistida</strong> y no como un disparo masivo automático de 500 mensajes en un segundo?</p>
+<ul><li>A) Porque WhatsApp no permite envíos masivos sin su API de pago y bloquea cuentas que mandan muchos mensajes iguales seguidos; la cola prepara cada texto para enviarlo espaciado y registrar enviado/omitido/baja</li><li>B) Porque GesPro no guarda números de teléfono</li><li>C) Porque WhatsApp solo funciona los lunes</li><li>D) Para cobrar por cada clic</li></ul>
+<p><strong>26. [Video 13]</strong> Un cliente hace clic en el enlace de baja al pie de una campaña de correo. ¿Qué hace GesPro en las siguientes campañas?</p>
+<ul><li>A) Le sigue enviando correos si el segmento lo incluye</li><li>B) Lo registra en la subpestaña <strong>Bajas</strong> y lo excluye automáticamente de futuras campañas por ese canal (sólo se reactiva si la persona lo pide, anotando el motivo)</li><li>C) Lo borra de Cuentas por cobrar</li><li>D) Bloquea sus pedidos en la tienda</li></ul>
+<h3 id="14-ajustes-14-crm-ajustes-mp4">14 · Ajustes (<code>14-crm-ajustes.mp4</code>)</h3>
+<p><strong>27. [Video 14]</strong> ¿Dónde se configuran las probabilidades de cada etapa del embudo (que alimentan el pronóstico ponderado) y los días para marcar negocios estancados o clientes dormidos?</p>
+<ul><li>A) En la ficha de cada artículo</li><li>B) En <strong>Vendedor (CRM) → Ajustes</strong> (acceso exclusivo de administración)</li><li>C) En el Portal de clientes</li><li>D) En Bancos y conciliación</li></ul>
+<p><strong>28. [Video 14]</strong> Antes de encender los recordatorios automáticos a clientes en <strong>Ajustes → Asistente del vendedor</strong>, ¿qué herramienta te permite comprobar sin riesgo exactamente a quién se le escribiría?</p>
+<ul><li>A) La tabla <strong>«Lo que se les enviaría hoy»</strong> (muestra quién recibe correo y quién queda excluido por baja, falta de correo o tope semanal)</li><li>B) El Libro de compras</li><li>C) El Kardex de inventario</li><li>D) No existe vista previa; hay que probar enviando a todos</li></ul>
+<hr>
+<h2 id="parte-ii-7-casos-integrados-que-harias-tu-2-pts-c-u-14-pts">Parte II · 7 Casos Integrados «¿Qué Harías Tú?» (2 pts c/u · 14 pts)</h2>
+<p><em>Lee cada situación real de oficina y explica paso a paso en qué pestañas entras y qué botones pulsas.</em></p>
+<ol><li><strong>El prospecto de feria que compra rápido:</strong> Conociste a María Gómez (Clínica Norte) en un evento. Te dio su tarjeta y pide cotización formal de 20 cajas de guantes para esta semana. Describe la secuencia exacta en GesPro desde que vuelves a la oficina hasta que la factura queda lista para cobrar <em>(menciona al menos 4 pestañas)</em>.</li><li><strong>El descuento urgente del 40 %:</strong> Un cliente grande exige 40 % de descuento para cerrar hoy. Tu empresa tiene configurado Aprobador 1 desde 25 %. El vendedor emite la cotización y reclama que el botón «Descargar PDF» está bloqueado. ¿Qué pasó y cómo se destraba correctamente?</li><li><strong>El pedido olvidado del jueves:</strong> El jueves a las 10:00 a. m. se aceptó una cotización y nació el pedido <code>PED-0042</code> sin pago previo. Nadie lo facturó el jueves ni el viernes. El lunes a las 9:00 a. m. Facturación intenta crear la factura y el pedido figura <strong>VENCIDO</strong>. ¿Qué ocurrió con la mercancía apartada y qué botón se usa para retomar la venta?</li><li><strong>El vendedor que pide comisión sobre el total con IVA:</strong> Al cerrar el mes, un vendedor reclama que facturó $11.600 (incluyendo 16 % de IVA) y con su 5 % esperaba $580, pero GesPro le calculó $500. ¿Cómo le explicas el cálculo usando la pantalla de <strong>Comisiones</strong>?</li><li><strong>La alerta de visita fuera del sitio:</strong> Como supervisor abres <strong>Ruta y visitas → Alertas</strong> y ves una alerta <em>«Llegada fuera del sitio (280 m)»</em> en una farmacia dentro de un centro comercial. ¿Significa automáticamente que el vendedor mintió? ¿Qué revisas y cómo ajustas el sistema si la entrada real estaba más lejos?</li><li><strong>Reactivar clientes dormidos sin caer en spam:</strong> Tu gerente quiere recuperar a todos los clientes que llevan más de 90 días sin comprar ofreciéndoles un cupón del 10 % en la tienda en línea y medir cuánto se vendió realmente. Describe los pasos exactos dentro de <strong>Marketing</strong>.</li><li><strong>Ajustar el pronóstico inflado:</strong> Tu gerente nota que el <em>Pronóstico ponderado</em> del Tablero siempre sale demasiado optimista porque la etapa «Prospección» tiene 50 % de probabilidad cuando en realidad solo cierra 1 de cada 10 negocios. ¿Dónde lo corriges y qué otro ajuste revisarías?</li></ol>
+<hr>
+<h2 id="parte-iii-10-preguntas-de-ensayo-y-aplicacion-practica-10-pts-c-u">Parte III · 10 Preguntas de Ensayo y Aplicación Práctica (10 pts c/u)</h2>
+<p><em>Objetivo: Que el equipo no solo memorice clics, sino que diseñe cómo trabajará con GesPro CRM desde mañana. Extensión recomendada: 120 a 250 palabras por ensayo (1–2 párrafos bien estructurados o esquema justificado).</em></p>
+<ol><li><strong>Tu rutina diaria de 15 minutos con el CRM (Tablero + Agenda + Embudo):</strong> Diseña una rutina realista de inicio y cierre de jornada para un vendedor de tu empresa combinando <em>Tablero</em>, <em>Agenda</em> y <em>Embudo</em>. Explica qué 3 alertas revisarías primero cada mañana y qué harías con cada una.</li><li><strong>El mapa de nuestro Embudo real (Embudo + Ajustes):</strong> Propón entre 4 y 6 etapas concretas para el proceso comercial real de tu empresa (con su nombre, criterio objetivo de paso a la siguiente etapa y probabilidad estimada de cierre). Explica por qué el criterio objetivo evita pronósticos inflados.</li><li><strong>Prospecto vs. Cliente y el valor de la disciplina en los datos (Prospectos + Clientes 360):</strong> Argumenta por qué separar <em>Prospectos</em> de <em>Clientes</em> y exigir el <em>motivo de pérdida</em> o <em>motivo de descarte</em> ahorra dinero a la empresa en 6 meses. Da dos ejemplos concretos de decisiones que la gerencia podría tomar gracias a esos datos.</li><li><strong>De la cotización al dinero en caja sin perder el control (Cotizaciones + Pedidos + Comisiones):</strong> Explica el sentido de control interno detrás de estas tres reglas de GesPro: <em>(a)</em> una cotización no se factura directo ni aparta stock; <em>(b)</em> un pedido aparta solo por 24 horas hábiles (salvo pagado) y nace como factura en borrador; <em>(c)</em> la comisión se calcula sin IVA y puede dividirse entre vender y cobrar.</li><li><strong>Diseño de una Secuencia de seguimiento ganadora (Automatización):</strong> Diseña una secuencia completa de 4 a 5 pasos (con día exacto, canal: Llamada, Correo, WhatsApp o LinkedIn, y objetivo de cada toque) para prospectos nuevos que lleguen desde un <em>Formulario web</em> de Instagram. Redacta también el texto de 1 plantilla usando variables <code>{{primer_nombre}}</code>, <code>{{empresa}}</code> y <code>{{vendedor}}</code>.</li><li><strong>Supervisión justa en la calle (Ruta y visitas):</strong> Una preocupación común de los vendedores de campo es sentirse «espiados» por el GPS. Redacta cómo presentarías <strong>Ruta y visitas</strong> (consentimiento, registro sólo en jornada, borrado automático a 90 días, optimización de rutas con <em>Ordenar por cercanía</em> y <em>Asistente de voz</em> para ahorrarles teclear) para lograr adopción genuina en vez de resistencia.</li><li><strong>Estrategia para rescatar clientes dormidos (Clientes 360 + Marketing):</strong> Escoge un segmento real de clientes que podrían dejar de comprarle a tu empresa. Diseña un plan paso a paso que combine <em>Clientes 360</em>, <em>Segmentos</em>, una <em>Campaña</em> (correo o cola de WhatsApp), un <em>cupón</em> y etiquetas <em>UTM</em> para medir el retorno exacto en ventas.</li><li><strong>El vendedor que se va o cambia de zona (Carteras + Clientes 360 + Comisiones):</strong> Imagina que uno de tus vendedores principales cambia de territorio o sale de la empresa. Explica qué ocurriría si toda su información estuviera en su WhatsApp personal versus en GesPro CRM (<em>Clientes 360</em>, <em>Agenda/Historial</em>, <em>Carteras</em> y <em>Comisiones</em>), y describe tu plan de transición en 5 pasos.</li><li><strong>Automatización con criterio humano (Ajustes + Asistente del vendedor):</strong> GesPro mantiene una filosofía clara: el <em>Asistente del vendedor</em> y los recordatorios preparan, avisan y proponen, pero nunca cambian precios ni aprueban créditos solos. Reflexiona sobre qué tareas comerciales de tu empresa SÍ deberían automatizarse hoy y en cuáles debe seguir mandando el criterio humano.</li><li><strong>Mi compromiso de 30 días con GesPro CRM (Integración total):</strong> Identifica los <strong>3 cuellos de botella comerciales</strong> más dolorosos que tiene hoy tu área (p. ej. cotizaciones sin seguimiento, desconocer por qué se pierden ventas, retrasos entre pedido y factura) y redacta un plan concreto de 30 días indicando qué pestañas exactas del CRM usarás para resolver cada uno y cómo medirás el éxito en el <em>Tablero</em>.</li></ol>
+<hr>
+<h3 id="rubrica-de-evaluacion-para-los-ensayos-10-puntos-por-ensayo">Rúbrica de Evaluación para los Ensayos (10 puntos por ensayo)</h3>
+<div class="tbl-wrap"><table><thead><tr><th>Criterio</th><th>Excelente (9–10 pts)</th><th>Competente (7–8 pts)</th><th>En desarrollo (4–6 pts)</th><th>Inicial (0–3 pts)</th></tr></thead><tbody><tr><td><strong>Precisión en GesPro (4 pts)</strong></td><td>Nombra correctamente pestañas, botones y reglas reales del CRM sin confundir conceptos.</td><td>Usa bien las pestañas principales con 1 omisión menor.</td><td>Confunde reglas clave (ej. cotización vs pedido, o IVA en comisiones).</td><td>Respuesta genérica sin mencionar cómo funciona GesPro.</td></tr><tr><td><strong>Aplicación práctica real (3 pts)</strong></td><td>Propone ejemplos, cifras, textos o pasos aplicables mañana mismo en su puesto.</td><td>Aplica a su contexto pero con ejemplos poco detallados.</td><td>Teórico o superficial; le falta aterrizaje operativo.</td><td>No conecta el sistema con la operación diaria.</td></tr><tr><td><strong>Claridad y criterio comercial (3 pts)</strong></td><td>Argumentación estructurada, lógica de negocio sólida y visión de control interno.</td><td>Ideas claras con justificación básica.</td><td>Ideas sueltas o poco justificadas.</td><td>Incompleto o fuera de tema.</td></tr></tbody></table></div>
+<hr>
+<h2 id="parte-iv-clave-de-respuestas-comentadas-solo-para-el-evaluador">Parte IV · Clave de Respuestas Comentadas (Solo para el Evaluador)</h2>
+<div class="tbl-wrap"><table><thead><tr><th>#</th><th>Resp.</th><th>Explicación clave (para retroalimentar al grupo)</th><th>Video</th></tr></thead><tbody><tr><td><strong>1</strong></td><td><strong>B</strong></td><td>Pronóstico ponderado = Monto × Probabilidad de etapa (<code>$10.000 × 50 % = $5.000</code>).</td><td><code>01</code></td></tr><tr><td><strong>2</strong></td><td><strong>B</strong></td><td>El botón <strong>«✦ Preguntar a la IA»</strong> arriba a la derecha responde sobre los datos filtrados del Tablero.</td><td><code>01</code></td></tr><tr><td><strong>3</strong></td><td><strong>B</strong></td><td>Perder exige motivo obligatorio (y permite anotar competidor) para alimentar el cuadro <em>Por qué se pierden</em>.</td><td><code>02</code></td></tr><tr><td><strong>4</strong></td><td><strong>B</strong></td><td>Las tarjetas del Embudo muestran <code>sin próxima acción</code>, <code>cierre vencido</code> y <code>N d sin movimiento</code>.</td><td><code>02</code></td></tr><tr><td><strong>5</strong></td><td><strong>B</strong></td><td>Cotizar desde la oportunidad enlaza ambos documentos: avanza a Propuesta y se gana sola al aceptar el cliente.</td><td><code>03</code></td></tr><tr><td><strong>6</strong></td><td><strong>B</strong></td><td>En Oportunidades filtras por Perdidas/Todas, abres la ficha y usas <strong>«Reabrir»</strong> conservando toda la historia.</td><td><code>03</code></td></tr><tr><td><strong>7</strong></td><td><strong>B</strong></td><td>Mantener prospectos aparte evita contaminar reportes de cartera y fichas fiscales con gente que nunca compró.</td><td><code>04</code></td></tr><tr><td><strong>8</strong></td><td><strong>C</strong></td><td>Escala oficial: <strong>≥70 Caliente</strong>, 40–69 Tibio, &lt;40 Frío.</td><td><code>04</code></td></tr><tr><td><strong>9</strong></td><td><strong>B</strong></td><td>Elegir <strong>«Sí: registrar lo que pasó»</strong> oculta la fecha futura y abre el campo <em>Qué salió</em> para documentarlo al instante.</td><td><code>05</code></td></tr><tr><td><strong>10</strong></td><td><strong>B</strong></td><td>«Un cliente sin siguiente paso es un cliente que se enfría»: <em>Hecha</em> guarda el resultado y agenda el próximo paso a la vez.</td><td><code>05</code></td></tr><tr><td><strong>11</strong></td><td><strong>A</strong></td><td>En Clientes 360 la columna <em>Sin comprar</em> marca en alerta a los clientes que superan el umbral (ej. &gt;90 días).</td><td><code>06</code></td></tr><tr><td><strong>12</strong></td><td><strong>D</strong></td><td>Clientes 360 reúne datos comerciales y financieros del cliente, jamás información bancaria personal del vendedor.</td><td><code>06</code></td></tr><tr><td><strong>13</strong></td><td><strong>B</strong></td><td>Descuento ≥25 % entra en <em>Descuento por aprobar</em> y bloquea impresión y aceptación hasta que los aprobadores decidan.</td><td><code>07</code></td></tr><tr><td><strong>14</strong></td><td><strong>B</strong></td><td>Toda cotización aceptada crea un <strong>Pedido</strong> (nunca factura directa) y las vencidas quedan bloqueadas para proteger precios.</td><td><code>07</code></td></tr><tr><td><strong>15</strong></td><td><strong>B</strong></td><td>La reserva de mercancía es de <strong>24 horas hábiles</strong> (fines de semana no cuentan): viernes 5 p. m. vence lunes 5 p. m.</td><td><code>08</code></td></tr><tr><td><strong>16</strong></td><td><strong>A</strong></td><td>Rechazar libera el stock, crea tarea hoy al vendedor con el motivo y reabre la oportunidad que ese pedido había ganado.</td><td><code>08</code></td></tr><tr><td><strong>17</strong></td><td><strong>B</strong></td><td>Aislamiento estricto por cartera: sin clientes asignados en <em>Carteras</em> o en su ficha, el portal <code>/vendedores</code> abre vacío.</td><td><code>09</code></td></tr><tr><td><strong>18</strong></td><td><strong>C</strong></td><td>Reasignar un cliente sólo afecta ventas futuras; las facturas pasadas conservan su vendedor original y su comisión.</td><td><code>09</code></td></tr><tr><td><strong>19</strong></td><td><strong>B</strong></td><td>Control interno: la geocerca la fija o aprueba siempre el supervisor, nunca quien va a ser medido con ella.</td><td><code>10</code></td></tr><tr><td><strong>20</strong></td><td><strong>B</strong></td><td>El asistente de voz transcribe y rellena el formulario de cierre para que el vendedor lo revise; la grabación no se guarda.</td><td><code>10</code></td></tr><tr><td><strong>21</strong></td><td><strong>B</strong></td><td>El IVA pertenece al fisco, no es ingreso de la empresa; las comisiones se calculan siempre sobre monto <strong>SIN IVA</strong>.</td><td><code>11</code></td></tr><tr><td><strong>22</strong></td><td><strong>B</strong></td><td>Tras «Registrar el período», se genera la orden en <strong>Órdenes de pago → Comisiones pendientes</strong> (con ficha de personal).</td><td><code>11</code></td></tr><tr><td><strong>23</strong></td><td><strong>B</strong></td><td>Al descartar un prospecto o cerrar un negocio, los pasos pendientes de la secuencia se cancelan solos para no molestar.</td><td><code>12</code></td></tr><tr><td><strong>24</strong></td><td><strong>B</strong></td><td>Los formularios web detectan si la persona ya existe para no duplicarla, reparten por turno y bloquean bots.</td><td><code>12</code></td></tr><tr><td><strong>25</strong></td><td><strong>A</strong></td><td>WhatsApp bloquea envíos masivos automáticos; la cola asistida espacia los toques y registra enviado/omitido/baja.</td><td><code>13</code></td></tr><tr><td><strong>26</strong></td><td><strong>B</strong></td><td>La baja queda registrada en <strong>Marketing → Bajas</strong> y excluye automáticamente a la persona de futuras campañas.</td><td><code>13</code></td></tr><tr><td><strong>27</strong></td><td><strong>B</strong></td><td>Etapas/probabilidades y alertas (<code>CRM_DIAS_ESTANCADA</code>, <code>CRM_DIAS_DORMIDO</code>) se calibran en <strong>CRM → Ajustes</strong> (admin).</td><td><code>14</code></td></tr><tr><td><strong>28</strong></td><td><strong>A</strong></td><td>La tabla <strong>«Lo que se les enviaría hoy»</strong> enseña exactamente cada destinatario y motivo de exclusión antes de encender nada.</td><td><code>14</code></td></tr></tbody></table></div>
+<h3 id="resumen-de-respuestas-esperadas-parte-ii-casos-integrados">Resumen de respuestas esperadas — Parte II (Casos Integrados)</h3>
+<ol><li><strong>Prospecto de feria:</strong> <code>Prospectos</code> (<code>+ Prospecto</code> + agendar llamada) → <code>Convertir en cliente</code> (crea ficha fiscal completa con vendedor asignado) → <code>Oportunidades</code> (<code>+ Oportunidad</code>) → botón <code>Cotizar</code> en la oportunidad (o pestaña <code>Cotizaciones</code>) → <code>Descargar PDF</code> → cuando acepta, <code>El cliente la aceptó</code> → nace el <code>Pedido</code> (aparta stock 24h hábiles) → <code>Cuentas por cobrar → Pedidos por facturar → Crear factura → Aprobar</code>.</li><li><strong>Descuento 40 %:</strong> Supera el umbral de 25 %, por lo que está en <em>Descuento por aprobar</em> y bloquea PDF y aceptación. El Aprobador 1 entra por su aviso de GP Mensajes o en <code>Cotizaciones → Descuentos por aprobar</code>, revisa los renglones y pulsa <code>Aprobar</code> (o <code>No aprobar</code> con motivo). Al aprobarse se desbloquea la impresión.</li><li><strong>Pedido vencido:</strong> Como pasaron más de 24 horas hábiles sin facturarse y sin pago previo, la mercancía apartada se liberó y el pedido pasó a <code>VENCIDO</code>. En <code>Pedidos</code> o en <code>Facturación de clientes → Pedidos vencidos sin facturar</code>, se pulsa <strong>«Hacer de nuevo»</strong>, lo que crea un nuevo pedido igual que vuelve a apartar el stock (si aún hay disponible).</li><li><strong>Comisión sin IVA:</strong> <code>$11.600 ÷ 1,16 = $10.000</code> de base imponible (y <code>$1.600</code> de IVA que es dinero del fisco). El 5 % de <code>$10.000</code> son exactamente <code>$500</code>. En <code>CRM → Comisiones</code> le muestras la columna de base sin IVA y la factura enlazada.</li><li><strong>Alerta fuera del sitio:</strong> Una alerta es una señal para revisar, no una prueba automática de mala fe (el GPS falla en edificios/centros comerciales o la entrada queda lejos del pin). Se revisa «Lo que contestó», la precisión GPS y el mapa; si el local es grande o el pin estaba mal puesto, en <code>Ubicaciones</code> se ajusta la coordenada o se sube el radio de ese cliente y se marca la alerta como revisada con una nota.</li><li><strong>Reactivar dormidos:</strong> <code>Tienda en línea → Cupones</code> (crear cupón 10 %) → <code>CRM → Marketing → Segmentos</code> (regla: <code>sin_comprar_dias &gt; 90</code>, pulsar <em>Ver quiénes entran</em>) → <code>Campañas → + Campaña</code> (Correo o cola WhatsApp, asociar cupón y etiqueta <code>utm_campaign</code>, enviar prueba y lanzar) → medir en <code>Marketing → Resumen</code> (aperturas, clics, pedidos, cupones usados y ventas atribuidas).</li><li><strong>Pronóstico inflado:</strong> Entrar como administrador a <code>Vendedor (CRM) → Ajustes → Etapas del embudo</code>, pulsar «Prospección» y cambiar su probabilidad de 50 % a 10 %. De paso revisar en <em>Alertas</em> los días de negocio estancado (<code>CRM_DIAS_ESTANCADA</code>) para que no se acumulen oportunidades muertas inflando el embudo.</li></ol>
+  </article>
+</div>
+</body>
+</html>

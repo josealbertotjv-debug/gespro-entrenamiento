@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manual 02 · Cuentas por Cobrar · Academia GesPro Administrativo</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --navy:#0c1d35; --blue:#1a5da8; --sky:#3892e8; --bg:#f4f7fb; --card:#ffffff;
+    --ink:#162233; --muted:#52657d; --line:#dce5f0; --ok:#0f766e; --warn:#b45309;
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif; background:var(--bg); color:var(--ink); line-height:1.68; }
+  .topbar {
+    position:sticky; top:0; z-index:40; background:linear-gradient(135deg,#091628,#143a68);
+    color:#fff; padding:12px 22px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    box-shadow:0 4px 18px rgba(9,22,40,.18);
+  }
+  .topbar-left { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .back-btn {
+    display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.12); color:#fff;
+    text-decoration:none; padding:7px 13px; border-radius:9px; font-weight:600; font-size:13.5px; border:1px solid rgba(255,255,255,.22);
+  }
+  .back-btn:hover { background:rgba(255,255,255,.22); }
+  .topbar-title { font-weight:700; font-size:15px; display:flex; align-items:center; gap:8px; }
+  .pill { background:rgba(56,146,232,.25); border:1px solid rgba(137,201,255,.4); color:#d8eeff; padding:2px 9px; border-radius:999px; font-size:11.5px; font-weight:700; }
+  .topbar-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .act-btn {
+    border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.12); color:#fff;
+    padding:7px 13px; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+  }
+  .act-btn.primary { background:var(--sky); border-color:transparent; color:#061322; font-weight:700; }
+  .act-btn:hover { filter:brightness(1.08); }
+
+  .shell { max-width:1180px; margin:24px auto; padding:0 18px 56px; display:grid; grid-template-columns:250px minmax(0,1fr); gap:24px; align-items:start; }
+  aside.toc {
+    position:sticky; top:76px; background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px; max-height:calc(100vh - 96px); overflow:auto; box-shadow:0 4px 14px rgba(12,29,53,.04);
+  }
+  aside.toc h4 { margin:0 0 10px; font-size:11.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); }
+  .toc-link { display:block; color:var(--ink); text-decoration:none; font-size:13px; padding:5px 8px; border-radius:7px; line-height:1.35; }
+  .toc-link:hover { background:#eaf2fb; color:var(--blue); }
+  .toc-link.l3 { padding-left:18px; color:var(--muted); font-size:12.5px; }
+
+  article.doc {
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:34px 38px; box-shadow:0 6px 24px rgba(12,29,53,.05);
+  }
+  .doc-hero { border-bottom:2px solid #e6eef7; padding-bottom:18px; margin-bottom:24px; }
+  .doc-hero .kicker { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--blue); }
+  .doc-hero h1 { margin:6px 0 6px; font-size:28px; line-height:1.2; color:var(--navy); }
+  .doc-hero p { margin:0; color:var(--muted); font-size:15.5px; }
+
+  article.doc h1 { font-size:24px; color:var(--navy); margin:28px 0 12px; }
+  article.doc h2 { font-size:20px; color:var(--navy); margin:30px 0 12px; padding-bottom:6px; border-bottom:1px solid #e6eef7; scroll-margin-top:82px; }
+  article.doc h3 { font-size:16.5px; color:var(--blue); margin:22px 0 8px; scroll-margin-top:82px; }
+  article.doc h4 { font-size:15px; color:#2b415d; margin:16px 0 6px; }
+  article.doc p { margin:0 0 12px; }
+  article.doc ul, article.doc ol { margin:0 0 14px; padding-left:22px; }
+  article.doc li { margin-bottom:6px; }
+  article.doc code { background:#eef4fb; color:#113968; padding:1.5px 6px; border-radius:5px; font-size:.9em; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  article.doc pre { background:#0d1c31; color:#e5f0ff; padding:14px 16px; border-radius:10px; overflow:auto; font-size:13px; line-height:1.5; }
+  article.doc pre code { background:none; color:inherit; padding:0; }
+  article.doc hr { border:none; border-top:1px solid var(--line); margin:24px 0; }
+  article.doc a { color:var(--blue); }
+  .chk { font-weight:700; color:var(--blue); }
+  .chk.done { color:var(--ok); }
+
+  .tbl-wrap { overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:10px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  thead { background:#eef4fb; }
+  th { text-align:left; padding:10px 12px; color:var(--navy); font-weight:700; border-bottom:1px solid var(--line); }
+  td { padding:9px 12px; border-bottom:1px solid #edf2f8; vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:nth-child(even) { background:#fafcff; }
+
+  .callout { padding:13px 16px; border-radius:10px; margin:16px 0; border-left:4px solid var(--blue); background:#eef5fd; }
+  .callout p:last-child { margin-bottom:0; }
+  .callout.warn { border-left-color:var(--warn); background:#fff7ed; }
+  .callout.ok { border-left-color:var(--ok); background:#ecfdf5; }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns:1fr; }
+    aside.toc { position:static; max-height:none; }
+    article.doc { padding:22px 18px; }
+  }
+  @media print {
+    .topbar, aside.toc { display:none !important; }
+    body { background:#fff; }
+    .shell { display:block; max-width:none; margin:0; padding:0; }
+    article.doc { border:none; box-shadow:none; padding:0; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-left">
+    <a class="back-btn" href="../index.html#manuales">← Volver al Portal</a>
+    <div class="topbar-title">💵 Manual 02 · Cuentas por Cobrar <span class="pill">Sección 2</span></div>
+  </div>
+  <div class="topbar-actions">
+    <a class="act-btn" href="../index.html#cxc">▶ Ver videos del módulo</a>
+    <a class="act-btn" href="md/02-Manual-Cuentas-por-Cobrar.md" download>⬇ Descargar .md</a>
+    <button class="act-btn primary" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="toc"><h4>Contenido</h4><a class="toc-link l2" href="#1-mapa-del-modulo-de-cuentas-por-cobrar">1. Mapa del Módulo de Cuentas por Cobrar</a>
+<a class="toc-link l2" href="#2-ficha-del-cliente-que-llenar-bien-desde-el-dia-1">2. Ficha del Cliente: Qué Llenar Bien desde el Día 1</a>
+<a class="toc-link l2" href="#3-emitir-y-aprobar-una-factura-paso-a-paso">3. Emitir y Aprobar una Factura (Paso a paso)</a>
+<a class="toc-link l3" href="#opcion-a-desde-un-pedido-cotizacion-aceptada-o-vendedor">Opción A: Desde un Pedido (cotización aceptada o vendedor)</a>
+<a class="toc-link l3" href="#opcion-b-factura-manual-desde-cero">Opción B: Factura manual desde cero</a>
+<a class="toc-link l2" href="#4-notas-de-credito-y-notas-de-debito">4. Notas de Crédito y Notas de Débito</a>
+<a class="toc-link l2" href="#5-registrar-cobros-igtf-y-retenciones-recibidas">5. Registrar Cobros, IGTF y Retenciones Recibidas</a>
+<a class="toc-link l3" href="#5-1-cobro-directo-con-o-sin-igtf">5.1 Cobro directo (con o sin IGTF)</a>
+<a class="toc-link l3" href="#5-2-retenciones-recibidas-de-clientes-contribuyentes-especiales">5.2 Retenciones recibidas de clientes (Contribuyentes Especiales)</a>
+<a class="toc-link l2" href="#6-portal-de-clientes-y-bandeja-de-comprobantes-de-pago">6. Portal de Clientes y Bandeja de Comprobantes de Pago</a>
+<a class="toc-link l2" href="#7-inteligencia-de-cobranza-antiguedad-panel-y-reporte-por-cliente">7. Inteligencia de Cobranza: Antigüedad, Panel y Reporte por Cliente</a>
+<a class="toc-link l2" href="#5-errores-clasicos-en-cxc-y-como-evitarlos">⚠️ 5 Errores Clásicos en CxC (y Cómo Evitarlos)</a>
+<a class="toc-link l2" href="#reto-practico-del-estudiante-25-min">🛠️ Reto Práctico del Estudiante (25 min)</a>
+<a class="toc-link l2" href="#chuleta-rapida-1-minuto">📌 Chuleta Rápida (1 minuto)</a></aside>
+  <article class="doc">
+    <div class="doc-hero">
+      <div class="kicker">Academia GesPro Administrativo · Material Oficial</div>
+      <h1>💵 Manual 02 · Cuentas por Cobrar</h1>
+      <p>Clientes, Facturación, Cobros, IGTF y Portal de comprobantes</p>
+    </div>
+    <h1 id="manual-del-usuario-modulo-2-cuentas-por-cobrar">Manual del Usuario · Módulo 2: Cuentas por Cobrar</h1>
+<p><strong>GesPro Administrativo v5.7.0 · Guía Práctica del Estudiante</strong></p>
+<div class="callout warn"><p><strong>Tu misión en este módulo:</strong> Facturar sin errores de numeración fiscal, controlar el crédito y los bloqueos por mora, cobrar en bolívares o divisas (con IGTF y retenciones de IVA/ISLR) y usar la cartera para cobrar más rápido.  </p><p><strong>🎬 Videos de repaso de este módulo (<code>-WhatsApp.mp4</code> disponibles):</strong> <code>10-Clientes</code> (<code>1:46</code>) · <code>05-Facturacion-de-clientes</code> (<code>2:04</code>) · <code>08-Cuentas-por-cobrar</code> (<code>1:58</code>) · <code>14-Comprobantes-de-pago</code> (<code>1:28</code>) · <code>12-Autorizaciones</code> (<code>1:13</code>).</p></div>
+<hr>
+<h2 id="1-mapa-del-modulo-de-cuentas-por-cobrar">1. Mapa del Módulo de Cuentas por Cobrar</h2>
+<p>Encontrarás estas secciones y pestañas clave:</p>
+<ul><li><strong>Menú <code>Clientes</code>:</strong> Directorio con ficha fiscal, crédito, vendedor asignado y detección de <em>Fichas incompletas</em>.</li><li><strong>Menú <code>Facturación de clientes</code>:</strong> Solo emitir, aprobar, imprimir y anular facturas/notas (ideal para facturadores que no tocan cobranza).</li><li><strong>Menú <code>Cuentas por cobrar</code></strong> (6 pestañas): 1. <strong>Documentos</strong> <em>(incluye las tarjetas «Pedidos por facturar» y «Pedidos vencidos sin facturar»)</em> 2. <strong>Panel de clientes</strong> <em>(ranking de mejores clientes y qué productos compra cada uno)</em> 3. <strong>Reporte por cliente</strong> <em>(días promedio reales de pago vs días de crédito y % pagado)</em> 4. <strong>Antigüedad de saldos</strong> <em>(a quién llamar primero por tramos: corriente, 1-30, 31-60, 61-90, +90)</em> 5. <strong>Cobros</strong> <em>(historial de cobros, anticipos y anulaciones)</em> 6. <strong>Retenciones recibidas</strong> <em>(comprobantes de retención IVA/ISLR que entregan clientes contribuyentes especiales)</em></li><li><strong>Menú <code>Comprobantes de pago</code> y <code>Portal de clientes (/portal)</code>:</strong> Bandeja donde llegan los pagos que reportan tus clientes escaneando el QR de su factura.</li><li><strong>Menú <code>Autorizaciones</code>:</strong> Bandeja del gerente para aprobar o rechazar facturas detenidas por morosidad.</li></ul>
+<hr>
+<h2 id="2-ficha-del-cliente-que-llenar-bien-desde-el-dia-1">2. Ficha del Cliente: Qué Llenar Bien desde el Día 1</h2>
+<p>!<a href="../presentacion/img/clientes-listado.png" target="_blank" rel="noopener">Listado de clientes</a></p>
+<p>Al crear un cliente en <strong>Clientes → Nuevo cliente</strong>:</p>
+<ol><li><strong>Escribe primero el RIF/Identificación:</strong> GesPro deduce automáticamente la <strong>Condición fiscal</strong> por el prefijo (<code>V/P</code> persona natural, <code>J/C</code> persona jurídica, <code>G</code> ente público, <code>E</code> extranjero residente). Si tienen el puente SENIAT o el botón <strong>«Leer el RIF (PDF o foto)»</strong>, rellena datos y dirección fiscal automáticamente.</li><li><strong>Vendedor (obligatorio):</strong> Define qué vendedor sale impreso en la factura y quién cobra la comisión.</li><li><strong>Días de crédito y Límite de crédito:</strong> Calcula automáticamente la fecha de vencimiento de cada factura.</li><li><strong>Bloqueo por facturas vencidas (⚠️ ¡Cuidado con el cero!):</strong> - Escribir <strong><code>0</code></strong> significa <strong>SIN TOPE</strong> (nunca se bloquea). - Escribir <strong><code>1</code></strong> significa que con <strong>1 factura vencida</strong> ya no se puede aprobar una factura nueva sin permiso del gerente en <strong>Autorizaciones</strong>. - <em>Cada autorización vale para UNA sola factura.</em> Las notas de crédito nunca se bloquean porque bajan la deuda.</li><li><strong>Si el cliente también es proveedor:</strong> Usa <strong>una sola ficha</strong> marcando tipo <strong>«Cliente y proveedor»</strong> para no duplicarlo.</li></ol>
+<hr>
+<h2 id="3-emitir-y-aprobar-una-factura-paso-a-paso">3. Emitir y Aprobar una Factura (Paso a paso)</h2>
+<p>!<a href="../presentacion/img/cxc-factura.png" target="_blank" rel="noopener">Editor de factura de venta</a></p>
+<h3 id="opcion-a-desde-un-pedido-cotizacion-aceptada-o-vendedor">Opción A: Desde un Pedido (cotización aceptada o vendedor)</h3>
+<ol><li>En <strong>Cuentas por cobrar</strong> (o <strong>Facturación de clientes</strong>), mira arriba la tarjeta <strong>«Pedidos por facturar»</strong>.</li><li>Pulsa <strong>«Crear factura»</strong>. Si era un cliente nuevo propuesto por el vendedor, revisa y confirma sus datos. Se crea el <strong>Borrador</strong> con los mismos renglones y precios del pedido.</li></ol>
+<h3 id="opcion-b-factura-manual-desde-cero">Opción B: Factura manual desde cero</h3>
+<ol><li>Pulsa <strong>«Nuevo documento»</strong> y elige el cliente.</li><li>Agrega los artículos o servicios. El impuesto (IVA 16 %, 8 % o Exento) viene de la ficha del artículo.</li><li><strong>Control de precios:</strong> Si cambias un precio respecto al de lista, el renglón te avisa debajo. Al pulsar <strong>Guardar</strong>, aparece una ventana de <strong>repaso completo</strong> señalando con <code>⚠</code> cualquier precio alterado antes de guardar.</li><li><strong>Equivalente en divisa:</strong> Si facturas en bolívares y debes mostrar el equivalente en USD (Art. 25 Ley IVA), marca <strong>«Equivalente en divisa»</strong> y verifica la tasa BCV propuesta. Esa tasa queda <strong>guardada para siempre</strong> en esa factura (al reimprimirla meses después, no cambia).</li><li><strong>BORRADOR vs APROBADO (¡Regla vital!):</strong> - Mientras es <strong>BORRADOR</strong> lleva número provisional (<code>BORRADOR-12</code>), <strong>no gasta correlativo fiscal</strong>, no descuenta inventario ni contabiliza. Puedes editarlo o eliminarlo libremente. - Al pulsar <strong>«Aprobar y contabilizar»</strong>, en ese instante: se asigna el <strong>número de factura y número de control consecutivos</strong>, se descuenta el inventario, se registra el costo de ventas y se crea el asiento cuadrado.</li><li><strong>Enviar por correo / Imprimir:</strong> Desde la factura aprobada, pulsa <strong>«Imprimir»</strong> (sale con tu formato o sobre talonario preimpreso y con el <strong>QR del Portal de Clientes</strong> al pie mientras tenga saldo) o <strong>«Enviar por correo»</strong>.</li></ol>
+<div class="callout warn"><p><strong>¿Aprobaste una factura por error y NO la imprimiste?</strong> Si es la <strong>última de la serie</strong>, no se envió por correo, no tiene cobros, despachos ni notas asociadas, un administrador puede abrirla y usar <strong>«Eliminar (no impresa)»</strong> para liberar el número. En cualquier otro caso, se usa <strong>«Anular»</strong> (genera asiento reverso y conserva el número anulado en el Libro de Ventas).</p></div>
+<hr>
+<h2 id="4-notas-de-credito-y-notas-de-debito">4. Notas de Crédito y Notas de Débito</h2>
+<ul><li><strong>Nota de crédito:</strong> Devuelve mercancía o rebaja deuda del cliente. Siempre indica <strong>«Factura que afecta»</strong> (si la factura original era de tu sistema anterior, elige <em>«Emitida en otro sistema»</em> para no duplicar ventas).</li><li><strong>Cruzar Nota de crédito con Factura:</strong> Abre la nota de crédito aprobada y pulsa <strong>«Cruzar con una factura»</strong> para rebajar directamente el saldo de la factura sin pasar por cobros. <em>(Solo mismo cliente y misma moneda).</em></li><li><strong>Nota de débito:</strong> Aumenta la deuda del cliente (intereses, recargos, ajustes).</li></ul>
+<hr>
+<h2 id="5-registrar-cobros-igtf-y-retenciones-recibidas">5. Registrar Cobros, IGTF y Retenciones Recibidas</h2>
+<p>!<a href="../presentacion/img/cxc-cobro.png" target="_blank" rel="noopener">Registro de cobro</a></p>
+<h3 id="5-1-cobro-directo-con-o-sin-igtf">5.1 Cobro directo (con o sin IGTF)</h3>
+<ol><li>Abre la factura y pulsa <strong>«Registrar cobro»</strong> (o ve a la pestaña <strong>Cobros</strong>).</li><li>Elige la <strong>cuenta bancaria</strong> donde entró el dinero, la fecha, el método y <strong>copia la referencia bancaria exacta</strong> <em>(clave para que el banco concilie solo después)</em>.</li><li><strong>Si la cuenta es en divisas y tu empresa es contribuyente especial:</strong> GesPro calcula automáticamente el <strong>3 % de IGTF</strong> encima de lo aplicado a facturas (ej. para saldar una factura de $100, el cliente paga $103: $100 cancelan la factura y $3 van a <em>IGTF percibido por enterar</em>).</li><li>Reparte el monto entre una o varias facturas. Si el cliente pagó de más, elige si el sobrante queda como <strong>Anticipo del cliente</strong> o (si eres Tesorería/Contabilidad/Admin) como <strong>Diferencial cambiario</strong>.</li><li><strong>¿Te equivocaste en un cobro?</strong> Un cobro no se edita: ábrelo y usa <strong>«Anular y registrar de nuevo»</strong> (te precarga todos los datos para corregir solo el error; no aplica si ya está conciliado con el banco).</li></ol>
+<h3 id="5-2-retenciones-recibidas-de-clientes-contribuyentes-especiales">5.2 Retenciones recibidas de clientes (Contribuyentes Especiales)</h3>
+<p>Cuando un cliente especial te retiene el <strong>75 % o 100 % del IVA</strong> (o ISLR):</p>
+<ol><li>Registra primero en <strong>Cobros</strong> únicamente el dinero neto que entró al banco. La factura quedará debiendo justo lo retenido.</li><li>Cuando llegue el comprobante del cliente, ve a <strong>Cuentas por cobrar → Retenciones recibidas → «Registrar retención recibida»</strong>.</li><li>Elige cliente, tipo (<strong>IVA</strong> o <strong>ISLR</strong>), número de comprobante (14 dígitos en IVA: <code>AAAAMM + secuencia</code>) y fecha.</li><li>Marca las facturas afectadas (GesPro propone el monto en bolívares según la ficha; ajústalo si el papel dice otra cifra), adjunta el PDF/foto y pulsa <strong>«Registrar»</strong>.</li><li><strong>Resultado automático:</strong> La factura baja su saldo sin tocar bancos, se contabiliza tu crédito fiscal y el número sale directo en el <strong>Libro de Ventas</strong>.</li></ol>
+<hr>
+<h2 id="6-portal-de-clientes-y-bandeja-de-comprobantes-de-pago">6. Portal de Clientes y Bandeja de Comprobantes de Pago</h2>
+<p>!<a href="../presentacion/img/comprobantes.png" target="_blank" rel="noopener">Bandeja de comprobantes de pago</a></p>
+<ul><li>Tus clientes entran a <code>/portal</code> (o escanean el <strong>QR al pie de su factura</strong>) solo con su <strong>RIF/Cédula</strong>, sin contraseñas. Allí ven sus facturas pendientes, tus cuentas bancarias y suben su comprobante de pago (y opcionalmente su comprobante de retención).</li><li>Los reportes caen en <strong>Tesorería → Comprobantes de pago</strong> recorriendo estos estados: <code>RECIBIDO → EN REVISIÓN → VERIFICADO → APLICADO</code> <em>(o <code>RECHAZADO</code> con motivo visible para el cliente)</em>.</li><li><strong>Ayudas automáticas:</strong> Detecta referencias duplicadas, busca el abono en el extracto bancario con índice de confianza (y con Banco Mercantil verifica pagos móviles directo con el banco) y sugiere contra qué facturas imputarlo.</li><li><strong>⚠️ Regla sagrada:</strong> <em>Un comprobante es lo que el cliente dice, no lo que ocurrió.</em> <strong>Nunca lo apliques</strong> sin confirmar que el dinero entró al banco. Si lo aplicaste mal, usa <strong>«Deshacer la aplicación»</strong> para devolverlo a <em>Verificado</em>.</li></ul>
+<hr>
+<h2 id="7-inteligencia-de-cobranza-antiguedad-panel-y-reporte-por-cliente">7. Inteligencia de Cobranza: Antigüedad, Panel y Reporte por Cliente</h2>
+<p>!<a href="../presentacion/img/cxc-antiguedad.png" target="_blank" rel="noopener">Antigüedad de saldos</a></p>
+<div class="tbl-wrap"><table><thead><tr><th>Herramienta en CxC</th><th>Pregunta que te responde al instante</th></tr></thead><tbody><tr><td><strong>Antigüedad de saldos</strong></td><td><em>¿A quién llamo primero hoy?</em> Clasifica cada deuda en Corriente, 1-30, 31-60, 61-90 y +90 días de mora.</td></tr><tr><td><strong>Panel de clientes</strong></td><td><em>¿Quiénes son mis mejores clientes y qué producto compran?</em> Además, te <strong>advierte en alerta si pocos clientes concentran más del 70 %</strong> de tu facturación (riesgo comercial).</td></tr><tr><td><strong>Reporte por cliente</strong></td><td><em>¿Quién me pide 30 días pero me paga a los 65?</em> Muestra <strong>Días promedio reales de pago</strong> (ponderado por monto), <strong>% pagado</strong> de lo facturado y el <strong>producto principal</strong> de cada cliente. Haz clic en cualquier columna para ordenar y exportar a Excel.</td></tr></tbody></table></div>
+<hr>
+<h2 id="5-errores-clasicos-en-cxc-y-como-evitarlos">⚠️ 5 Errores Clásicos en CxC (y Cómo Evitarlos)</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Error clásico</th><th>Qué pasa</th><th>Solución correcta</th></tr></thead><tbody><tr><td>Poner <code>0</code> en «Bloqueo por facturas vencidas» pensando que bloquea con cero mora</td><td><code>0</code> significa <strong>SIN TOPE</strong> (le venderá aunque deba 20 facturas)</td><td>Escribe <strong><code>1</code></strong> para frenar desde la primera factura vencida</td></tr><tr><td>Inventar o recortar la referencia al registrar un cobro</td><td>La conciliación bancaria no lo cruza sola y toca hacerlo a mano</td><td>Copia la <strong>referencia completa exacta</strong> de la transferencia/pago móvil</td></tr><tr><td>Registrar el monto total de la factura en el banco aunque el cliente retuvo IVA</td><td>El banco queda inflado y nunca concilia</td><td>Registra en <strong>Cobros</strong> solo lo que entró al banco, y lo retenido en <strong>Retenciones recibidas</strong></td></tr><tr><td>Aplicar un comprobante del portal solo viendo la foto de WhatsApp</td><td>Si el pago rebotó o era falso, ya saldaste la deuda</td><td>Verifica primero en el extracto o banca en línea antes de pulsar <strong>Aplicar</strong></td></tr><tr><td>Cobrar en dólares sin revisar el IGTF</td><td>Diferencias de 3 % en caja y sanciones fiscales</td><td>Verifica que la cuenta en divisas tenga marcado <strong>«sujeta a IGTF»</strong> y confirma el cálculo automático</td></tr></tbody></table></div>
+<hr>
+<h2 id="reto-practico-del-estudiante-25-min">🛠️ Reto Práctico del Estudiante (25 min)</h2>
+<ol><li>Abre <strong>Cuentas por cobrar</strong> → tarjeta <strong>«Pedidos por facturar»</strong> → crea la factura de tu pedido del Módulo 1 (<code>PED-…</code>), revisa el repaso de precios y pulsa <strong>«Aprobar y contabilizar»</strong>.</li><li>Pulsa <strong>«Imprimir»</strong> para ver la factura con su número fiscal, número de control y código <strong>QR del Portal de Clientes</strong>.</li><li>Pulsa <strong>«Registrar cobro»</strong> por el <strong>50 %</strong> de la factura en una cuenta bancaria (anota tu referencia exacta, ej. <code>COB-EQ1-101</code>). Si usas cuenta en USD y la empresa es contribuyente especial, observa cómo aparece el <strong>3 % de IGTF</strong>.</li><li>Ve a <strong>Retenciones recibidas → Registrar retención recibida</strong>, carga un comprobante de IVA de 14 dígitos (<code>20261100000015</code>) por el 75 % del IVA de esa factura y comprueba el nuevo saldo.</li><li>Entra a <strong>Antigüedad de saldos</strong> y <strong>Reporte por cliente</strong> y responde: <em>¿cuál cliente tiene más días promedio de pago?</em></li></ol>
+<hr>
+<h2 id="chuleta-rapida-1-minuto">📌 Chuleta Rápida (1 minuto)</h2>
+<ul><li><strong>Borrador</strong> = editable, sin número fiscal. <strong>Aprobar</strong> = número + control + inventario + asiento contable.</li><li><strong>Bloqueo mora:</strong> <code>0</code> = sin límite; <code>1</code> = bloquea con 1 vencida (destraba Gerencia en <strong>Autorizaciones</strong>).</li><li><strong>Retenciones de clientes:</strong> Cobro por el neto + comprobante de 14 dígitos en <strong>Retenciones recibidas</strong>.</li><li><strong>Cobro equivocado:</strong> No se edita → <strong>«Anular y registrar de nuevo»</strong>.</li></ul>
+  </article>
+</div>
+</body>
+</html>

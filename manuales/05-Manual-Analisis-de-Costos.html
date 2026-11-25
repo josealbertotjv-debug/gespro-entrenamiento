@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manual 05 · Análisis de Costos · Academia GesPro Administrativo</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --navy:#0c1d35; --blue:#1a5da8; --sky:#3892e8; --bg:#f4f7fb; --card:#ffffff;
+    --ink:#162233; --muted:#52657d; --line:#dce5f0; --ok:#0f766e; --warn:#b45309;
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif; background:var(--bg); color:var(--ink); line-height:1.68; }
+  .topbar {
+    position:sticky; top:0; z-index:40; background:linear-gradient(135deg,#091628,#143a68);
+    color:#fff; padding:12px 22px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    box-shadow:0 4px 18px rgba(9,22,40,.18);
+  }
+  .topbar-left { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .back-btn {
+    display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.12); color:#fff;
+    text-decoration:none; padding:7px 13px; border-radius:9px; font-weight:600; font-size:13.5px; border:1px solid rgba(255,255,255,.22);
+  }
+  .back-btn:hover { background:rgba(255,255,255,.22); }
+  .topbar-title { font-weight:700; font-size:15px; display:flex; align-items:center; gap:8px; }
+  .pill { background:rgba(56,146,232,.25); border:1px solid rgba(137,201,255,.4); color:#d8eeff; padding:2px 9px; border-radius:999px; font-size:11.5px; font-weight:700; }
+  .topbar-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .act-btn {
+    border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.12); color:#fff;
+    padding:7px 13px; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+  }
+  .act-btn.primary { background:var(--sky); border-color:transparent; color:#061322; font-weight:700; }
+  .act-btn:hover { filter:brightness(1.08); }
+
+  .shell { max-width:1180px; margin:24px auto; padding:0 18px 56px; display:grid; grid-template-columns:250px minmax(0,1fr); gap:24px; align-items:start; }
+  aside.toc {
+    position:sticky; top:76px; background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px; max-height:calc(100vh - 96px); overflow:auto; box-shadow:0 4px 14px rgba(12,29,53,.04);
+  }
+  aside.toc h4 { margin:0 0 10px; font-size:11.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); }
+  .toc-link { display:block; color:var(--ink); text-decoration:none; font-size:13px; padding:5px 8px; border-radius:7px; line-height:1.35; }
+  .toc-link:hover { background:#eaf2fb; color:var(--blue); }
+  .toc-link.l3 { padding-left:18px; color:var(--muted); font-size:12.5px; }
+
+  article.doc {
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:34px 38px; box-shadow:0 6px 24px rgba(12,29,53,.05);
+  }
+  .doc-hero { border-bottom:2px solid #e6eef7; padding-bottom:18px; margin-bottom:24px; }
+  .doc-hero .kicker { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--blue); }
+  .doc-hero h1 { margin:6px 0 6px; font-size:28px; line-height:1.2; color:var(--navy); }
+  .doc-hero p { margin:0; color:var(--muted); font-size:15.5px; }
+
+  article.doc h1 { font-size:24px; color:var(--navy); margin:28px 0 12px; }
+  article.doc h2 { font-size:20px; color:var(--navy); margin:30px 0 12px; padding-bottom:6px; border-bottom:1px solid #e6eef7; scroll-margin-top:82px; }
+  article.doc h3 { font-size:16.5px; color:var(--blue); margin:22px 0 8px; scroll-margin-top:82px; }
+  article.doc h4 { font-size:15px; color:#2b415d; margin:16px 0 6px; }
+  article.doc p { margin:0 0 12px; }
+  article.doc ul, article.doc ol { margin:0 0 14px; padding-left:22px; }
+  article.doc li { margin-bottom:6px; }
+  article.doc code { background:#eef4fb; color:#113968; padding:1.5px 6px; border-radius:5px; font-size:.9em; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  article.doc pre { background:#0d1c31; color:#e5f0ff; padding:14px 16px; border-radius:10px; overflow:auto; font-size:13px; line-height:1.5; }
+  article.doc pre code { background:none; color:inherit; padding:0; }
+  article.doc hr { border:none; border-top:1px solid var(--line); margin:24px 0; }
+  article.doc a { color:var(--blue); }
+  .chk { font-weight:700; color:var(--blue); }
+  .chk.done { color:var(--ok); }
+
+  .tbl-wrap { overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:10px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  thead { background:#eef4fb; }
+  th { text-align:left; padding:10px 12px; color:var(--navy); font-weight:700; border-bottom:1px solid var(--line); }
+  td { padding:9px 12px; border-bottom:1px solid #edf2f8; vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:nth-child(even) { background:#fafcff; }
+
+  .callout { padding:13px 16px; border-radius:10px; margin:16px 0; border-left:4px solid var(--blue); background:#eef5fd; }
+  .callout p:last-child { margin-bottom:0; }
+  .callout.warn { border-left-color:var(--warn); background:#fff7ed; }
+  .callout.ok { border-left-color:var(--ok); background:#ecfdf5; }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns:1fr; }
+    aside.toc { position:static; max-height:none; }
+    article.doc { padding:22px 18px; }
+  }
+  @media print {
+    .topbar, aside.toc { display:none !important; }
+    body { background:#fff; }
+    .shell { display:block; max-width:none; margin:0; padding:0; }
+    article.doc { border:none; box-shadow:none; padding:0; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-left">
+    <a class="back-btn" href="../index.html#manuales">← Volver al Portal</a>
+    <div class="topbar-title">📊 Manual 05 · Análisis de Costos <span class="pill">Sección 5</span></div>
+  </div>
+  <div class="topbar-actions">
+    <a class="act-btn" href="../index.html#costos">▶ Ver videos del módulo</a>
+    <a class="act-btn" href="md/05-Manual-Analisis-de-Costos.md" download>⬇ Descargar .md</a>
+    <button class="act-btn primary" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="toc"><h4>Contenido</h4><a class="toc-link l2" href="#1-por-que-existe-analisis-de-costos">1. ¿Por Qué Existe Análisis de Costos?</a>
+<a class="toc-link l2" href="#2-las-cuatro-modalidades-de-costeo">2. Las Cuatro Modalidades de Costeo</a>
+<a class="toc-link l2" href="#3-dos-conceptos-que-debes-dominar-como-la-palma-de-tu-mano">3. Dos Conceptos que Debes Dominar como la Palma de tu Mano</a>
+<a class="toc-link l3" href="#a-la-casilla-al-costo-no-mezcles-inventario-con-gastos-de-venta">A. La casilla `Al costo` (¡No mezcles inventario con gastos de venta!)</a>
+<a class="toc-link l3" href="#b-la-formula-exacta-del-precio-sugerido-margen-sobre-precio">B. La Fórmula Exacta del Precio Sugerido (Margen sobre Precio)</a>
+<a class="toc-link l3" href="#bases-de-calculo-disponibles-en-cada-renglon">Bases de cálculo disponibles en cada renglón</a>
+<a class="toc-link l2" href="#4-crear-revisar-con-ia-y-aprobar-una-ficha-de-costo">4. Crear, Revisar (con IA) y Aprobar una Ficha de Costo</a>
+<a class="toc-link l3" href="#paso-a-paso-individual">Paso a paso individual</a>
+<a class="toc-link l3" href="#atajo-masivo-para-importadores-pestana-desde-una-importacion">Atajo masivo para importadores: Pestaña «Desde una importación»</a>
+<a class="toc-link l2" href="#5-que-pasa-exactamente-al-aprobar-una-ficha">5. ¿Qué Pasa Exactamente al Aprobar una Ficha?</a>
+<a class="toc-link l2" href="#6-complemento-gerencial-utilidad-bruta-promedio-vs-peps-y-agentes">6. Complemento Gerencial: Utilidad Bruta (Promedio vs PEPS) y Agentes</a>
+<a class="toc-link l2" href="#5-errores-clasicos-en-analisis-de-costos-y-como-evitarlos">⚠️ 5 Errores Clásicos en Análisis de Costos (y Cómo Evitarlos)</a>
+<a class="toc-link l2" href="#reto-practico-del-estudiante-20-min">🛠️ Reto Práctico del Estudiante (20 min)</a>
+<a class="toc-link l2" href="#chuleta-rapida-1-minuto">📌 Chuleta Rápida (1 minuto)</a></aside>
+  <article class="doc">
+    <div class="doc-hero">
+      <div class="kicker">Academia GesPro Administrativo · Material Oficial</div>
+      <h1>📊 Manual 05 · Análisis de Costos</h1>
+      <p>Fichas de costo, Márgenes, Precios sugeridos e Importaciones</p>
+    </div>
+    <h1 id="manual-del-usuario-modulo-5-analisis-de-costos">Manual del Usuario · Módulo 5: Análisis de Costos</h1>
+<p><strong>GesPro Administrativo v5.7.0 · Guía Práctica del Estudiante</strong></p>
+<div class="callout tip"><p><strong>Tu misión en este módulo:</strong> Descubrir cuánto te cuesta <em>de verdad</em> cada producto o servicio que vendes (importado, fabricado, servicio o mixto), calcular el precio de venta correcto para no perder margen, aprovechar la IA Gemini como analista y entender la utilidad real con Costo Promedio vs PEPS.  </p><p><strong>🎬 Videos de repaso de este módulo (<code>-WhatsApp.mp4</code> disponibles):</strong> <code>23-Analisis-de-costos</code> (<code>3:48</code>) · <em>complementos:</em> <code>22-Importaciones</code> (<code>2:39</code>) · <code>21-Reportes</code> (<code>1:38</code>).</p></div>
+<hr>
+<h2 id="1-por-que-existe-analisis-de-costos">1. ¿Por Qué Existe Análisis de Costos?</h2>
+<p>Uno de los errores más caros en cualquier empresa es fijar precios «a ojo» o multiplicar el costo de factura por 1,30 creyendo que se gana un 30 %. Cuando sumas flete marítimo, seguro, aranceles, agente aduanal, transporte al almacén, gastos generales de la empresa y comisiones de ventas, ese «30 %» suele convertirse en un <strong>5 %… o en pérdida</strong>.</p>
+<p>En <strong>Operaciones → Análisis de costos</strong>, cada artículo o servicio tiene su <strong>Ficha de costo</strong> viva, con el origen exacto de cada cifra. Y cuando Contabilidad o Administración la aprueba, <strong>actualiza el costo del artículo y revaloriza el inventario automáticamente</strong>.</p>
+<hr>
+<h2 id="2-las-cuatro-modalidades-de-costeo">2. Las Cuatro Modalidades de Costeo</h2>
+<p>Al pulsar <strong>«Nueva ficha de costo»</strong>, GesPro soporta 4 formas de obtener lo que vendes y llena automáticamente lo que ya sabe tu sistema:</p>
+<div class="tbl-wrap"><table><thead><tr><th>Modalidad</th><th>Lo que GesPro llena SOLO desde tu sistema</th><th>Lo que tú revisas o completas</th></tr></thead><tbody><tr><td><strong>Importado</strong></td><td>Precio de la última factura de compra, o los costos repartidos de una <strong>Importación</strong> (flete, seguro, aduana, impuestos). Sin importación ligada, toma el % histórico de gastos de tus importaciones anteriores.</td><td>Arancel específico del código arancelario y transporte local hasta el almacén.</td></tr><tr><td><strong>Elaborado</strong></td><td>La receta de <strong>Manufactura</strong>: cada material con su merma al costo de hoy, mano de obra y gastos de fabricación para el lote de la receta.</td><td>Cualquier gasto adicional fuera de la receta.</td></tr><tr><td><strong>Servicio</strong></td><td>Costo por hora real del personal activo en <strong>Recursos humanos</strong> (<code>sueldo ÷ 173,33 horas/mes</code>, sin cargas sociales).</td><td>Cantidad de horas que lleva prestar el servicio, insumos y servicios de terceros.</td></tr><tr><td><strong>Mixto</strong></td><td>Combina lo que aplique de compras, receta y horas de personal.</td><td>Ajustes específicos del paquete producto + servicio.</td></tr></tbody></table></div>
+<div class="callout tip"><p><strong>Plus automático en las 4 modalidades:</strong> Si tienes contabilidad con historial, GesPro calcula solo tus <strong>Gastos generales y de administración</strong> comparando los gastos de los últimos <strong>3 meses completos</strong> contra las ventas del mismo período (como % del precio de venta).</p></div>
+<hr>
+<h2 id="3-dos-conceptos-que-debes-dominar-como-la-palma-de-tu-mano">3. Dos Conceptos que Debes Dominar como la Palma de tu Mano</h2>
+<h3 id="a-la-casilla-al-costo-no-mezcles-inventario-con-gastos-de-venta">A. La casilla <strong><code>Al costo</code></strong> (¡No mezcles inventario con gastos de venta!)</h3>
+<p>Cada renglón de una ficha tiene una casilla llamada <strong><code>Al costo</code></strong>:</p>
+<ul><li><strong>✅ Marcada (<code>Al costo</code>):</strong> Forma parte del <strong>Costo del artículo</strong> (lo que contablemente va al inventario): <em>Precio FOB, Flete, Seguro, Aranceles, Aduana, Transporte al almacén, Materiales, Mano de obra, Gastos de fabricación</em>.</li><li><strong>⬜ Desmarcada:</strong> <strong>No</strong> infla el valor del inventario; <strong>solo cuenta para calcular el Costo completo y el Precio sugerido</strong>: <em>Gastos generales y de administración, Comisiones de venta</em>.</li></ul>
+<h3 id="b-la-formula-exacta-del-precio-sugerido-margen-sobre-precio">B. La Fórmula Exacta del Precio Sugerido (Margen sobre Precio)</h3>
+<p>En GesPro, un margen del <strong>30 %</strong> significa que el <strong>30 % del precio final que paga el cliente</strong> es ganancia neta después de cubrir costos, gastos generales y comisiones:</p>
+<p>$$\text{Precio sugerido} = \frac{\text{Costo completo (por unidad)}}{1 - \text{Margen} - \sum \%\text{ sobre el precio}}$$</p>
+<p><strong>Ejemplo real paso a paso:</strong></p>
+<ul><li>Costo del artículo (FOB + flete + aduana): <strong>$13,86</strong></li><li>Gastos generales: <strong>12 %</strong> del precio de venta <em>(sin marcar <code>Al costo</code>)</em></li><li>Comisión al vendedor: <strong>3 %</strong> del precio de venta <em>(sin marcar <code>Al costo</code>)</em></li><li>Margen deseado: <strong>30 %</strong> sobre el precio de venta</li><li>Cálculo de GesPro: <code>13,86 ÷ (1 − 0,30 − 0,12 − 0,03) = 13,86 ÷ 0,55 =</code> <strong>$25,20</strong></li><li><em>Comprobación:</em> De $25,20, el 12 % son $3,02 (gastos generales), el 3 % son $0,76 (comisión), el costo es $13,86 → quedan <strong>$7,56</strong> de ganancia, que es exactamente el <strong>30,0 %</strong> de $25,20.</li></ul>
+<h3 id="bases-de-calculo-disponibles-en-cada-renglon">Bases de cálculo disponibles en cada renglón</h3>
+<p>Cada renglón puede ser un <strong>Importe</strong> (<code>cantidad × unitario</code>, incluso en otra moneda convertida a la tasa de la fecha de la ficha) o un <strong>Porcentaje</strong> calculado sobre 4 posibles bases:</p>
+<ol><li><strong>del precio de compra (FOB)</strong></li><li><strong>del CIF</strong> (<code>compra + flete + seguro</code>, la base legal de los aranceles)</li><li><strong>del costo del artículo</strong></li><li><strong>del precio de venta</strong> <em>(se despeja automáticamente con la fórmula de arriba)</em></li></ol>
+<hr>
+<h2 id="4-crear-revisar-con-ia-y-aprobar-una-ficha-de-costo">4. Crear, Revisar (con IA) y Aprobar una Ficha de Costo</h2>
+<h3 id="paso-a-paso-individual">Paso a paso individual</h3>
+<ol><li>Entra a <strong>Operaciones → Análisis de costos</strong> y pulsa <strong>«Nueva ficha de costo»</strong>.</li><li>Elige el <strong>Artículo o servicio</strong>, la modalidad y con qué llenarla: - <strong>Los datos del sistema y la IA:</strong> GesPro carga los datos reales y <strong>Gemini (IA)</strong> propone estimaciones para los renglones faltantes. - <strong>Los datos del sistema:</strong> Solo cifras reales de facturas, recetas, importaciones y nómina. - <strong>Nada (la escribo yo):</strong> Ficha en blanco.</li><li><strong>Revisa las cifras en amarillo:</strong> Todo lo que la IA estimó aparece resaltado en <strong>amarillo</strong> con etiqueta <strong><code>Estimado</code></strong> y su explicación debajo. - <em>Seguridad y privacidad:</em> La IA solo ve el artículo y cifras anónimas (nunca nombres de clientes ni proveedores), y <strong>jamás aprueba nada por su cuenta</strong>.</li><li>Edita cualquier cantidad, moneda, importe o porcentaje: los 4 indicadores superiores (<em>Costo del artículo, Costo completo, Precio sugerido y Costo de hoy</em>) se recalculan <strong>en vivo mientras escribes</strong>.</li><li>Escribe el <strong>Margen sobre el precio (%)</strong> que buscas. Debajo de los indicadores, GesPro te dice de inmediato: <em>«Precio 1 de hoy: X; con el costo completo de la ficha deja Y % de margen»</em> (¡alerta instantánea si estás vendiendo muy barato!).</li><li>Pulsa <strong>«Guardar»</strong>. Queda en <strong>BORRADOR</strong>.</li><li><strong>Aprobar (solo Contabilidad o Administrador):</strong> Pulsa <strong>«Aprobar…»</strong>. Una ventana te muestra exactamente: - El costo nuevo vs el actual. - Cuánto cambia el valor del inventario y contra qué cuenta contable va el asiento. - La casilla opcional <strong>«Actualizar también el Precio 1»</strong> (si quieres adoptar de una vez el precio sugerido).</li></ol>
+<h3 id="atajo-masivo-para-importadores-pestana-desde-una-importacion">Atajo masivo para importadores: Pestaña «Desde una importación»</h3>
+<ol><li>Cuando una importación ya tiene aprobada su factura de mercancía y sus gastos (flete, seguro, aduana), abre la pestaña <strong>«Desde una importación»</strong>.</li><li>Elige la importación y el criterio de reparto: <strong>«Según lo que costó cada artículo» (por valor)</strong> o <strong>«Por unidades» (por cantidad)</strong>.</li><li>Revisa la tabla con el <strong>Costo de llegada</strong> de cada artículo y pulsa <strong>«Preparar las fichas de todos»</strong>: GesPro crea un borrador por cada artículo de golpe, listo para revisar y aprobar. - <em>Ventaja contable:</em> Al aprobar las fichas ligadas a una importación abierta, esos gastos <strong>salen de la cuenta transitoria de la importación y pasan al costo del inventario</strong>, de modo que al cerrar la importación ya no se mandan a gastos.</li></ol>
+<hr>
+<h2 id="5-que-pasa-exactamente-al-aprobar-una-ficha">5. ¿Qué Pasa Exactamente al Aprobar una Ficha?</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Tipo de artículo</th><th>Efecto en Inventario / Kardex</th><th>Efecto en Contabilidad</th></tr></thead><tbody><tr><td><strong>Producto CON existencia</strong></td><td>Su costo promedio pasa al de la ficha. En el <strong>Kardex</strong> aparece una línea <strong><code>REVALORIZACION</code></strong> sin cambiar unidades, mostrando el cambio de valor por almacén.</td><td>Asiento automático por <code>existencia × diferencia de costo</code> contra la cuenta transitoria de la importación, ajustes de inventario o apertura.</td></tr><tr><td><strong>Producto SIN existencia</strong></td><td>Guarda el costo de referencia en la ficha del artículo; la próxima compra volverá a promediar con su factura.</td><td>Sin asiento (existencia = 0).</td></tr><tr><td><strong>Servicio</strong></td><td>Actualiza el costo unitario del servicio (usado para medir su margen en reportes de rentabilidad).</td><td>Sin asiento (no tiene stock).</td></tr></tbody></table></div>
+<p><em>(La ficha aprobada anteriormente no se borra: pasa al historial con estado <strong><code>Reemplazada</code></strong>).</em></p>
+<hr>
+<h2 id="6-complemento-gerencial-utilidad-bruta-promedio-vs-peps-y-agentes">6. Complemento Gerencial: Utilidad Bruta (Promedio vs PEPS) y Agentes</h2>
+<p>Para vigilar tus márgenes todos los días después de costear:</p>
+<ol><li><strong>Reportes → Utilidad bruta:</strong> Compara tus ventas del período dos veces lado a lado: - <strong>Costo promedio:</strong> El oficial de tu contabilidad. - <strong>PEPS (Primero en entrar, primero en salir):</strong> Mide cuánto ganaste usando el costo original de las unidades más antiguas. <em>(Cuando los costos suben por inflación, PEPS muestra más utilidad contable; cuando bajan, menos).</em> - <em>Nota:</em> Es solo analítico; no modifica tus libros. También avisa si vendiste algo con costo <code>$0</code> (margen falso del 100 %).</li><li><strong>Agentes automáticos (<code>Configuración → Agentes</code>):</strong> - <strong>Rentabilidad (semanal):</strong> Detecta artículos vendidos por debajo del costo, por debajo del margen mínimo o que cayeron ≥5 puntos porcentuales. - <strong>Costos de compra e inventario sin movimiento (diario/semanal):</strong> Avisa apenas entra una compra más cara que el promedio de los últimos 90 días (ej. &gt;10 %) y te dice cómo quedó tu margen actual con el nuevo costo.</li></ol>
+<hr>
+<h2 id="5-errores-clasicos-en-analisis-de-costos-y-como-evitarlos">⚠️ 5 Errores Clásicos en Análisis de Costos (y Cómo Evitarlos)</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Error clásico</th><th>Consecuencia</th><th>Cómo hacerlo bien</th></tr></thead><tbody><tr><td>Marcar <code>Al costo</code> en <em>Gastos generales</em> o <em>Comisiones de venta</em></td><td>Inflas artificialmente el activo de inventario violando normas contables</td><td>Deja <strong>desmarcada</strong> <code>Al costo</code> en gastos generales y comisiones (solo afectan el precio)</td></tr><tr><td>Aprobar una ficha con cifras en <strong>amarillo (<code>Estimado</code>)</strong> sin verificarlas</td><td>Queda contabilizado un costo inventado por la IA o aproximado</td><td>Revisa y reemplaza cada renglón amarillo por tu tarifa/factura real antes de aprobar</td></tr><tr><td>Poner margen + gastos sobre precio que suman casi 100 %</td><td>El denominador se vuelve cero o negativo (el sistema te bloquea con error)</td><td>Mantén <code>Margen + % sobre precio &lt; 95 %</code></td></tr><tr><td>Cerrar una importación antes de repartir sus costos en <code>Análisis de costos</code></td><td>Todos los fletes y aduanas se van al gasto del mes en vez del costo del producto</td><td>Primero reparte y aprueba las fichas en <strong>Desde una importación</strong>, luego cierra la importación</td></tr><tr><td>Confundir «recargo sobre costo» (×1,30) con «margen sobre precio» (÷0,70)</td><td>Crees que ganas 30 % cuando solo ganas 23 %</td><td>Confía en el <strong>Precio sugerido</strong> de GesPro (calcula margen real sobre precio de venta)</td></tr></tbody></table></div>
+<hr>
+<h2 id="reto-practico-del-estudiante-20-min">🛠️ Reto Práctico del Estudiante (20 min)</h2>
+<ol><li>Ve a <strong>Operaciones → Análisis de costos → «Nueva ficha de costo»</strong>. Elige un artículo inventariable en modalidad <strong>Importado</strong> (usa <em>«Los datos del sistema»</em> o <em>«Los datos del sistema y la IA»</em> si está activa).</li><li>Asegúrate de tener estos renglones (añade con <strong>«Añadir renglón»</strong> los que falten): - Precio de compra (FOB): importe real o <code>10,00</code> USD (<code>Al costo</code> ✅) - Flete: importe <code>2,00</code> USD (<code>Al costo</code> ✅) - Arancel: porcentaje <code>15 %</code> sobre <strong>CIF</strong> (<code>Al costo</code> ✅) - Gastos generales: porcentaje <code>12 %</code> sobre <strong>precio de venta</strong> (<code>Al costo</code> ⬜) - Comisiones de venta: porcentaje <code>3 %</code> sobre <strong>precio de venta</strong> (<code>Al costo</code> ⬜)</li><li>Escribe <strong>30</strong> en <strong>Margen sobre el precio (%)</strong>. Anota en tu cuaderno: - <em>Costo del artículo:</em> ________ - <em>Costo completo:</em> ________ - <em>Precio sugerido:</em> ________ - <em>¿El Precio 1 actual estaba ganando o perdiendo frente al margen de 30 %?</em></li><li>Guarda y <strong>Aprueba</strong> la ficha (revisa el cuadro de impacto en inventario). Luego abre el <strong>Kardex</strong> de ese artículo y ubica la línea <strong><code>REVALORIZACION</code></strong>.</li><li>Abre <strong>Reportes → Utilidad bruta</strong> y compara la columna de Costo Promedio vs PEPS.</li></ol>
+<hr>
+<h2 id="chuleta-rapida-1-minuto">📌 Chuleta Rápida (1 minuto)</h2>
+<ul><li><strong><code>Al costo</code> ✅</strong> = Entra al inventario (FOB, flete, seguro, arancel, aduana, materiales, mano de obra).</li><li><strong><code>Al costo</code> ⬜</strong> = Solo para calcular precio (gastos generales, comisiones).</li><li><strong>Amarillo (<code>Estimado</code>)</strong> = Propuesta de IA; <strong>revisa siempre antes de aprobar</strong>.</li><li><strong>Fórmula mágica:</strong> <code>Precio = Costo completo ÷ (1 − Margen − % sobre precio)</code>.</li><li><strong>Importaciones:</strong> Reparte en <strong>Desde una importación</strong> → <strong>Preparar las fichas de todos</strong>.</li></ul>
+  </article>
+</div>
+</body>
+</html>

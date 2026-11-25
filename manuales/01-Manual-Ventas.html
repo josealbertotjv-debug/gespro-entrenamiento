@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manual 01 · Ventas · Academia GesPro Administrativo</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --navy:#0c1d35; --blue:#1a5da8; --sky:#3892e8; --bg:#f4f7fb; --card:#ffffff;
+    --ink:#162233; --muted:#52657d; --line:#dce5f0; --ok:#0f766e; --warn:#b45309;
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif; background:var(--bg); color:var(--ink); line-height:1.68; }
+  .topbar {
+    position:sticky; top:0; z-index:40; background:linear-gradient(135deg,#091628,#143a68);
+    color:#fff; padding:12px 22px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    box-shadow:0 4px 18px rgba(9,22,40,.18);
+  }
+  .topbar-left { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .back-btn {
+    display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.12); color:#fff;
+    text-decoration:none; padding:7px 13px; border-radius:9px; font-weight:600; font-size:13.5px; border:1px solid rgba(255,255,255,.22);
+  }
+  .back-btn:hover { background:rgba(255,255,255,.22); }
+  .topbar-title { font-weight:700; font-size:15px; display:flex; align-items:center; gap:8px; }
+  .pill { background:rgba(56,146,232,.25); border:1px solid rgba(137,201,255,.4); color:#d8eeff; padding:2px 9px; border-radius:999px; font-size:11.5px; font-weight:700; }
+  .topbar-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .act-btn {
+    border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.12); color:#fff;
+    padding:7px 13px; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+  }
+  .act-btn.primary { background:var(--sky); border-color:transparent; color:#061322; font-weight:700; }
+  .act-btn:hover { filter:brightness(1.08); }
+
+  .shell { max-width:1180px; margin:24px auto; padding:0 18px 56px; display:grid; grid-template-columns:250px minmax(0,1fr); gap:24px; align-items:start; }
+  aside.toc {
+    position:sticky; top:76px; background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px; max-height:calc(100vh - 96px); overflow:auto; box-shadow:0 4px 14px rgba(12,29,53,.04);
+  }
+  aside.toc h4 { margin:0 0 10px; font-size:11.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); }
+  .toc-link { display:block; color:var(--ink); text-decoration:none; font-size:13px; padding:5px 8px; border-radius:7px; line-height:1.35; }
+  .toc-link:hover { background:#eaf2fb; color:var(--blue); }
+  .toc-link.l3 { padding-left:18px; color:var(--muted); font-size:12.5px; }
+
+  article.doc {
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:34px 38px; box-shadow:0 6px 24px rgba(12,29,53,.05);
+  }
+  .doc-hero { border-bottom:2px solid #e6eef7; padding-bottom:18px; margin-bottom:24px; }
+  .doc-hero .kicker { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--blue); }
+  .doc-hero h1 { margin:6px 0 6px; font-size:28px; line-height:1.2; color:var(--navy); }
+  .doc-hero p { margin:0; color:var(--muted); font-size:15.5px; }
+
+  article.doc h1 { font-size:24px; color:var(--navy); margin:28px 0 12px; }
+  article.doc h2 { font-size:20px; color:var(--navy); margin:30px 0 12px; padding-bottom:6px; border-bottom:1px solid #e6eef7; scroll-margin-top:82px; }
+  article.doc h3 { font-size:16.5px; color:var(--blue); margin:22px 0 8px; scroll-margin-top:82px; }
+  article.doc h4 { font-size:15px; color:#2b415d; margin:16px 0 6px; }
+  article.doc p { margin:0 0 12px; }
+  article.doc ul, article.doc ol { margin:0 0 14px; padding-left:22px; }
+  article.doc li { margin-bottom:6px; }
+  article.doc code { background:#eef4fb; color:#113968; padding:1.5px 6px; border-radius:5px; font-size:.9em; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  article.doc pre { background:#0d1c31; color:#e5f0ff; padding:14px 16px; border-radius:10px; overflow:auto; font-size:13px; line-height:1.5; }
+  article.doc pre code { background:none; color:inherit; padding:0; }
+  article.doc hr { border:none; border-top:1px solid var(--line); margin:24px 0; }
+  article.doc a { color:var(--blue); }
+  .chk { font-weight:700; color:var(--blue); }
+  .chk.done { color:var(--ok); }
+
+  .tbl-wrap { overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:10px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  thead { background:#eef4fb; }
+  th { text-align:left; padding:10px 12px; color:var(--navy); font-weight:700; border-bottom:1px solid var(--line); }
+  td { padding:9px 12px; border-bottom:1px solid #edf2f8; vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:nth-child(even) { background:#fafcff; }
+
+  .callout { padding:13px 16px; border-radius:10px; margin:16px 0; border-left:4px solid var(--blue); background:#eef5fd; }
+  .callout p:last-child { margin-bottom:0; }
+  .callout.warn { border-left-color:var(--warn); background:#fff7ed; }
+  .callout.ok { border-left-color:var(--ok); background:#ecfdf5; }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns:1fr; }
+    aside.toc { position:static; max-height:none; }
+    article.doc { padding:22px 18px; }
+  }
+  @media print {
+    .topbar, aside.toc { display:none !important; }
+    body { background:#fff; }
+    .shell { display:block; max-width:none; margin:0; padding:0; }
+    article.doc { border:none; box-shadow:none; padding:0; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-left">
+    <a class="back-btn" href="../index.html#manuales">← Volver al Portal</a>
+    <div class="topbar-title">💼 Manual 01 · Ventas <span class="pill">Sección 1</span></div>
+  </div>
+  <div class="topbar-actions">
+    <a class="act-btn" href="../index.html#ventas">▶ Ver videos del módulo</a>
+    <a class="act-btn" href="md/01-Manual-Ventas.md" download>⬇ Descargar .md</a>
+    <button class="act-btn primary" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="toc"><h4>Contenido</h4><a class="toc-link l2" href="#1-mapa-del-modulo-de-ventas">1. Mapa del Módulo de Ventas</a>
+<a class="toc-link l2" href="#2-vendedor-crm-vende-con-orden-y-sin-olvidar-seguimientos">2. Vendedor (CRM): Vende con orden y sin olvidar seguimientos</a>
+<a class="toc-link l3" href="#2-1-de-prospecto-a-cliente-paso-a-paso">2.1 De Prospecto a Cliente (Paso a paso)</a>
+<a class="toc-link l3" href="#2-2-clientes-360-y-automatizacion">2.2 Clientes 360 y Automatización</a>
+<a class="toc-link l2" href="#3-cotizaciones-y-aprobacion-de-descuentos">3. Cotizaciones y Aprobación de Descuentos</a>
+<a class="toc-link l3" href="#como-emitir-una-cotizacion-sin-sorpresas">Cómo emitir una cotización sin sorpresas</a>
+<a class="toc-link l3" href="#que-pasa-si-das-un-descuento-grande">¿Qué pasa si das un descuento grande?</a>
+<a class="toc-link l3" href="#cuando-el-cliente-responde">Cuando el cliente responde</a>
+<a class="toc-link l2" href="#4-pedidos-mercancia-apartada-24-h-habiles-y-comisiones">4. Pedidos, Mercancía Apartada (24 h hábiles) y Comisiones</a>
+<a class="toc-link l3" href="#la-regla-de-la-mercancia-apartada-muy-importante">La regla de la mercancía apartada (¡muy importante!)</a>
+<a class="toc-link l3" href="#comisiones-sin-discusiones-a-fin-de-mes">Comisiones sin discusiones a fin de mes</a>
+<a class="toc-link l2" href="#5-punto-de-venta-pos-rapido-multimoneda-y-sin-conexion">5. Punto de Venta (POS): Rápido, Multimoneda y Sin Conexión</a>
+<a class="toc-link l3" href="#tu-rutina-diaria-en-caja">Tu rutina diaria en caja</a>
+<a class="toc-link l3" href="#que-hago-si-se-cae-internet-en-medio-de-la-cola">¿Qué hago si se cae internet en medio de la cola?</a>
+<a class="toc-link l2" href="#6-tienda-en-linea-y-portal-de-vendedores-vendedores">6. Tienda en Línea y Portal de Vendedores (`/vendedores`)</a>
+<a class="toc-link l3" href="#tienda-en-linea">Tienda en línea</a>
+<a class="toc-link l3" href="#portal-de-vendedores-vendedores">Portal de vendedores (`/vendedores`)</a>
+<a class="toc-link l2" href="#5-errores-clasicos-en-ventas-y-como-evitarlos">⚠️ 5 Errores Clásicos en Ventas (y Cómo Evitarlos)</a>
+<a class="toc-link l2" href="#reto-practico-del-estudiante-20-min">🛠️ Reto Práctico del Estudiante (20 min)</a>
+<a class="toc-link l2" href="#chuleta-rapida-1-minuto">📌 Chuleta Rápida (1 minuto)</a></aside>
+  <article class="doc">
+    <div class="doc-hero">
+      <div class="kicker">Academia GesPro Administrativo · Material Oficial</div>
+      <h1>💼 Manual 01 · Ventas</h1>
+      <p>CRM, Cotizaciones, Pedidos, POS y Tienda en línea</p>
+    </div>
+    <h1 id="manual-del-usuario-modulo-1-ventas">Manual del Usuario · Módulo 1: Ventas</h1>
+<p><strong>GesPro Administrativo v5.7.0 · Guía Práctica del Estudiante</strong></p>
+<div class="callout tip"><p><strong>Tu misión en este módulo:</strong> Dominar el recorrido completo de una venta —desde el primer contacto con un prospecto hasta el pedido en firme, el Punto de Venta en mostrador y la Tienda en línea— sin perder oportunidades ni prometer mercancía que no existe.  </p><p><strong>🎬 Videos de repaso de este módulo (disponibles también en versión <code>-WhatsApp.mp4</code>):</strong> <code>01-Vendedor</code> (<code>3:40</code>) · <code>02-Cotizaciones</code> (<code>1:46</code>) · <code>03-Punto-de-venta</code> (<code>2:05</code>) · <code>04-Tienda-en-linea</code> (<code>1:57</code>) · <code>Guia-del-vendedor</code> (<code>5:29</code>, móvil).</p></div>
+<hr>
+<h2 id="1-mapa-del-modulo-de-ventas">1. Mapa del Módulo de Ventas</h2>
+<p>En GesPro, todas las puertas por donde entra una venta viven en el grupo <strong>Ciclo comercial</strong> del menú lateral (y el portal móvil en <code>/vendedores</code>):</p>
+<div class="tbl-wrap"><table><thead><tr><th>Sección del menú</th><th>Para qué la usarás todos los días</th></tr></thead><tbody><tr><td><strong>Vendedor (CRM)</strong></td><td>Prospectos, Embudo de negocios, Agenda de llamadas/visitas, Clientes 360, Cotizaciones, Pedidos, Carteras, Ruta y visitas, Comisiones, Automatización y Marketing.</td></tr><tr><td><strong>Cotizaciones</strong></td><td>Bandeja dedicada para emitir ofertas formales en PDF, controlar su fecha de validez y aprobar descuentos grandes.</td></tr><tr><td><strong>Punto de venta (POS)</strong></td><td>Venta rápida en mostrador con lector de código de barras, pago multimoneda con vuelto, impresora térmica y modo <strong>sin conexión</strong>.</td></tr><tr><td><strong>Tienda en línea</strong></td><td>Catálogo web público conectado a tu inventario real, cupones y pagos en línea (Stripe, PayPal, Binance Pay, Pago Móvil C2P Mercantil).</td></tr><tr><td><strong>Portal de vendedores (<code>/vendedores</code>)</strong></td><td>Pantalla móvil para vendedores de calle: asistente <em>«Mi día»</em>, levantar pedidos, cargar comprobantes de pago y dictar cierres de visita por voz.</td></tr></tbody></table></div>
+<div class="callout ok"><p><strong>💡 Regla de oro de GesPro:</strong> Un <strong>Prospecto</strong> no es cliente hasta que compra; una <strong>Cotización</strong> no aparta mercancía ni se factura directa; un <strong>Pedido</strong> aparta mercancía por <strong>24 horas hábiles</strong> pero todavía no toca la contabilidad. Nada entra en los libros hasta que Administración aprueba la factura.</p></div>
+<hr>
+<h2 id="2-vendedor-crm-vende-con-orden-y-sin-olvidar-seguimientos">2. Vendedor (CRM): Vende con orden y sin olvidar seguimientos</h2>
+<h3 id="2-1-de-prospecto-a-cliente-paso-a-paso">2.1 De Prospecto a Cliente (Paso a paso)</h3>
+<ol><li>Entra a <strong>Vendedor (CRM) → Prospectos</strong> y pulsa <strong>«+ Prospecto»</strong>.</li><li>Escribe nombre, empresa, teléfono o correo y cómo llegó (<em>origen</em>). Si el teléfono, correo o RIF ya existen, GesPro te avisa para no duplicar.</li><li>Observa la <strong>Puntuación de prospectos (0 a 100)</strong>: - 🔥 <strong>70 o más (Caliente):</strong> llamar hoy primero. - 🌤️ <strong>40 a 69 (Tibio):</strong> seguimiento programado. - ❄️ <strong>Menos de 40 (Frío):</strong> nutrir o retomar.</li><li>Deja agendada la primera acción en <strong>Agenda</strong> (te ordena primero lo <strong>vencido</strong>, luego <strong>hoy</strong> y <strong>esta semana</strong>).</li><li>Cuando haya un negocio concreto, crea una <strong>Oportunidad</strong> (monto estimado y fecha de cierre). Muévela arrastrando la tarjeta en el <strong>Embudo</strong> (<em>arrastrar y soltar</em>).</li><li>Si el cliente compra, conviértelo en <strong>Cliente</strong> (pasa todo su historial y contactos). Si pierdes el negocio, elige siempre el <strong>motivo de pérdida</strong> (precio, competencia, plazos…): el Tablero usa esto para saber qué corregir.</li></ol>
+<h3 id="2-2-clientes-360-y-automatizacion">2.2 Clientes 360 y Automatización</h3>
+<ul><li>En <strong>Clientes 360</strong>, haz clic en cualquier cliente y verás en una sola pantalla: lo que compra, cuánto debe, sus contactos, sus negocios y todo lo hablado con él.</li><li>En <strong>Automatización</strong> puedes usar <strong>Plantillas</strong> de correo/WhatsApp (<code>{{nombre}}</code>, <code>{{empresa}}</code>, <code>{{vendedor}}</code>), <strong>Secuencias</strong> (ej. llamar hoy → escribir a los 3 días → visitar a la semana) y <strong>Formularios web</strong> que reparten prospectos por turno.</li><li>En <strong>Marketing</strong>, arma <strong>Segmentos</strong> dinámicos (ej. <em>«clientes que no compran hace 60 días»</em>) y lanza campañas por correo o cola de WhatsApp midiendo aperturas, clics y ventas generadas.</li></ul>
+<hr>
+<h2 id="3-cotizaciones-y-aprobacion-de-descuentos">3. Cotizaciones y Aprobación de Descuentos</h2>
+<h3 id="como-emitir-una-cotizacion-sin-sorpresas">Cómo emitir una cotización sin sorpresas</h3>
+<ol><li>Entra a <strong>Cotizaciones</strong> (o <strong>Vendedor (CRM) → Cotizaciones</strong>) y pulsa <strong>«+ Nueva cotización»</strong> (o pulsa <strong>«Cotizar»</strong> directo desde una Oportunidad del CRM).</li><li>Selecciona el cliente, la <strong>fecha de validez</strong> (30 días por defecto; sale impresa en grande en el PDF para evitar discusiones de precios viejos) y agrega los artículos del catálogo. - <strong>Protección automática:</strong> GesPro <strong>no deja cotizar</strong> artículos que no tienen existencia en ningún almacén.</li><li>Guarda y pulsa <strong>«Descargar PDF»</strong> para enviársela al cliente por correo o WhatsApp.</li></ol>
+<h3 id="que-pasa-si-das-un-descuento-grande">¿Qué pasa si das un descuento grande?</h3>
+<p>Si tu empresa activó <strong>Configuración → Descuentos</strong>, según el mayor descuento de un renglón se piden aprobaciones automáticas por <strong>GP Mensajes</strong>:</p>
+<ul><li><strong>Desde 25 %:</strong> aprueba el Aprobador 1.</li><li><strong>Desde 50 %:</strong> aprueban el 1 y el 2.</li><li><strong>Desde 75 %:</strong> aprueban los tres.</li></ul>
+<div class="callout tip"><p>Mientras espera aprobación, la cotización queda en estado <em>«Descuento por aprobar»</em> y <strong>no se puede imprimir ni aceptar</strong>.</p></div>
+<h3 id="cuando-el-cliente-responde">Cuando el cliente responde</h3>
+<ul><li><strong>Dijo SÍ:</strong> Abre la cotización y pulsa <strong>«El cliente la aceptó»</strong>. Nace un <strong>Pedido en firme</strong> con los mismos renglones y precios (la cotización original queda intacta como prueba histórica).</li><li><strong>Dijo NO:</strong> Pulsa <strong>«El cliente la rechazó»</strong> e indica el motivo.</li><li><strong>Venció sin respuesta:</strong> Ya no se puede aceptar; emite una nueva a precios de hoy.</li></ul>
+<hr>
+<h2 id="4-pedidos-mercancia-apartada-24-h-habiles-y-comisiones">4. Pedidos, Mercancía Apartada (24 h hábiles) y Comisiones</h2>
+<p>!<a href="../presentacion/img/pedidos.png" target="_blank" rel="noopener">Pedidos de vendedores</a></p>
+<h3 id="la-regla-de-la-mercancia-apartada-muy-importante">La regla de la mercancía apartada (¡muy importante!)</h3>
+<p>Cada <strong>Pedido en firme</strong> (de un vendedor, de la tienda en línea o de una cotización aceptada) <strong>aparta automáticamente la mercancía durante 24 horas hábiles</strong> (sábados y domingos no cuentan; ej. viernes 5:00 p. m. → lunes 5:00 p. m.):</p>
+<ul><li>Mientras esté apartado, <strong>nadie más puede vender esas unidades</strong> (ni otra factura, ni POS, ni Tienda, ni Manufactura).</li><li>Si el cliente <strong>ya pagó</strong> (pago en línea o comprobante cargado por el vendedor), la reserva <strong>no vence</strong>.</li><li>Si pasan las 24 h hábiles sin facturarse, la mercancía se libera, el pedido pasa a <strong>VENCIDO</strong> y avisa por GP Mensajes. Para retomarlo, Facturación pulsa <strong>«Hacer de nuevo»</strong> (vuelve a apartar si aún hay stock).</li></ul>
+<h3 id="comisiones-sin-discusiones-a-fin-de-mes">Comisiones sin discusiones a fin de mes</h3>
+<p>!<a href="../presentacion/img/pedidos-comisiones.png" target="_blank" rel="noopener">Comisiones de vendedores</a></p>
+<ul><li>Se configuran en <strong>Vendedor (CRM) → Comisiones</strong> por vendedor: por <strong>vender</strong>, por <strong>cobrar</strong>, o ambas.</li><li>Siempre se calculan sobre el monto <strong>SIN IVA</strong> (el IVA es del fisco, no ingreso de la empresa) y convertidas a la moneda base.</li><li>Comisiona el vendedor asignado en la <strong>ficha del cliente</strong> al momento de facturar.</li></ul>
+<hr>
+<h2 id="5-punto-de-venta-pos-rapido-multimoneda-y-sin-conexion">5. Punto de Venta (POS): Rápido, Multimoneda y Sin Conexión</h2>
+<h3 id="tu-rutina-diaria-en-caja">Tu rutina diaria en caja</h3>
+<ol><li><strong>Abrir turno:</strong> Entra a <strong>Punto de venta</strong>, elige tu caja y declara el <strong>fondo inicial en efectivo</strong>. <em>(Nadie puede vender sin turno abierto, y una caja solo la abre una persona a la vez).</em></li><li><strong>Vender:</strong> Escanea el código de barras (con lector USB o botón de cámara <code>📷</code>) o busca por nombre. Ajusta cantidad o descuento permitido (no puedes alterar el precio de lista).</li><li><strong>Identificar al cliente (opcional):</strong> Si quiere la factura a su nombre, pulsa <strong>«Con cédula o RIF»</strong>; si no existe, créalo rápido con su nombre.</li><li><strong>Cobrar:</strong> Pulsa <strong>Cobrar</strong>. Puedes combinar formas de pago (ej. parte en USD efectivo, parte en Bs punto de venta). Usa el botón <strong>«Exacto»</strong> para completar lo que falta. - Si cobras en divisas y la empresa es contribuyente especial, el <strong>IGTF del 3 %</strong> se calcula solo sobre lo que se queda la empresa (no sobre el vuelto). - Al confirmar, se emite la factura fiscal, se imprime el ticket térmico y se abre la gaveta automáticamente.</li><li><strong>Cerrar turno:</strong> Al final del día, cuenta el dinero real por cada forma de pago y escríbelo. GesPro compara contra lo esperado y registra cualquier sobrante o faltante para el supervisor.</li></ol>
+<h3 id="que-hago-si-se-cae-internet-en-medio-de-la-cola">¿Qué hago si se cae internet en medio de la cola?</h3>
+<ul><li><strong>No detengas la caja.</strong> El indicador superior se pondrá en <strong>rojo</strong> y podrás seguir vendiendo con el catálogo guardado al abrir el turno.</li><li>El cliente recibe un <strong>Comprobante Provisional (<code>PRV-…</code>)</strong>.</li><li>Al volver internet, GesPro envía y factura automáticamente cada venta (sin duplicarlas). <em>Nota: no puedes cerrar el turno mientras queden ventas sin sincronizar o por revisar.</em></li></ul>
+<hr>
+<h2 id="6-tienda-en-linea-y-portal-de-vendedores-vendedores">6. Tienda en Línea y Portal de Vendedores (<code>/vendedores</code>)</h2>
+<h3 id="tienda-en-linea">Tienda en línea</h3>
+<ul><li>En <strong>Tienda en línea → Configuración</strong> eliges el almacén de venta, métodos de entrega y cuentas bancarias. En <strong>Productos</strong>, publicas los artículos (con foto y descripción; requiere precio de venta).</li><li>En <strong>Cupones</strong>, creas descuentos por % o monto fijo con vigencia, compra mínima y límite por RIF/cédula.</li><li>En <strong>Pagos en línea</strong>, se activan <strong>Stripe (tarjeta), PayPal, Binance Pay y Pago Móvil C2P del Banco Mercantil</strong>. Los pedidos pagados en línea llegan ya verificados a <strong>Vendedor (CRM) → Pedidos</strong>.</li></ul>
+<h3 id="portal-de-vendedores-vendedores">Portal de vendedores (<code>/vendedores</code>)</h3>
+<p>!<a href="../presentacion/img/portal-vendedores.png" target="_blank" rel="noopener">Portal de vendedores en el teléfono</a></p>
+<ul><li><strong>«Mi día»:</strong> Lista inteligente priorizada de a quién llamar o visitar hoy (tareas vencidas, facturas vencidas, cotizaciones por vencer, clientes que ya les toca reponer).</li><li><strong>Pedidos y pagos en la calle:</strong> El vendedor solo ve <strong>su propia cartera</strong>. Puede levantar pedidos/cotizaciones y cargar la foto del comprobante de pago que le entregue el cliente.</li><li><strong>Ruta y visitas (con asistente de voz):</strong> Inicia jornada → pulsa <strong>«Llegué»</strong> (verifica geocerca GPS) → al salir pulsa <strong>«Contar la visita»</strong> para dictar en voz alta lo ocurrido y que el formulario se llene solo antes de guardar.</li></ul>
+<hr>
+<h2 id="5-errores-clasicos-en-ventas-y-como-evitarlos">⚠️ 5 Errores Clásicos en Ventas (y Cómo Evitarlos)</h2>
+<div class="tbl-wrap"><table><thead><tr><th>Error clásico</th><th>Qué pasa en GesPro</th><th>Cómo hacerlo bien</th></tr></thead><tbody><tr><td>Intentar facturar una cotización sin aceptarla</td><td>El sistema no lo permite</td><td>Abre la cotización → <strong>«El cliente la aceptó»</strong> → luego se factura el Pedido en CxC</td></tr><tr><td>Dejar un pedido sin facturar más de 24 h hábiles</td><td>La reserva caduca y otro puede vender esa mercancía</td><td>Revisa el contador de <strong>Pedidos por facturar</strong> o registra el pago si el cliente ya pagó</td></tr><tr><td>Dejar un cliente sin «Vendedor» en su ficha</td><td>La factura sale sin vendedor y <strong>no genera comisión</strong></td><td>Verifica siempre el campo obligatorio <strong>Vendedor</strong> en la ficha del cliente</td></tr><tr><td>Querer anular una venta de POS después de cerrar el turno</td><td>Ya no se puede anular en caja</td><td>Emite una <strong>Nota de crédito</strong> desde Cuentas por cobrar</td></tr><tr><td>Cotizar sin revisar existencia</td><td>El sistema bloquea artículos sin stock</td><td>Revisa disponibilidad real (existencia menos lo apartado) antes de ofertar</td></tr></tbody></table></div>
+<hr>
+<h2 id="reto-practico-del-estudiante-20-min">🛠️ Reto Práctico del Estudiante (20 min)</h2>
+<ol><li>Ve a <strong>Vendedor (CRM) → Prospectos</strong> y crea un prospecto nuevo con tus iniciales (ej. <em>«Comercializadora [Tus Iniciales]»</em>). Verifica su puntuación y agéndale una llamada para mañana.</li><li>Ve a <strong>Cotizaciones → + Nueva cotización</strong>, elige un cliente existente, agrega 2 artículos con stock y dale validez de 5 días. Descarga el PDF.</li><li>Abre esa cotización y pulsa <strong>«El cliente la aceptó»</strong>. Anota el número de Pedido <code>PED-…</code> que nació (lo necesitarás en el Módulo 2).</li><li>Entra a <strong>Punto de venta</strong>, abre turno, vende 1 artículo combinando <strong>dos formas de pago</strong> y visualiza el ticket.</li></ol>
+<hr>
+<h2 id="chuleta-rapida-1-minuto">📌 Chuleta Rápida (1 minuto)</h2>
+<ul><li><strong>Flujo estándar:</strong> <code>Prospecto → Oportunidad → Cotización → [Aceptada] → Pedido (aparta 24 h hábiles) → Factura (en CxC)</code>.</li><li><strong>Descuentos grandes en cotización:</strong> 25 % / 50 % / 75 % piden aprobación por GP Mensajes.</li><li><strong>POS sin internet:</strong> Sigue vendiendo (<code>PRV-…</code>) y sincroniza solo al volver la red.</li><li><strong>¿Dudas en un campo?</strong> Pulsa el ícono <strong><code>ⓘ</code></strong> junto al título o el botón <strong><code>?</code></strong> arriba a la derecha.</li></ul>
+  </article>
+</div>
+</body>
+</html>

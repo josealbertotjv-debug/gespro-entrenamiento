@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuestionario y Ensayos · Vendedor (CRM) · GesPro Administrativo</title>
+<style>
+  :root {
+    --navy: #0a2140; --navy2: #0e3159; --blue: #1a5da8; --sky: #3a8ae0;
+    --ink: #1e293b; --muted: #475569; --border: #dbe3ee; --bg: #f1f5f9;
+    --ok: #059669; --ok-bg: #ecfdf5; --err: #dc2626; --err-bg: #fef2f2;
+    --warn: #d97706; --warn-bg: #fffbeb;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; font: 400 15px/1.6 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: var(--bg); }
+
+  .top {
+    position: sticky; top: 0; z-index: 40;
+    background: linear-gradient(135deg, var(--navy), var(--navy2)); color: #fff;
+    padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    box-shadow: 0 4px 18px rgba(10,33,64,.25);
+  }
+  .top h1 { margin: 0; font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  .top .badge { background: rgba(58,138,224,.28); border: 1px solid rgba(140,200,255,.45); padding: 2px 10px; border-radius: 999px; font-size: 11px; color: #bae6fd; }
+  .top-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.1); color: #fff;
+    padding: 7px 14px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit;
+  }
+  .btn:hover { background: rgba(255,255,255,.2); }
+  .btn.pri { background: linear-gradient(135deg, #3a8ae0, #1a5da8); border-color: #7fc0ff; }
+  .btn.ok { background: var(--ok); border-color: #34d399; }
+  .btn.light { background: #fff; color: var(--navy); border-color: var(--border); }
+  .btn.light:hover { background: #f8fafc; }
+
+  .wrap { max-width: 960px; margin: 24px auto 64px; padding: 0 18px; }
+  .hero {
+    background: linear-gradient(145deg, var(--navy) 0%, var(--navy2) 65%, #164882 100%);
+    color: #fff; border-radius: 16px; padding: 28px 32px; margin-bottom: 20px;
+    box-shadow: 0 12px 32px rgba(10,33,64,.16);
+  }
+  .hero h2 { margin: 0 0 8px; font-size: 26px; letter-spacing: -.4px; }
+  .hero p { margin: 0 0 18px; color: #cfe2f7; }
+  .meta-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .meta-grid label { font-size: 12px; color: #a9c8ea; display: block; margin-bottom: 4px; }
+  .meta-grid input {
+    width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.25);
+    background: rgba(255,255,255,.1); color: #fff; font-size: 14px; font-family: inherit;
+  }
+  .meta-grid input::placeholder { color: rgba(255,255,255,.45); }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .tab {
+    padding: 10px 18px; border-radius: 10px; border: 1px solid var(--border); background: #fff;
+    color: var(--muted); font-weight: 700; font-size: 14px; cursor: pointer; font-family: inherit;
+  }
+  .tab.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* Cards */
+  .card {
+    background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px;
+    margin-bottom: 14px; box-shadow: 0 2px 8px rgba(15,23,42,.04); break-inside: avoid;
+  }
+  .q-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .q-tag {
+    display: inline-block; font-size: 11.5px; font-weight: 700; color: var(--blue);
+    background: #eaf3ff; padding: 2px 10px; border-radius: 999px;
+  }
+  .q-num { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .q-text { font-weight: 650; font-size: 15.5px; margin: 0 0 12px; color: var(--navy); }
+  .opts { display: grid; gap: 8px; }
+  .opt {
+    display: flex; align-items: flex-start; gap: 10px; padding: 10px 13px; border-radius: 10px;
+    border: 1.5px solid var(--border); cursor: pointer; transition: all .15s; background: #fff;
+  }
+  .opt:hover { border-color: var(--sky); background: #f8fbff; }
+  .opt input { margin-top: 3px; accent-color: var(--blue); }
+  .opt.sel { border-color: var(--blue); background: #eff6ff; }
+  .opt.correct { border-color: var(--ok); background: var(--ok-bg); color: #065f46; font-weight: 600; }
+  .opt.wrong { border-color: var(--err); background: var(--err-bg); color: #991b1b; }
+  .explain {
+    margin-top: 10px; padding: 10px 13px; border-radius: 8px; font-size: 13.5px; display: none;
+  }
+  .explain.ok { display: block; background: var(--ok-bg); color: #065f46; border-left: 4px solid var(--ok); }
+  .explain.err { display: block; background: var(--err-bg); color: #991b1b; border-left: 4px solid var(--err); }
+
+  /* Score summary */
+  .score-box {
+    display: none; background: #fff; border: 2px solid var(--sky); border-radius: 14px;
+    padding: 22px 26px; margin-bottom: 18px;
+  }
+  .score-box.show { display: block; }
+  .score-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .score-big { font-size: 38px; font-weight: 800; color: var(--navy); line-height: 1; }
+  .remedial { margin-top: 14px; padding: 12px 16px; border-radius: 10px; background: var(--warn-bg); border: 1px solid #fcd34d; color: #92400e; font-size: 14px; }
+  .remedial.perfect { background: var(--ok-bg); border-color: #6ee7b7; color: #065f46; }
+
+  /* Essays & Cases */
+  textarea.resp {
+    width: 100%; min-height: 120px; padding: 12px 14px; border-radius: 10px;
+    border: 1.5px solid var(--border); font: inherit; font-size: 14.5px; resize: vertical;
+    transition: border-color .15s;
+  }
+  textarea.resp:focus { outline: none; border-color: var(--sky); }
+  .essay-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+  details.hint { margin: 8px 0 10px; background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 13.5px; color: var(--muted); }
+  details.hint summary { cursor: pointer; font-weight: 600; color: var(--blue); }
+
+  .rubric { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+  .rubric th { background: var(--navy); color: #fff; padding: 8px 10px; text-align: left; }
+  .rubric td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+
+  .bar-bottom {
+    display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;
+    background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin-top: 18px;
+  }
+  .saved-dot { font-size: 12.5px; color: var(--ok); font-weight: 600; }
+
+  @media (max-width: 700px) { .meta-grid { grid-template-columns: 1fr; } }
+  @media print {
+    body { background: #fff; font-size: 11pt; }
+    .top, .tabs, .bar-bottom, details.hint summary { display: none !important; }
+    .panel { display: block !important; }
+    .hero, .q-tag, .explain, .score-box, .rubric th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    textarea.resp { border: 1px solid #94a3b8; min-height: 90px; }
+    .print-title { display: block !important; margin: 22px 0 10px; color: var(--navy); border-bottom: 2px solid var(--navy); padding-bottom: 4px; page-break-after: avoid; }
+  }
+  .print-title { display: none; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1>🎯 Evaluación Práctica · Vendedor (CRM) <span class="badge">14 Videos · 28 Preguntas · 7 Casos · 10 Ensayos</span></h1>
+  <div class="top-actions">
+    <button class="btn ok" onclick="gradeQuiz()">✓ Calificar Cuestionario</button>
+    <button class="btn pri" onclick="window.print()">🖨️ Imprimir / PDF</button>
+    <button class="btn" onclick="copyReport()">📋 Copiar Resumen</button>
+    <button class="btn" onclick="resetAll()">↺ Reiniciar</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <h2>Cuestionario de Retención y Cuaderno de Ensayos — CRM</h2>
+    <p>Responde tras ver la serie de 14 videos de <strong>Vendedor (CRM)</strong>. Tu progreso se guarda automáticamente en este navegador; al calificar sabrás exactamente qué videos repasar.</p>
+    <div class="meta-grid">
+      <div><label>Nombre completo</label><input id="m-nombre" placeholder="Ej. Ana Pérez"></div>
+      <div><label>Cargo / Equipo</label><input id="m-cargo" placeholder="Ej. Vendedora técnica"></div>
+      <div><label>Fecha</label><input id="m-fecha" type="date"></div>
+    </div>
+  </section>
+
+  <div class="score-box" id="scoreBox">
+    <div class="score-top">
+      <div>
+        <div style="font-size:13px;color:#475569;font-weight:600;text-transform:uppercase">Resultado Parte I · Selección Múltiple</div>
+        <div class="score-big" id="scoreVal">0 / 28 (0 %)</div>
+      </div>
+      <div id="scoreBadge" style="font-size:14px;font-weight:700"></div>
+    </div>
+    <div class="remedial" id="remedialBox"></div>
+  </div>
+
+  <nav class="tabs">
+    <button class="tab active" onclick="switchTab('p1', this)">1 · Cuestionario (28 preguntas)</button>
+    <button class="tab" onclick="switchTab('p2', this)">2 · Casos «¿Qué harías?» (7)</button>
+    <button class="tab" onclick="switchTab('p3', this)">3 · Ensayos Aplicados (10)</button>
+  </nav>
+
+  <section class="panel active" id="p1">
+    <h2 class="print-title">Parte I · Preguntas de Selección Múltiple (28)</h2>
+    <div id="quizContainer"></div>
+    <div class="bar-bottom">
+      <span class="saved-dot" id="progressQuiz">0 de 28 respondidas</span>
+      <button class="btn ok" onclick="gradeQuiz()">✓ Calificar Parte I y ver videos a repasar</button>
+    </div>
+  </section>
+
+  <section class="panel" id="p2">
+    <h2 class="print-title">Parte II · 7 Casos Integrados «¿Qué Harías Tú?»</h2>
+    <div id="casesContainer"></div>
+  </section>
+
+  <section class="panel" id="p3">
+    <h2 class="print-title">Parte III · 10 Preguntas de Ensayo y Aplicación Práctica</h2>
+    <div class="card" style="background:#f8fbff;border-color:#c7dffb">
+      <strong style="color:#0a2140">Rúbrica sugerida (10 puntos por ensayo · extensión recomendada 120–250 palabras):</strong>
+      <table class="rubric">
+        <thead><tr><th>Criterio</th><th>Peso</th><th>Qué evalúa</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Precisión en GesPro</strong></td><td>4 pts</td><td>Nombra pestañas, botones y reglas reales del CRM sin confundir conceptos.</td></tr>
+          <tr><td><strong>Aplicación práctica</strong></td><td>3 pts</td><td>Aterriza ejemplos, pasos, textos o métricas aplicables mañana mismo.</td></tr>
+          <tr><td><strong>Criterio comercial</strong></td><td>3 pts</td><td>Argumentación clara, lógica de seguimiento y control interno.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="essaysContainer"></div>
+  </section>
+</div>
+
+<script>
+const STORAGE_KEY = 'gespro_crm_eval_v1';
+
+const QUESTIONS = [
+  { v: '01 · Tablero', q: 'Tienes una oportunidad abierta de $10.000 en «Propuesta» (probabilidad 50 %). ¿Cuánto aporta al Pronóstico ponderado del Tablero?',
+    opts: ['$10.000', '$5.000', '$0 hasta que se facture', '$15.000'], ok: 1,
+    exp: 'El pronóstico ponderado multiplica el monto por la probabilidad de la etapa ($10.000 × 50 % = $5.000).' },
+  { v: '01 · Tablero', q: '¿Qué botón del Tablero te permite hacer preguntas en lenguaje natural sobre las cifras mostradas en pantalla?',
+    opts: ['«Exportar CSV»', '«✦ Preguntar a la IA»', '«Recalcular pronóstico»', '«Generar orden»'], ok: 1,
+    exp: 'El botón «✦ Preguntar a la IA» arriba a la derecha responde directamente sobre las cifras del período filtrado.' },
+  { v: '02 · Embudo', q: 'Al arrastrar una tarjeta del Embudo y soltarla en ✕ Perdida, ¿qué dato exige obligatoriamente GesPro?',
+    opts: ['Una factura anulada', 'El motivo de pérdida (y opcionalmente el competidor)', 'Aprobación del gerente por GP Mensajes', 'Una nota de crédito'], ok: 1,
+    exp: 'El motivo es obligatorio porque alimenta el cuadro «Por qué se pierden» del Tablero.' },
+  { v: '02 · Embudo', q: '¿Qué etiqueta en una tarjeta del Embudo advierte que el negocio corre riesgo de enfriarse por falta de seguimiento?',
+    opts: ['«bloqueado por mora»', '«sin próxima acción» (o «N d sin movimiento»)', '«borrador pendiente»', '«sin comprobante»'], ok: 1,
+    exp: 'Las tarjetas marcan «sin próxima acción», «cierre vencido» y «N d sin movimiento» para actuar antes de perder la venta.' },
+  { v: '03 · Oportunidades', q: 'Abres una oportunidad de un cliente y pulsas «Cotizar». ¿Qué ocurre al emitir la oferta y luego al aceptarla el cliente?',
+    opts: ['Nada automático; debes actualizar todo a mano', 'Pasa sola a Propuesta al emitirla y se marca Ganada sola al aceptarla', 'Emite la factura fiscal de inmediato sin borrador', 'Elimina el historial previo'], ok: 1,
+    exp: 'Cotizar desde la oportunidad las enlaza: al emitir avanza a Propuesta y al aceptar se gana automáticamente.' },
+  { v: '03 · Oportunidades', q: 'Un negocio marcado como Perdido hace un mes vuelve a reactivarse. ¿Qué haces en la pestaña Oportunidades?',
+    opts: ['Creas un cliente duplicado', 'Filtras por «Perdidas», abres el negocio y pulsas «Reabrir»', 'Borras el negocio anterior', 'Lo cargas como prospecto nuevo'], ok: 1,
+    exp: 'El botón «Reabrir» reactiva una oportunidad cerrada conservando todo su historial y movimientos.' },
+  { v: '04 · Prospectos', q: '¿Por qué un prospecto NO se crea directamente como cliente hasta que va a comprar?',
+    opts: ['Porque los clientes no guardan teléfono', 'Para no llenar la cartera, los reportes y el directorio fiscal con gente que nunca compró', 'Porque los prospectos no pueden usar Agenda', 'Porque hay un tope de 50 clientes'], ok: 1,
+    exp: 'Separar prospectos mantiene limpio tu directorio contable y tus indicadores de cartera.' },
+  { v: '04 · Prospectos', q: 'En la puntuación automática de prospectos (0 a 100), ¿desde qué puntaje se clasifica como 🔥 Caliente?',
+    opts: ['40 o más', '50 o más', '70 o más', '90 o más'], ok: 2,
+    exp: 'La escala oficial es: 70+ Caliente, 40–69 Tibio y menos de 40 Frío.' },
+  { v: '05 · Agenda', q: 'Acabas de colgar una llamada inesperada de un cliente. En «+ Actividad», ¿qué eliges en «¿Ya se hizo?»?',
+    opts: ['«No: agendarla» con fecha pasada', '«Sí: registrar lo que pasó» para guardar el resultado de inmediato', 'No se pueden registrar llamadas pasadas', 'Crear una nota de débito'], ok: 1,
+    exp: '«Sí: registrar lo que pasó» oculta la fecha futura y abre el cuadro «Qué salió» para documentarlo en el historial.' },
+  { v: '05 · Agenda', q: 'Al pulsar «✓ Hecha» en una actividad de tu Agenda, ¿qué buena práctica te permite hacer en la misma ventana?',
+    opts: ['Borrar las actividades anteriores', 'Escribir «Qué salió» y dejar agendado el «Siguiente paso» con fecha', 'Reasignar el cliente a otro vendedor', 'Eliminar el prospecto'], ok: 1,
+    exp: '«Un cliente sin siguiente paso es un cliente que se enfría»: anotas lo acordado y agendas de una vez el próximo toque.' },
+  { v: '06 · Clientes 360', q: 'En el listado de Clientes 360, ¿qué columna alerta visualmente que un cliente lleva demasiado tiempo sin comprar?',
+    opts: ['«Sin comprar» (alerta al superar los días configurados, ej. >90 d)', '«Código postal»', '«Moneda base»', '«Número de control»'], ok: 0,
+    exp: 'La columna «Sin comprar» destaca con etiqueta de aviso a quienes pasan el umbral de cliente dormido.' },
+  { v: '06 · Clientes 360', q: '¿Cuál de estos datos NO aparece dentro de la ficha de Clientes 360?',
+    opts: ['Ventas 12 meses, saldo por cobrar y vencido', 'Contactos (cargo, cumpleaños, LinkedIn), negocios e historial', 'Artículos más comprados, facturas y visitas en calle', 'El saldo bancario personal del vendedor'], ok: 3,
+    exp: 'Clientes 360 concentra toda la información comercial y financiera del cliente, nunca cuentas personales de empleados.' },
+  { v: '07 · Cotizaciones', q: 'Tu empresa exige Aprobador 1 desde 25 % de descuento y un vendedor cotiza con 30 %. ¿Qué pasa mientras espera decisión?',
+    opts: ['Se puede imprimir y aceptar normalmente', 'Queda en «Descuento por aprobar» y no se puede imprimir ni aceptar', 'Se borra sola a los 5 minutos', 'Se aprueba sola a medianoche'], ok: 1,
+    exp: 'Mientras espera aprobación (aviso por GP Mensajes), el sistema bloquea imprimir el PDF y aceptar la cotización.' },
+  { v: '07 · Cotizaciones', q: '¿Se puede facturar directo una cotización o aceptar una cotización que ya venció?',
+    opts: ['Sí a ambas', 'No: primero se acepta (nace Pedido) y una cotización vencida no se puede aceptar', 'Sólo en montos pequeños', 'Sí desde el Embudo'], ok: 1,
+    exp: 'La cotización nunca se transforma: al aceptarla nace un Pedido en firme; si venció, debe emitirse una nueva a precios de hoy.' },
+  { v: '08 · Pedidos', q: 'Un pedido sin pago se crea el viernes a las 5:00 p. m. ¿Hasta cuándo queda apartada su mercancía?',
+    opts: ['Sábado 5:00 p. m.', 'Lunes 5:00 p. m. (24 horas hábiles; sábado y domingo no cuentan)', 'Para siempre', 'Los pedidos no apartan stock'], ok: 1,
+    exp: 'La mercancía queda apartada durante 24 horas hábiles. Si el cliente ya pagó, la reserva no vence.' },
+  { v: '08 · Pedidos', q: 'Si administración rechaza un pedido que había ganado una oportunidad del CRM, ¿qué hace GesPro automáticamente?',
+    opts: ['Libera el stock, crea tarea hoy al vendedor con el motivo y reabre la oportunidad', 'Mantiene el stock apartado 7 días', 'Elimina al cliente', 'Genera una nota de crédito'], ok: 0,
+    exp: 'Rechazar libera el inventario de inmediato, avisa en agenda al vendedor y devuelve el negocio a abierto.' },
+  { v: '09 · Carteras', q: 'Un vendedor nuevo entra a /vendedores antes de que le asignes clientes en Carteras. ¿Qué verá?',
+    opts: ['Todos los clientes de la empresa', 'Su portal aparecerá vacío (sólo ve los clientes de su cartera)', 'La cartera del vendedor principal', 'Facturas de proveedores'], ok: 1,
+    exp: 'Cada vendedor tiene aislamiento estricto sobre su cartera para proteger la información de los demás.' },
+  { v: '09 · Carteras', q: 'Si cambias hoy el vendedor de un cliente, ¿qué pasa con sus facturas ya emitidas el mes anterior?',
+    opts: ['Pasan al nuevo vendedor', 'Se anulan', 'Conservan al vendedor que tenía el cliente cuando se emitieron', 'Pierden el IVA'], ok: 2,
+    exp: 'El vendedor histórico de cada factura queda fijo para respetar la atribución y comisiones ya causadas.' },
+  { v: '10 · Ruta y visitas', q: '¿Quién fija y aprueba la geocerca (ubicación) de cada cliente en Ruta y visitas?',
+    opts: ['El vendedor sin revisión', 'Siempre el supervisor (la geocerca no la fija quien será medido con ella)', 'El cliente en el portal', 'El cajero'], ok: 1,
+    exp: 'Si un cliente no tiene ubicación, la visita la propone, pero siempre requiere aprobación del supervisor.' },
+  { v: '10 · Ruta y visitas', q: '¿Qué hace el Asistente de voz en Cierre de visitas cuando la empresa lo activa?',
+    opts: ['Graba llamadas todo el día', 'Permite dictar la visita en voz alta para rellenar el formulario (el vendedor revisa antes de guardar; la grabación no se guarda)', 'Envía correos masivos solos', 'Cambia precios de lista'], ok: 1,
+    exp: 'Ahorra teclear en la calle: la IA transcribe y propone los campos, el vendedor revisa y guarda; el audio no se almacena.' },
+  { v: '11 · Comisiones', q: '¿Sobre qué base se calculan las comisiones de venta y de cobro en GesPro?',
+    opts: ['Total con IVA incluido', 'Siempre sobre el monto SIN IVA, en moneda base', 'Sobre el costo promedio', 'Sobre el límite de crédito'], ok: 1,
+    exp: 'El IVA es dinero del fisco, no ingreso propio; por eso las comisiones siempre se calculan sin IVA.' },
+  { v: '11 · Comisiones', q: 'Después de pulsar «Registrar el período» en Comisiones, ¿dónde se genera el pago hacia el banco?',
+    opts: ['Se paga solo al instante', 'En Personal → Órdenes de pago → «Generar orden» → Comisiones pendientes', 'En Inventario → Notas de despacho', 'En Contabilidad → Plan de cuentas'], ok: 1,
+    exp: 'Requiere que cada vendedor tenga su ficha de personal vinculada en Comisiones para pasar a orden de pago y lote al banco.' },
+  { v: '12 · Automatización', q: 'Un prospecto inscrito en una Secuencia de 4 pasos es descartado el día 3. ¿Qué pasa con los pasos pendientes?',
+    opts: ['Quedan vencidos para siempre', 'Se cancelan solos automáticamente', 'Se transfieren a otro cliente', 'Hay que llamar a soporte'], ok: 1,
+    exp: 'Al cerrarse un negocio o descartarse un prospecto, GesPro cancela los pasos pendientes para no saturar tu agenda.' },
+  { v: '12 · Automatización', q: 'Si alguien que ya está en el CRM vuelve a llenar un Formulario web desde Instagram, ¿qué hace GesPro?',
+    opts: ['Crea una ficha duplicada', 'No lo duplica; lo gestiona sin repetir ficha, reparte por turno y frena robots', 'Bloquea la web', 'Lo borra del CRM'], ok: 1,
+    exp: 'Los formularios web evitan duplicados, asignan por turno y traen protección anti-bot integrada.' },
+  { v: '13 · Marketing', q: '¿Por qué las campañas de WhatsApp usan una cola asistida en lugar de disparo masivo automático?',
+    opts: ['Porque WhatsApp bloquea envíos masivos sin su API paga; la cola prepara cada mensaje para enviarlo espaciado y marcar estado/baja', 'Porque GesPro no guarda teléfonos', 'Porque solo funciona los lunes', 'Para evitar correos'], ok: 0,
+    exp: 'La cola asistida protege el número de WhatsApp de tu empresa y lleva registro exacto de enviados, omitidos y bajas.' },
+  { v: '13 · Marketing', q: 'Cuando un cliente pulsa el enlace de baja en un correo de campaña, ¿qué sucede después?',
+    opts: ['Sigue recibiendo si cumple el segmento', 'Queda en Marketing → Bajas y es excluido automáticamente de futuras campañas por ese canal', 'Se desactiva en Cuentas por cobrar', 'Se bloquea en la tienda'], ok: 1,
+    exp: 'Las bajas se respetan automáticamente (y cumplen los requisitos anti-spam de Gmail y Outlook).' },
+  { v: '14 · Ajustes', q: '¿Dónde se ajustan las probabilidades de las etapas del embudo y los días para marcar negocios estancados o clientes dormidos?',
+    opts: ['En Inventario → Artículos', 'En Vendedor (CRM) → Ajustes (solo administración)', 'En el Portal de clientes', 'En Bancos'], ok: 1,
+    exp: 'Ajustes centraliza etapas/probabilidades, umbrales CRM_DIAS_ESTANCADA y CRM_DIAS_DORMIDO, y el Asistente del vendedor.' },
+  { v: '14 · Ajustes', q: 'Antes de activar los recordatorios automáticos a clientes en Ajustes, ¿cómo verificas a quién se le escribiría sin riesgo?',
+    opts: ['En la tabla «Lo que se les enviaría hoy» (muestra quién recibe y quién se excluye)', 'En el Libro de compras', 'En el Kardex', 'No hay vista previa'], ok: 0,
+    exp: 'La vista previa lista cada correo proyectado y explica exclusiones (baja, sin correo o tope semanal alcanzado).' },
+];
+
+const CASES = [
+  { id: 'c1', tag: 'Prospectos → Oportunidades → Cotizaciones → Pedidos → CxC', title: '1. El prospecto de feria que compra rápido',
+    prompt: 'Conociste a María Gómez (Clínica Norte) en un evento y te pide cotización formal de 20 cajas de guantes para esta semana. Describe el recorrido exacto en GesPro desde que vuelves a la oficina hasta que la factura queda lista para cobrar.' },
+  { id: 'c2', tag: 'Cotizaciones · Aprobación de descuentos', title: '2. El descuento urgente del 40 %',
+    prompt: 'Un cliente exige 40 % de descuento para cerrar hoy (tu empresa tiene Aprobador 1 desde 25 %). El vendedor emitió la cotización pero reclama que «Descargar PDF» está bloqueado. ¿Qué pasó y cómo se destraba?' },
+  { id: 'c3', tag: 'Pedidos · Reservas 24h hábiles', title: '3. El pedido olvidado del jueves',
+    prompt: 'El jueves a las 10:00 a. m. se aceptó una cotización (nació PED-0042, sin pago). Nadie lo facturó el jueves ni el viernes. El lunes a las 9:00 a. m. aparece VENCIDO. ¿Qué ocurrió con el inventario apartado y qué botón se usa para retomar la venta?' },
+  { id: 'c4', tag: 'Comisiones', title: '4. El vendedor que pide comisión sobre el total con IVA',
+    prompt: 'Un vendedor facturó $11.600 (incluyendo 16 % de IVA) y con su 5 % esperaba $580 de comisión, pero GesPro le calculó $500. ¿Cómo le explicas el cálculo exacto apoyándote en la pantalla de Comisiones?' },
+  { id: 'c5', tag: 'Ruta y visitas', title: '5. La alerta «Llegada fuera del sitio (280 m)»',
+    prompt: 'Ves una alerta de llegada fuera del sitio en una farmacia dentro de un centro comercial. ¿Significa automáticamente que el vendedor mintió? ¿Qué revisas y cómo ajustas el sistema si la entrada real estaba lejos del pin?' },
+  { id: 'c6', tag: 'Marketing + Tienda', title: '6. Reactivar clientes dormidos sin caer en spam',
+    prompt: 'Tu gerente quiere recuperar a clientes con más de 90 días sin comprar usando un cupón del 10 % y medir cuántas ventas trajo la campaña. Enumera los pasos exactos dentro de Marketing.' },
+  { id: 'c7', tag: 'Tablero + Ajustes', title: '7. Corregir un pronóstico ponderado inflado',
+    prompt: 'El Pronóstico ponderado del Tablero siempre sale demasiado optimista porque «Prospección» tiene 50 % cuando realmente cierra 1 de cada 10 negocios. ¿Dónde lo corriges y qué otra alerta revisarías?' },
+];
+
+const ESSAYS = [
+  { id: 'e1', tag: 'Videos 01, 02 y 05', title: 'Ensayo 1 · Tu rutina diaria de 15 minutos con el CRM',
+    prompt: 'Diseña una rutina realista de inicio y cierre de jornada para un vendedor combinando Tablero, Agenda y Embudo. Explica qué 3 alertas revisarías primero cada mañana y qué acción exacta tomarías con cada una.',
+    hint: 'Incluye: 5 min en Tablero (Estancadas, Cierre vencido, Cotizaciones sin respuesta), orden de prioridades en Agenda (Vencidas → Hoy → Esta semana), uso de «✓ Hecha» + «Siguiente paso» y limpieza de tarjetas sin próxima acción en Embudo.' },
+  { id: 'e2', tag: 'Videos 02 y 14', title: 'Ensayo 2 · El mapa de nuestro Embudo real',
+    prompt: 'Propón entre 4 y 6 etapas concretas para el proceso comercial de tu empresa (nombre, criterio objetivo para avanzar y probabilidad de cierre %). Explica por qué el criterio objetivo evita pronósticos inflados.',
+    hint: 'Ej. Prospección (10 %) → Calificación (25 %) → Propuesta/Cotización (50 %) → Negociación (75 %) + fijas Ganada/Perdida. Explica cómo esas probabilidades calculan el Pronóstico ponderado en Ajustes.' },
+  { id: 'e3', tag: 'Videos 01, 04 y 06', title: 'Ensayo 3 · Disciplina de datos: Prospectos vs. Clientes y motivos de pérdida',
+    prompt: 'Argumenta por qué mantener separados Prospectos de Clientes y exigir el motivo de pérdida/descarte ahorra dinero a la empresa en 6 meses. Da dos decisiones gerenciales concretas que podrían tomarse con esos datos.',
+    hint: 'Menciona: cartera/reportes fiscales limpios, puntuación 0–100 para enfocar esfuerzo, análisis de «De dónde vienen los prospectos» (inversión en canales que convierten) y «Por qué se pierden» (precio, plazos, stock, competidores).' },
+  { id: 'e4', tag: 'Videos 07, 08 y 11', title: 'Ensayo 4 · Control interno de la cotización a la comisión',
+    prompt: 'Explica el sentido de control interno detrás de estas 3 reglas: (a) una cotización no se factura directo ni aparta stock; (b) un pedido aparta solo por 24 h hábiles y nace como factura en borrador; (c) la comisión se calcula sin IVA y puede dividirse entre vender y cobrar.',
+    hint: 'Conecta trazabilidad legal/comercial (cotización inmutable con validez), protección de inventario contra bloqueos eternos, segregación vendedor vs facturación y alineación de incentivos (vender vs cobrar realmente).' },
+  { id: 'e5', tag: 'Video 12', title: 'Ensayo 5 · Diseña una Secuencia de seguimiento ganadora',
+    prompt: 'Diseña una secuencia completa de 4 a 5 pasos (día, canal: Llamada/Correo/WhatsApp/LinkedIn y objetivo) para prospectos que entren desde un Formulario web de Instagram, y redacta 1 plantilla usando {{primer_nombre}}, {{empresa}} y {{vendedor}}.',
+    hint: 'Incluye toques espaciados (ej. Día 0 llamada/WhatsApp, Día 2 correo con catálogo, Día 5 LinkedIn/caso, Día 10 llamada de cierre), una Regla automática en evento PROSPECTO_NUEVO y menciona la cancelación automática al cerrar.' },
+  { id: 'e6', tag: 'Video 10', title: 'Ensayo 6 · Supervisión justa en la calle sin resistencia del equipo',
+    prompt: '¿Cómo presentarías «Ruta y visitas» a un equipo de vendedores de campo que teme sentirse espiado, apoyándote en las protecciones de privacidad y los beneficios prácticos que trae GesPro para ellos?',
+    hint: 'Destaca: consentimiento explícito, registro sólo durante la jornada que el vendedor inicia/termina, borrado automático a 90 días, ahorro de tiempo con «Ordenar por cercanía», «También quedan cerca» y el Asistente de voz («Contar la visita»).' },
+  { id: 'e7', tag: 'Videos 06 y 13', title: 'Ensayo 7 · Plan para rescatar clientes dormidos con Marketing medible',
+    prompt: 'Escoge un segmento real de clientes dormidos de tu empresa y diseña paso a paso una campaña combinando Clientes 360, Segmentos, Campaña (Correo o cola WhatsApp), cupón de descuento y etiquetas UTM para medir ventas reales.',
+    hint: 'Menciona: regla sin_comprar_dias, «Ver quiénes entran», prueba previa antes de lanzar, respeto a «Bajas» y tope diario MK_TOPE_DIARIO, y medición en Marketing → Resumen.' },
+  { id: 'e8', tag: 'Videos 06, 09 y 11', title: 'Ensayo 8 · Continuidad cuando un vendedor cambia de zona o sale',
+    prompt: 'Compara qué pasa cuando un vendedor se va si su cartera vivía en su WhatsApp personal vs. en GesPro CRM, y describe tu plan de transición en 5 pasos usando Clientes 360, Agenda, Carteras y Comisiones.',
+    hint: 'Abarca: conservación de contactos/historial en Clientes 360, reasignación limpia en Carteras sin alterar facturas pasadas, reasignación de oportunidades abiertas y liquidación final justa en Comisiones.' },
+  { id: 'e9', tag: 'Videos 12 y 14', title: 'Ensayo 9 · Automatización inteligente vs. criterio humano',
+    prompt: 'En GesPro, el Asistente del vendedor y las reglas automáticas preparan y avisan pero nunca cambian precios ni aprueban créditos. Reflexiona sobre qué tareas comerciales de tu empresa SÍ deben automatizarse y cuáles exigen decisión humana.',
+    hint: 'Menciona el Resumen matutino por GP Mensajes, recordatorios de cotización por vencer y cobranza preventiva (con vista previa «Lo que se les enviaría hoy» y tope semanal) frente a negociación de precios, descuentos y crédito.' },
+  { id: 'e10', tag: 'Integración (Videos 01–14)', title: 'Ensayo 10 · Tu plan de acción de 30 días con GesPro CRM',
+    prompt: 'Identifica los 3 cuellos de botella comerciales más costosos que tiene hoy tu área y redacta un plan concreto de 30 días indicando qué pestañas exactas del CRM usarás para resolver cada uno y con qué indicador del Tablero medirás el éxito.',
+    hint: 'Sé específico: semana 1 orden de datos/carteras, semana 2 disciplina de embudo/agenda/cotizaciones, semana 3–4 automatización/marketing y revisión de tasa de cierre, ciclo de venta y clientes dormidos en el Tablero.' },
+];
+
+let state = { meta: {}, answers: {}, texts: {}, graded: false };
+try {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw) state = { ...state, ...JSON.parse(raw) };
+} catch {}
+
+function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {} }
+
+function initMeta() {
+  const today = new Date().toISOString().slice(0, 10);
+  const mN = document.getElementById('m-nombre'), mC = document.getElementById('m-cargo'), mF = document.getElementById('m-fecha');
+  mN.value = state.meta.nombre || ''; mC.value = state.meta.cargo || ''; mF.value = state.meta.fecha || today;
+  const sync = () => { state.meta = { nombre: mN.value, cargo: mC.value, fecha: mF.value }; save(); };
+  [mN, mC, mF].forEach((i) => i.addEventListener('input', sync));
+  sync();
+}
+
+function renderQuiz() {
+  const c = document.getElementById('quizContainer');
+  c.innerHTML = QUESTIONS.map((item, idx) => `
+    <div class="card" id="qcard-${idx}">
+      <div class="q-head"><span class="q-tag">🎬 Video ${item.v}</span><span class="q-num">Pregunta ${idx + 1} de ${QUESTIONS.length}</span></div>
+      <div class="q-text">${idx + 1}. ${item.q}</div>
+      <div class="opts">
+        ${item.opts.map((o, oi) => `
+          <label class="opt ${state.answers[idx] === oi ? 'sel' : ''}" id="opt-${idx}-${oi}">
+            <input type="radio" name="q${idx}" value="${oi}" ${state.answers[idx] === oi ? 'checked' : ''} onchange="pick(${idx}, ${oi})">
+            <span><strong>${'ABCD'[oi]})</strong> ${o}</span>
+          </label>`).join('')}
+      </div>
+      <div class="explain" id="exp-${idx}"></div>
+    </div>`).join('');
+  updateProgress();
+  if (state.graded) gradeQuiz(true);
+}
+
+window.pick = function(qIdx, oIdx) {
+  state.answers[qIdx] = oIdx;
+  save();
+  for (let i = 0; i < 4; i++) document.getElementById(`opt-${qIdx}-${i}`)?.classList.toggle('sel', i === oIdx);
+  updateProgress();
+};
+
+function updateProgress() {
+  const n = Object.keys(state.answers).length;
+  document.getElementById('progressQuiz').textContent = `${n} de ${QUESTIONS.length} respondidas · autoguardado ✓`;
+}
+
+window.gradeQuiz = function(silent = false) {
+  state.graded = true; save();
+  let ok = 0;
+  const weakVideos = new Set();
+  QUESTIONS.forEach((item, idx) => {
+    const picked = state.answers[idx];
+    const exp = document.getElementById(`exp-${idx}`);
+    for (let i = 0; i < 4; i++) {
+      const el = document.getElementById(`opt-${idx}-${i}`);
+      el.classList.remove('correct', 'wrong');
+      if (i === item.ok) el.classList.add('correct');
+      else if (picked === i) el.classList.add('wrong');
+    }
+    if (picked === item.ok) {
+      ok++;
+      exp.className = 'explain ok';
+      exp.innerHTML = `✅ <strong>¡Correcto!</strong> ${item.exp}`;
+    } else {
+      weakVideos.add(item.v);
+      exp.className = 'explain err';
+      exp.innerHTML = `❌ <strong>Respuesta correcta: ${'ABCD'[item.ok]}.</strong> ${item.exp} <em>(Repasar Video ${item.v})</em>`;
+    }
+  });
+
+  const pct = Math.round((ok / QUESTIONS.length) * 100);
+  const box = document.getElementById('scoreBox');
+  box.classList.add('show');
+  document.getElementById('scoreVal').textContent = `${ok} / ${QUESTIONS.length} (${pct} %)`;
+  document.getElementById('scoreBadge').innerHTML = pct >= 85
+    ? '<span style="color:#059669">🏆 Nivel Experto CRM</span>'
+    : pct >= 70 ? '<span style="color:#1a5da8">👍 Aprobado · Repasa detalles clave</span>'
+    : '<span style="color:#d97706">📚 Requiere repasar videos indicados</span>';
+
+  const rem = document.getElementById('remedialBox');
+  if (!weakVideos.size) {
+    rem.className = 'remedial perfect';
+    rem.innerHTML = '🎉 <strong>¡Puntaje perfecto!</strong> Dominas todas las pestañas de Vendedor (CRM). Completa ahora los Casos Prácticos y los Ensayos para consolidar tu plan de acción.';
+  } else {
+    rem.className = 'remedial';
+    rem.innerHTML = `🎬 <strong>Videos recomendados para repasar antes de pasar a producción:</strong> ${[...weakVideos].join(' · ')}`;
+  }
+  if (!silent) window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+function renderWriting(list, containerId, minWords) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = list.map((it) => `
+    <div class="card">
+      <div class="q-head"><span class="q-tag">${it.tag}</span></div>
+      <div class="q-text">${it.title}</div>
+      <p style="margin:0 0 10px;color:#334155">${it.prompt}</p>
+      ${it.hint ? `<details class="hint"><summary>💡 Pistas de qué conviene incluir</summary><p style="margin:6px 0 0">${it.hint}</p></details>` : ''}
+      <textarea class="resp" id="txt-${it.id}" placeholder="Escribe aquí tu respuesta razonada…">${(state.texts[it.id] || '').replace(/</g, '&lt;')}</textarea>
+      <div class="essay-foot">
+        <span id="wc-${it.id}">0 palabras</span>
+        <span>${minWords ? `Sugerencia: ${minWords} palabras · ` : ''}autoguardado ✓</span>
+      </div>
+    </div>`).join('');
+  list.forEach((it) => {
+    const ta = document.getElementById(`txt-${it.id}`);
+    const wc = document.getElementById(`wc-${it.id}`);
+    const count = () => {
+      const w = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
+      wc.textContent = `${w} palabra${w === 1 ? '' : 's'}`;
+    };
+    ta.addEventListener('input', () => { state.texts[it.id] = ta.value; save(); count(); });
+    count();
+  });
+}
+
+window.switchTab = function(id, btn) {
+  document.querySelectorAll('.panel').forEach((p) => p.classList.toggle('active', p.id === id));
+  document.querySelectorAll('.tab').forEach((t) => t.classList.toggle('active', t === btn));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+window.copyReport = async function() {
+  let ok = 0;
+  QUESTIONS.forEach((q, i) => { if (state.answers[i] === q.ok) ok++; });
+  const pct = Math.round((ok / QUESTIONS.length) * 100);
+  const casosDone = CASES.filter((c) => (state.texts[c.id] || '').trim().length > 15).length;
+  const essaysDone = ESSAYS.filter((e) => (state.texts[e.id] || '').trim().length > 30).length;
+  const txt = [
+    `EVALUACIÓN VENDEDOR (CRM) · GesPro Administrativo`,
+    `Participante: ${state.meta.nombre || '—'} | Cargo: ${state.meta.cargo || '—'} | Fecha: ${state.meta.fecha || '—'}`,
+    `Parte I (Selección múltiple): ${ok}/${QUESTIONS.length} (${pct} %)`,
+    `Parte II (Casos prácticos respondidos): ${casosDone}/${CASES.length}`,
+    `Parte III (Ensayos redactados): ${essaysDone}/${ESSAYS.length}`,
+  ].join('\n');
+  try { await navigator.clipboard.writeText(txt); alert('Resumen copiado al portapapeles.'); }
+  catch { prompt('Copia este resumen:', txt); }
+};
+
+window.resetAll = function() {
+  if (!confirm('¿Borrar todas tus respuestas guardadas y empezar de cero?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+};
+
+initMeta();
+renderQuiz();
+renderWriting(CASES, 'casesContainer', '40–100');
+renderWriting(ESSAYS, 'essaysContainer', '120–250');
+</script>
+
+<style>
+  .gespro-portal-back{position:fixed;bottom:16px;left:16px;z-index:99999;display:inline-flex;align-items:center;gap:7px;
+    background:#0c1d35;color:#fff !important;text-decoration:none !important;padding:9px 15px;border-radius:999px;
+    font:600 13px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:1px solid rgba(137,201,255,.45);
+    box-shadow:0 8px 24px rgba(0,0,0,.28);transition:transform .15s,background .15s}
+  .gespro-portal-back:hover{background:#1a5da8;transform:translateY(-1px)}
+  @media print{.gespro-portal-back{display:none !important}}
+  
+</style>
+<a class="gespro-portal-back" href="../index.html#evaluacion" title="Volver al portal principal de entrenamiento">← Portal GesPro</a>
+</body>
+</html>

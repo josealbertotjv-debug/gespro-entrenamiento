@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual Completo del Estudiante · GesPro Administrativo v5.7.0</title>
+<style>
+  :root {
+    --navy: #0a2140;
+    --navy2: #0e3159;
+    --blue: #1a5da8;
+    --sky: #3a8ae0;
+    --sky-soft: #eaf3ff;
+    --ink: #1e293b;
+    --muted: #475569;
+    --border: #dbe3ee;
+    --surface: #f8fafc;
+    --ok: #059669;
+    --warn: #d97706;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font: 400 15px/1.65 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: #eef2f7;
+  }
+  /* Floating toolbar (hidden on print) */
+  .toolbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10,33,64,.96); backdrop-filter: blur(8px);
+    color: #fff; padding: 10px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.22);
+  }
+  .toolbar-left { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 14px; }
+  .toolbar-nav { display: flex; gap: 6px; flex-wrap: wrap; }
+  .toolbar-nav a {
+    color: #cfe2f7; text-decoration: none; font-size: 12px; padding: 5px 10px;
+    border-radius: 999px; background: rgba(255,255,255,.08); transition: background .15s;
+  }
+  .toolbar-nav a:hover { background: rgba(58,138,224,.45); color: #fff; }
+  .btn-print {
+    background: linear-gradient(135deg, #3a8ae0, #1a5da8); color: #fff; border: 0;
+    padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer;
+    box-shadow: 0 2px 10px rgba(58,138,224,.35);
+  }
+  .btn-print:hover { filter: brightness(1.08); }
+
+  .book {
+    max-width: 920px; margin: 28px auto 60px; background: #fff;
+    box-shadow: 0 18px 50px rgba(10,33,64,.14); border-radius: 16px; overflow: hidden;
+  }
+
+  /* Cover */
+  .cover {
+    background:
+      radial-gradient(800px 520px at 85% 15%, rgba(58,138,224,.35), transparent 62%),
+      linear-gradient(150deg, #0a2140 0%, #0e3159 55%, #0a2544 100%);
+    color: #fff; padding: 72px 64px 56px; position: relative;
+  }
+  .cover-badge {
+    display: inline-block; padding: 6px 16px; border-radius: 999px;
+    border: 1px solid rgba(140,200,255,.45); color: #8cc8ff;
+    font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  }
+  .cover h1 { font-size: 46px; line-height: 1.08; margin: 22px 0 14px; letter-spacing: -1.2px; }
+  .cover .lead { font-size: 19px; color: #cfe2f7; max-width: 640px; margin: 0 0 36px; }
+  .cover-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 42px; }
+  .cover-pill {
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+    border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; color: #eaf3ff;
+  }
+  .cover-pill span { display: block; font-size: 11px; color: #8cc8ff; letter-spacing: .08em; margin-bottom: 2px; }
+  .student-card {
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 12px; padding: 18px 22px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
+    font-size: 12px; color: #a9c8ea;
+  }
+  .student-card .line { border-bottom: 1px dashed rgba(255,255,255,.35); height: 22px; margin-top: 4px; }
+
+  /* Intro & TOC */
+  .front-matter { padding: 44px 56px; border-bottom: 1px solid var(--border); }
+  .front-matter h2 { color: var(--navy); font-size: 24px; margin: 0 0 16px; letter-spacing: -.4px; }
+  .toc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 32px; }
+  .toc-item {
+    display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px;
+    border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: inherit;
+    background: var(--surface);
+  }
+  .toc-num {
+    flex: none; width: 34px; height: 34px; border-radius: 8px; background: var(--navy);
+    color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 13px;
+  }
+  .toc-item strong { display: block; font-size: 15px; color: var(--navy); }
+  .toc-item span { font-size: 12.5px; color: var(--muted); line-height: 1.35; display: block; margin-top: 2px; }
+
+  .rules-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .rule-card {
+    background: var(--sky-soft); border: 1px solid #c7dffb; border-radius: 10px; padding: 14px 16px;
+  }
+  .rule-card strong { display: block; color: var(--navy); font-size: 14px; margin-bottom: 4px; }
+  .rule-card p { margin: 0; font-size: 13px; color: #334155; }
+
+  /* Module section */
+  .module-section { page-break-before: always; break-before: page; }
+  .module-banner {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 70%, var(--mod-color, var(--sky)) 145%);
+    color: #fff; padding: 36px 56px 32px;
+  }
+  .mod-num {
+    font-size: 12px; font-weight: 700; letter-spacing: .2em; color: #8cc8ff; text-transform: uppercase;
+  }
+  .module-banner h1 { margin: 6px 0 6px; font-size: 32px; letter-spacing: -.6px; }
+  .mod-sub { margin: 0; color: #cfe2f7; font-size: 15px; }
+
+  .module-body { padding: 32px 56px 42px; }
+  h2.sec-h2 {
+    color: var(--navy); font-size: 20px; margin: 28px 0 12px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--sky-soft); letter-spacing: -.3px;
+    page-break-after: avoid; break-after: avoid;
+  }
+  h3 { color: var(--blue); font-size: 16.5px; margin: 20px 0 8px; page-break-after: avoid; break-after: avoid; }
+  h4 { color: var(--navy); font-size: 14.5px; margin: 14px 0 6px; }
+  p { margin: 0 0 11px; }
+  code {
+    background: #eef4fb; color: #0f3a6d; padding: 1.5px 6px; border-radius: 5px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px;
+  }
+  .callout {
+    background: #f0f7ff; border-left: 4px solid var(--sky); padding: 12px 16px;
+    border-radius: 0 8px 8px 0; margin: 14px 0 18px; font-size: 14px; color: #1e3a5f;
+    break-inside: avoid;
+  }
+  .formula-box {
+    background: #0a2140; color: #fff; padding: 16px 22px; border-radius: 10px;
+    text-align: center; font-size: 16px; font-weight: 600; margin: 16px 0;
+    break-inside: avoid;
+  }
+  .frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 6px; }
+  .frac .num { border-bottom: 1.5px solid #8cc8ff; padding: 0 8px 2px; }
+  .frac .den { padding: 2px 8px 0; color: #a9c8ea; }
+
+  ul.bullets, ol.steps { margin: 8px 0 14px; padding-left: 22px; }
+  ul.bullets li, ol.steps li { margin-bottom: 6px; }
+  ol.steps li ul { margin-top: 5px; padding-left: 20px; }
+
+  .table-wrap { margin: 14px 0 18px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th {
+    background: var(--navy); color: #fff; text-align: left; padding: 9px 12px;
+    font-weight: 600; font-size: 12.5px; letter-spacing: .02em;
+  }
+  td { padding: 8.5px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  tr { break-inside: avoid; }
+
+  figure.screenshot {
+    margin: 18px 0 22px; padding: 10px; background: #f8fafc;
+    border: 1px solid var(--border); border-radius: 12px; text-align: center;
+    break-inside: avoid;
+  }
+  figure.screenshot img {
+    max-width: 100%; max-height: 360px; width: auto; height: auto;
+    border-radius: 8px; box-shadow: 0 4px 16px rgba(10,33,64,.12); display: block; margin: 0 auto;
+  }
+  figure.screenshot figcaption { font-size: 12.5px; color: var(--muted); margin-top: 8px; font-style: italic; }
+
+  /* Special boxes */
+  .special-box { border-radius: 12px; padding: 18px 22px; margin: 22px 0; break-inside: avoid; }
+  .special-box h2 { margin: 0 0 10px; font-size: 18px; border: 0; padding: 0; }
+  .special-box.warn { background: #fffbeb; border: 1.5px solid #fcd34d; }
+  .special-box.warn h2 { color: #92400e; }
+  .special-box.warn th { background: #b45309; }
+  .special-box.challenge { background: #ecfdf5; border: 1.5px solid #6ee7b7; }
+  .special-box.challenge h2 { color: #065f46; }
+  .special-box.cheat { background: #0a2140; color: #eaf3ff; }
+  .special-box.cheat h2 { color: #8cc8ff; }
+  .special-box.cheat code { background: rgba(255,255,255,.14); color: #fff; }
+  .special-box.cheat strong { color: #fff; }
+
+  /* Back cover cheat sheet */
+  .back-sheet {
+    page-break-before: always; break-before: page;
+    padding: 40px 56px 52px; background: #f8fafc;
+  }
+  .back-sheet h2 { color: var(--navy); font-size: 24px; margin: 0 0 6px; }
+  .cheat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 18px; }
+  .cheat-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .cheat-card h3 { margin: 0 0 6px; font-size: 15px; color: var(--navy); }
+  .cheat-card p { margin: 0; font-size: 13px; color: var(--muted); }
+
+  @media print {
+    body { background: #fff; font-size: 11.5pt; }
+    .toolbar { display: none !important; }
+    .book { max-width: 100%; margin: 0; box-shadow: none; border-radius: 0; }
+    .cover { min-height: 92vh; display: flex; flex-direction: column; justify-content: center; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .module-banner, th, .special-box, .formula-box, .callout, .rule-card, .toc-num {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .front-matter, .module-body, .back-sheet { padding: 20px 28px; }
+    .module-banner { padding: 22px 28px; }
+    figure.screenshot img { max-height: 260px; }
+  }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <div class="toolbar-left">📘 Manual del Estudiante · GesPro Administrativo v5.7.0</div>
+    <div class="toolbar-nav">
+      <a href="#mod-01">1. Ventas</a>
+      <a href="#mod-02">2. CxC</a>
+      <a href="#mod-03">3. CxP</a>
+      <a href="#mod-04">4. Inventario</a>
+      <a href="#mod-05">5. Costos</a>
+      <a href="#mod-06">6. Bancos</a>
+      <a href="#referencia">Chuleta Final</a>
+    </div>
+    <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+  </div>
+
+  <div class="book">
+    <header class="cover">
+      <div class="cover-badge">Entrenamiento Oficial · GesPro Administrativo v5.7.0</div>
+      <h1>Manual Práctico<br>del Usuario</h1>
+      <p class="lead">Domina en un solo día el ciclo completo de tu empresa: Ventas, Cuentas por Cobrar, Cuentas por Pagar, Inventario, Análisis de Costos y Bancos.</p>
+      <div class="cover-pills">
+        <div class="cover-pill"><span>MÓDULO 01</span>Ventas, CRM, POS y Tienda</div>
+        <div class="cover-pill"><span>MÓDULO 02</span>Cuentas por Cobrar e IGTF</div>
+        <div class="cover-pill"><span>MÓDULO 03</span>Cuentas por Pagar e IA</div>
+        <div class="cover-pill"><span>MÓDULO 04</span>Inventario y Despachos</div>
+        <div class="cover-pill"><span>MÓDULO 05</span>Análisis de Costos y PEPS</div>
+        <div class="cover-pill"><span>MÓDULO 06</span>Bancos y Conciliación</div>
+      </div>
+      <div class="student-card">
+        <div>Participante<div class="line"></div></div>
+        <div>Área / Cargo<div class="line"></div></div>
+        <div>Fecha del entrenamiento<div class="line"></div></div>
+      </div>
+    </header>
+
+    <section class="front-matter">
+      <h2>Índice de Contenidos</h2>
+      <div class="toc-grid">
+        
+          <a class="toc-item" href="#mod-01">
+            <div class="toc-num" style="background:#2563eb">01</div>
+            <div><strong>Ventas</strong><span>CRM, Cotizaciones, Pedidos, Punto de Venta, Tienda en Línea y Portal Vendedores</span></div>
+          </a>
+          <a class="toc-item" href="#mod-02">
+            <div class="toc-num" style="background:#0891b2">02</div>
+            <div><strong>Cuentas por Cobrar</strong><span>Facturación, Crédito, Cobros, IGTF, Retenciones Recibidas, Comprobantes y Cartera</span></div>
+          </a>
+          <a class="toc-item" href="#mod-03">
+            <div class="toc-num" style="background:#7c3aed">03</div>
+            <div><strong>Cuentas por Pagar</strong><span>Facturas con IA, Comprobante Previo, Retenciones IVA/ISLR, Reintegros y Lotes al Banco</span></div>
+          </a>
+          <a class="toc-item" href="#mod-04">
+            <div class="toc-num" style="background:#059669">04</div>
+            <div><strong>Inventario</strong><span>Catálogo, Costo Inicial, Kardex, Apartado 24h, Reposición, Notas de Despacho y Manufactura</span></div>
+          </a>
+          <a class="toc-item" href="#mod-05">
+            <div class="toc-num" style="background:#d97706">05</div>
+            <div><strong>Análisis de Costos</strong><span>Fichas de Costo, 4 Modalidades, IA Gemini, Fórmula de Precio, Revalorización y PEPS</span></div>
+          </a>
+          <a class="toc-item" href="#mod-06">
+            <div class="toc-num" style="background:#0284c7">06</div>
+            <div><strong>Bancos y Conciliación</strong><span>Cuentas y Devaluación, Libro, Extracto, Conciliación 7 Pasos, Devoluciones y Agente</span></div>
+          </a>
+      </div>
+
+      <h2>Las 3 Reglas de Oro Antes de Empezar</h2>
+      <div class="rules-grid">
+        <div class="rule-card">
+          <strong>1. Una operación, un solo registro</strong>
+          <p>Cuando apruebas una factura, cobro o compra, el inventario, los saldos y la contabilidad se actualizan al instante y sin duplicar trabajo.</p>
+        </div>
+        <div class="rule-card">
+          <strong>2. BORRADOR ≠ APROBADO</strong>
+          <p>En borrador puedes editar y borrar sin gastar correlativos. Al aprobar entra a los libros; lo aprobado nunca se borra, se anula por reverso.</p>
+        </div>
+        <div class="rule-card">
+          <strong>3. Tus 3 salvavidas en pantalla</strong>
+          <p>Pulsa <code>ⓘ</code> junto a cualquier campo, pulsa <code>?</code> arriba para preguntarle a la Ayuda IA, o abre el <strong>Manual de usuario</strong> en el menú.</p>
+        </div>
+      </div>
+    </section>
+
+    
+  <section class="module-section" id="mod-01">
+    <div class="module-banner" style="--mod-color: #2563eb">
+      <div class="mod-num">MÓDULO 01</div>
+      <h1>Ventas</h1>
+      <p class="mod-sub">CRM, Cotizaciones, Pedidos, Punto de Venta, Tienda en Línea y Portal Vendedores</p>
+    </div>
+    <div class="module-body">
+      <div class="callout"><strong>Tu misión en este módulo:</strong> Dominar el recorrido completo de una venta —desde el primer contacto con un prospecto hasta el pedido en firme, el Punto de Venta en mostrador y la Tienda en línea— sin perder oportunidades ni prometer mercancía que no existe.  <br><strong>🎬 Videos de repaso de este módulo (disponibles también en versión <code>-WhatsApp.mp4</code>):</strong> <code>01-Vendedor</code> (<code>3:40</code>) · <code>02-Cotizaciones</code> (<code>1:46</code>) · <code>03-Punto-de-venta</code> (<code>2:05</code>) · <code>04-Tienda-en-linea</code> (<code>1:57</code>) · <code>Guia-del-vendedor</code> (<code>5:29</code>, móvil).</div>
+<h2 class="sec-h2">1. Mapa del Módulo de Ventas</h2>
+<p>En GesPro, todas las puertas por donde entra una venta viven en el grupo <strong>Ciclo comercial</strong> del menú lateral (y el portal móvil en <code>/vendedores</code>):</p>
+<div class="table-wrap"><table><thead><tr><th>Sección del menú</th><th>Para qué la usarás todos los días</th></tr></thead><tbody><tr><td><strong>Vendedor (CRM)</strong></td><td>Prospectos, Embudo de negocios, Agenda de llamadas/visitas, Clientes 360, Cotizaciones, Pedidos, Carteras, Ruta y visitas, Comisiones, Automatización y Marketing.</td></tr><tr><td><strong>Cotizaciones</strong></td><td>Bandeja dedicada para emitir ofertas formales en PDF, controlar su fecha de validez y aprobar descuentos grandes.</td></tr><tr><td><strong>Punto de venta (POS)</strong></td><td>Venta rápida en mostrador con lector de código de barras, pago multimoneda con vuelto, impresora térmica y modo <strong>sin conexión</strong>.</td></tr><tr><td><strong>Tienda en línea</strong></td><td>Catálogo web público conectado a tu inventario real, cupones y pagos en línea (Stripe, PayPal, Binance Pay, Pago Móvil C2P Mercantil).</td></tr><tr><td><strong>Portal de vendedores (<code>/vendedores</code>)</strong></td><td>Pantalla móvil para vendedores de calle: asistente <em>«Mi día»</em>, levantar pedidos, cargar comprobantes de pago y dictar cierres de visita por voz.</td></tr></tbody></table></div>
+<div class="callout"><strong>💡 Regla de oro de GesPro:</strong> Un <strong>Prospecto</strong> no es cliente hasta que compra; una <strong>Cotización</strong> no aparta mercancía ni se factura directa; un <strong>Pedido</strong> aparta mercancía por <strong>24 horas hábiles</strong> pero todavía no toca la contabilidad. Nada entra en los libros hasta que Administración aprueba la factura.</div>
+<h2 class="sec-h2">2. Vendedor (CRM): Vende con orden y sin olvidar seguimientos</h2>
+<h3>2.1 De Prospecto a Cliente (Paso a paso)</h3>
+<ol class="steps"><li>Entra a <strong>Vendedor (CRM) → Prospectos</strong> y pulsa <strong>«+ Prospecto»</strong>.</li><li>Escribe nombre, empresa, teléfono o correo y cómo llegó (<em>origen</em>). Si el teléfono, correo o RIF ya existen, GesPro te avisa para no duplicar.</li><li>Observa la <strong>Puntuación de prospectos (0 a 100)</strong>:<ul><li>🔥 <strong>70 o más (Caliente):</strong> llamar hoy primero.</li><li>🌤️ <strong>40 a 69 (Tibio):</strong> seguimiento programado.</li><li>❄️ <strong>Menos de 40 (Frío):</strong> nutrir o retomar.</li></ul></li><li>Deja agendada la primera acción en <strong>Agenda</strong> (te ordena primero lo <strong>vencido</strong>, luego <strong>hoy</strong> y <strong>esta semana</strong>).</li><li>Cuando haya un negocio concreto, crea una <strong>Oportunidad</strong> (monto estimado y fecha de cierre). Muévela arrastrando la tarjeta en el <strong>Embudo</strong> (<em>arrastrar y soltar</em>).</li><li>Si el cliente compra, conviértelo en <strong>Cliente</strong> (pasa todo su historial y contactos). Si pierdes el negocio, elige siempre el <strong>motivo de pérdida</strong> (precio, competencia, plazos…): el Tablero usa esto para saber qué corregir.</li></ol>
+<h3>2.2 Clientes 360 y Automatización</h3>
+<ul class="bullets"><li>En <strong>Clientes 360</strong>, haz clic en cualquier cliente y verás en una sola pantalla: lo que compra, cuánto debe, sus contactos, sus negocios y todo lo hablado con él.</li><li>En <strong>Automatización</strong> puedes usar <strong>Plantillas</strong> de correo/WhatsApp (<code>{{nombre}}</code>, <code>{{empresa}}</code>, <code>{{vendedor}}</code>), <strong>Secuencias</strong> (ej. llamar hoy → escribir a los 3 días → visitar a la semana) y <strong>Formularios web</strong> que reparten prospectos por turno.</li><li>En <strong>Marketing</strong>, arma <strong>Segmentos</strong> dinámicos (ej. <em>«clientes que no compran hace 60 días»</em>) y lanza campañas por correo o cola de WhatsApp midiendo aperturas, clics y ventas generadas.</li></ul>
+<h2 class="sec-h2">3. Cotizaciones y Aprobación de Descuentos</h2>
+<h3>Cómo emitir una cotización sin sorpresas</h3>
+<ol class="steps"><li>Entra a <strong>Cotizaciones</strong> (o <strong>Vendedor (CRM) → Cotizaciones</strong>) y pulsa <strong>«+ Nueva cotización»</strong> (o pulsa <strong>«Cotizar»</strong> directo desde una Oportunidad del CRM).</li><li>Selecciona el cliente, la <strong>fecha de validez</strong> (30 días por defecto; sale impresa en grande en el PDF para evitar discusiones de precios viejos) y agrega los artículos del catálogo.<ul><li><strong>Protección automática:</strong> GesPro <strong>no deja cotizar</strong> artículos que no tienen existencia en ningún almacén.</li></ul></li><li>Guarda y pulsa <strong>«Descargar PDF»</strong> para enviársela al cliente por correo o WhatsApp.</li></ol>
+<h3>¿Qué pasa si das un descuento grande?</h3>
+<p>Si tu empresa activó <strong>Configuración → Descuentos</strong>, según el mayor descuento de un renglón se piden aprobaciones automáticas por <strong>GP Mensajes</strong>:</p>
+<ul class="bullets"><li><strong>Desde 25 %:</strong> aprueba el Aprobador 1.</li><li><strong>Desde 50 %:</strong> aprueban el 1 y el 2.</li><li><strong>Desde 75 %:</strong> aprueban los tres.</li></ul>
+<div class="callout">Mientras espera aprobación, la cotización queda en estado <em>«Descuento por aprobar»</em> y <strong>no se puede imprimir ni aceptar</strong>.</div>
+<h3>Cuando el cliente responde</h3>
+<ul class="bullets"><li><strong>Dijo SÍ:</strong> Abre la cotización y pulsa <strong>«El cliente la aceptó»</strong>. Nace un <strong>Pedido en firme</strong> con los mismos renglones y precios (la cotización original queda intacta como prueba histórica).</li><li><strong>Dijo NO:</strong> Pulsa <strong>«El cliente la rechazó»</strong> e indica el motivo.</li><li><strong>Venció sin respuesta:</strong> Ya no se puede aceptar; emite una nueva a precios de hoy.</li></ul>
+<h2 class="sec-h2">4. Pedidos, Mercancía Apartada (24 h hábiles) y Comisiones</h2>
+<figure class="screenshot"><img src="../presentacion/img/pedidos.png" alt="Pedidos de vendedores"><figcaption>Pedidos de vendedores</figcaption></figure>
+<h3>La regla de la mercancía apartada (¡muy importante!)</h3>
+<p>Cada <strong>Pedido en firme</strong> (de un vendedor, de la tienda en línea o de una cotización aceptada) <strong>aparta automáticamente la mercancía durante 24 horas hábiles</strong> (sábados y domingos no cuentan; ej. viernes 5:00 p. m. → lunes 5:00 p. m.):</p>
+<ul class="bullets"><li>Mientras esté apartado, <strong>nadie más puede vender esas unidades</strong> (ni otra factura, ni POS, ni Tienda, ni Manufactura).</li><li>Si el cliente <strong>ya pagó</strong> (pago en línea o comprobante cargado por el vendedor), la reserva <strong>no vence</strong>.</li><li>Si pasan las 24 h hábiles sin facturarse, la mercancía se libera, el pedido pasa a <strong>VENCIDO</strong> y avisa por GP Mensajes. Para retomarlo, Facturación pulsa <strong>«Hacer de nuevo»</strong> (vuelve a apartar si aún hay stock).</li></ul>
+<h3>Comisiones sin discusiones a fin de mes</h3>
+<figure class="screenshot"><img src="../presentacion/img/pedidos-comisiones.png" alt="Comisiones de vendedores"><figcaption>Comisiones de vendedores</figcaption></figure>
+<ul class="bullets"><li>Se configuran en <strong>Vendedor (CRM) → Comisiones</strong> por vendedor: por <strong>vender</strong>, por <strong>cobrar</strong>, o ambas.</li><li>Siempre se calculan sobre el monto <strong>SIN IVA</strong> (el IVA es del fisco, no ingreso de la empresa) y convertidas a la moneda base.</li><li>Comisiona el vendedor asignado en la <strong>ficha del cliente</strong> al momento de facturar.</li></ul>
+<h2 class="sec-h2">5. Punto de Venta (POS): Rápido, Multimoneda y Sin Conexión</h2>
+<h3>Tu rutina diaria en caja</h3>
+<ol class="steps"><li><strong>Abrir turno:</strong> Entra a <strong>Punto de venta</strong>, elige tu caja y declara el <strong>fondo inicial en efectivo</strong>. <em>(Nadie puede vender sin turno abierto, y una caja solo la abre una persona a la vez).</em></li><li><strong>Vender:</strong> Escanea el código de barras (con lector USB o botón de cámara <code>📷</code>) o busca por nombre. Ajusta cantidad o descuento permitido (no puedes alterar el precio de lista).</li><li><strong>Identificar al cliente (opcional):</strong> Si quiere la factura a su nombre, pulsa <strong>«Con cédula o RIF»</strong>; si no existe, créalo rápido con su nombre.</li><li><strong>Cobrar:</strong> Pulsa <strong>Cobrar</strong>. Puedes combinar formas de pago (ej. parte en USD efectivo, parte en Bs punto de venta). Usa el botón <strong>«Exacto»</strong> para completar lo que falta.<ul><li>Si cobras en divisas y la empresa es contribuyente especial, el <strong>IGTF del 3 %</strong> se calcula solo sobre lo que se queda la empresa (no sobre el vuelto).</li><li>Al confirmar, se emite la factura fiscal, se imprime el ticket térmico y se abre la gaveta automáticamente.</li></ul></li><li><strong>Cerrar turno:</strong> Al final del día, cuenta el dinero real por cada forma de pago y escríbelo. GesPro compara contra lo esperado y registra cualquier sobrante o faltante para el supervisor.</li></ol>
+<h3>¿Qué hago si se cae internet en medio de la cola?</h3>
+<ul class="bullets"><li><strong>No detengas la caja.</strong> El indicador superior se pondrá en <strong>rojo</strong> y podrás seguir vendiendo con el catálogo guardado al abrir el turno.</li><li>El cliente recibe un <strong>Comprobante Provisional (<code>PRV-…</code>)</strong>.</li><li>Al volver internet, GesPro envía y factura automáticamente cada venta (sin duplicarlas). <em>Nota: no puedes cerrar el turno mientras queden ventas sin sincronizar o por revisar.</em></li></ul>
+<h2 class="sec-h2">6. Tienda en Línea y Portal de Vendedores (<code>/vendedores</code>)</h2>
+<h3>Tienda en línea</h3>
+<ul class="bullets"><li>En <strong>Tienda en línea → Configuración</strong> eliges el almacén de venta, métodos de entrega y cuentas bancarias. En <strong>Productos</strong>, publicas los artículos (con foto y descripción; requiere precio de venta).</li><li>En <strong>Cupones</strong>, creas descuentos por % o monto fijo con vigencia, compra mínima y límite por RIF/cédula.</li><li>En <strong>Pagos en línea</strong>, se activan <strong>Stripe (tarjeta), PayPal, Binance Pay y Pago Móvil C2P del Banco Mercantil</strong>. Los pedidos pagados en línea llegan ya verificados a <strong>Vendedor (CRM) → Pedidos</strong>.</li></ul>
+<h3>Portal de vendedores (<code>/vendedores</code>)</h3>
+<figure class="screenshot"><img src="../presentacion/img/portal-vendedores.png" alt="Portal de vendedores en el teléfono"><figcaption>Portal de vendedores en el teléfono</figcaption></figure>
+<ul class="bullets"><li><strong>«Mi día»:</strong> Lista inteligente priorizada de a quién llamar o visitar hoy (tareas vencidas, facturas vencidas, cotizaciones por vencer, clientes que ya les toca reponer).</li><li><strong>Pedidos y pagos en la calle:</strong> El vendedor solo ve <strong>su propia cartera</strong>. Puede levantar pedidos/cotizaciones y cargar la foto del comprobante de pago que le entregue el cliente.</li><li><strong>Ruta y visitas (con asistente de voz):</strong> Inicia jornada → pulsa <strong>«Llegué»</strong> (verifica geocerca GPS) → al salir pulsa <strong>«Contar la visita»</strong> para dictar en voz alta lo ocurrido y que el formulario se llene solo antes de guardar.</li></ul>
+<div class="special-box warn"><h2>⚠️ 5 Errores Clásicos en Ventas (y Cómo Evitarlos)</h2>
+<div class="table-wrap"><table><thead><tr><th>Error clásico</th><th>Qué pasa en GesPro</th><th>Cómo hacerlo bien</th></tr></thead><tbody><tr><td>Intentar facturar una cotización sin aceptarla</td><td>El sistema no lo permite</td><td>Abre la cotización → <strong>«El cliente la aceptó»</strong> → luego se factura el Pedido en CxC</td></tr><tr><td>Dejar un pedido sin facturar más de 24 h hábiles</td><td>La reserva caduca y otro puede vender esa mercancía</td><td>Revisa el contador de <strong>Pedidos por facturar</strong> o registra el pago si el cliente ya pagó</td></tr><tr><td>Dejar un cliente sin «Vendedor» en su ficha</td><td>La factura sale sin vendedor y <strong>no genera comisión</strong></td><td>Verifica siempre el campo obligatorio <strong>Vendedor</strong> en la ficha del cliente</td></tr><tr><td>Querer anular una venta de POS después de cerrar el turno</td><td>Ya no se puede anular en caja</td><td>Emite una <strong>Nota de crédito</strong> desde Cuentas por cobrar</td></tr><tr><td>Cotizar sin revisar existencia</td><td>El sistema bloquea artículos sin stock</td><td>Revisa disponibilidad real (existencia menos lo apartado) antes de ofertar</td></tr></tbody></table></div>
+</div>
+<div class="special-box challenge"><h2>🛠️ Reto Práctico del Estudiante (20 min)</h2>
+<ol class="steps"><li>Ve a <strong>Vendedor (CRM) → Prospectos</strong> y crea un prospecto nuevo con tus iniciales (ej. <em>«Comercializadora [Tus Iniciales]»</em>). Verifica su puntuación y agéndale una llamada para mañana.</li><li>Ve a <strong>Cotizaciones → + Nueva cotización</strong>, elige un cliente existente, agrega 2 artículos con stock y dale validez de 5 días. Descarga el PDF.</li><li>Abre esa cotización y pulsa <strong>«El cliente la aceptó»</strong>. Anota el número de Pedido <code>PED-…</code> que nació (lo necesitarás en el Módulo 2).</li><li>Entra a <strong>Punto de venta</strong>, abre turno, vende 1 artículo combinando <strong>dos formas de pago</strong> y visualiza el ticket.</li></ol>
+</div>
+<div class="special-box cheat"><h2>📌 Chuleta Rápida (1 minuto)</h2>
+<ul class="bullets"><li><strong>Flujo estándar:</strong> <code>Prospecto → Oportunidad → Cotización → [Aceptada] → Pedido (aparta 24 h hábiles) → Factura (en CxC)</code>.</li><li><strong>Descuentos grandes en cotización:</strong> 25 % / 50 % / 75 % piden aprobación por GP Mensajes.</li><li><strong>POS sin internet:</strong> Sigue vendiendo (<code>PRV-…</code>) y sincroniza solo al volver la red.</li><li><strong>¿Dudas en un campo?</strong> Pulsa el ícono <strong><code>ⓘ</code></strong> junto al título o el botón <strong><code>?</code></strong> arriba a la derecha.</li></ul>
+</div>
+    </div>
+  </section>
+
+  <section class="module-section" id="mod-02">
+    <div class="module-banner" style="--mod-color: #0891b2">
+      <div class="mod-num">MÓDULO 02</div>
+      <h1>Cuentas por Cobrar</h1>
+      <p class="mod-sub">Facturación, Crédito, Cobros, IGTF, Retenciones Recibidas, Comprobantes y Cartera</p>
+    </div>
+    <div class="module-body">
+      <div class="callout"><strong>Tu misión en este módulo:</strong> Facturar sin errores de numeración fiscal, controlar el crédito y los bloqueos por mora, cobrar en bolívares o divisas (con IGTF y retenciones de IVA/ISLR) y usar la cartera para cobrar más rápido.  <br><strong>🎬 Videos de repaso de este módulo (<code>-WhatsApp.mp4</code> disponibles):</strong> <code>10-Clientes</code> (<code>1:46</code>) · <code>05-Facturacion-de-clientes</code> (<code>2:04</code>) · <code>08-Cuentas-por-cobrar</code> (<code>1:58</code>) · <code>14-Comprobantes-de-pago</code> (<code>1:28</code>) · <code>12-Autorizaciones</code> (<code>1:13</code>).</div>
+<h2 class="sec-h2">1. Mapa del Módulo de Cuentas por Cobrar</h2>
+<p>Encontrarás estas secciones y pestañas clave:</p>
+<ul class="bullets"><li><strong>Menú <code>Clientes</code>:</strong> Directorio con ficha fiscal, crédito, vendedor asignado y detección de <em>Fichas incompletas</em>.</li><li><strong>Menú <code>Facturación de clientes</code>:</strong> Solo emitir, aprobar, imprimir y anular facturas/notas (ideal para facturadores que no tocan cobranza).</li><li><strong>Menú <code>Cuentas por cobrar</code></strong> (6 pestañas):</li></ul>
+<ol class="steps"><li><strong>Documentos</strong> <em>(incluye las tarjetas «Pedidos por facturar» y «Pedidos vencidos sin facturar»)</em></li><li><strong>Panel de clientes</strong> <em>(ranking de mejores clientes y qué productos compra cada uno)</em></li><li><strong>Reporte por cliente</strong> <em>(días promedio reales de pago vs días de crédito y % pagado)</em></li><li><strong>Antigüedad de saldos</strong> <em>(a quién llamar primero por tramos: corriente, 1-30, 31-60, 61-90, +90)</em></li><li><strong>Cobros</strong> <em>(historial de cobros, anticipos y anulaciones)</em></li><li><strong>Retenciones recibidas</strong> <em>(comprobantes de retención IVA/ISLR que entregan clientes contribuyentes especiales)</em></li></ol>
+<ul class="bullets"><li><strong>Menú <code>Comprobantes de pago</code> y <code>Portal de clientes (/portal)</code>:</strong> Bandeja donde llegan los pagos que reportan tus clientes escaneando el QR de su factura.</li><li><strong>Menú <code>Autorizaciones</code>:</strong> Bandeja del gerente para aprobar o rechazar facturas detenidas por morosidad.</li></ul>
+<h2 class="sec-h2">2. Ficha del Cliente: Qué Llenar Bien desde el Día 1</h2>
+<figure class="screenshot"><img src="../presentacion/img/clientes-listado.png" alt="Listado de clientes"><figcaption>Listado de clientes</figcaption></figure>
+<p>Al crear un cliente en <strong>Clientes → Nuevo cliente</strong>:</p>
+<ol class="steps"><li><strong>Escribe primero el RIF/Identificación:</strong> GesPro deduce automáticamente la <strong>Condición fiscal</strong> por el prefijo (<code>V/P</code> persona natural, <code>J/C</code> persona jurídica, <code>G</code> ente público, <code>E</code> extranjero residente). Si tienen el puente SENIAT o el botón <strong>«Leer el RIF (PDF o foto)»</strong>, rellena datos y dirección fiscal automáticamente.</li><li><strong>Vendedor (obligatorio):</strong> Define qué vendedor sale impreso en la factura y quién cobra la comisión.</li><li><strong>Días de crédito y Límite de crédito:</strong> Calcula automáticamente la fecha de vencimiento de cada factura.</li><li><strong>Bloqueo por facturas vencidas (⚠️ ¡Cuidado con el cero!):</strong><ul><li>Escribir <strong><code>0</code></strong> significa <strong>SIN TOPE</strong> (nunca se bloquea).</li><li>Escribir <strong><code>1</code></strong> significa que con <strong>1 factura vencida</strong> ya no se puede aprobar una factura nueva sin permiso del gerente en <strong>Autorizaciones</strong>.</li><li><em>Cada autorización vale para UNA sola factura.</em> Las notas de crédito nunca se bloquean porque bajan la deuda.</li></ul></li><li><strong>Si el cliente también es proveedor:</strong> Usa <strong>una sola ficha</strong> marcando tipo <strong>«Cliente y proveedor»</strong> para no duplicarlo.</li></ol>
+<h2 class="sec-h2">3. Emitir y Aprobar una Factura (Paso a paso)</h2>
+<figure class="screenshot"><img src="../presentacion/img/cxc-factura.png" alt="Editor de factura de venta"><figcaption>Editor de factura de venta</figcaption></figure>
+<h3>Opción A: Desde un Pedido (cotización aceptada o vendedor)</h3>
+<ol class="steps"><li>En <strong>Cuentas por cobrar</strong> (o <strong>Facturación de clientes</strong>), mira arriba la tarjeta <strong>«Pedidos por facturar»</strong>.</li><li>Pulsa <strong>«Crear factura»</strong>. Si era un cliente nuevo propuesto por el vendedor, revisa y confirma sus datos. Se crea el <strong>Borrador</strong> con los mismos renglones y precios del pedido.</li></ol>
+<h3>Opción B: Factura manual desde cero</h3>
+<ol class="steps"><li>Pulsa <strong>«Nuevo documento»</strong> y elige el cliente.</li><li>Agrega los artículos o servicios. El impuesto (IVA 16 %, 8 % o Exento) viene de la ficha del artículo.</li><li><strong>Control de precios:</strong> Si cambias un precio respecto al de lista, el renglón te avisa debajo. Al pulsar <strong>Guardar</strong>, aparece una ventana de <strong>repaso completo</strong> señalando con <code>⚠</code> cualquier precio alterado antes de guardar.</li><li><strong>Equivalente en divisa:</strong> Si facturas en bolívares y debes mostrar el equivalente en USD (Art. 25 Ley IVA), marca <strong>«Equivalente en divisa»</strong> y verifica la tasa BCV propuesta. Esa tasa queda <strong>guardada para siempre</strong> en esa factura (al reimprimirla meses después, no cambia).</li><li><strong>BORRADOR vs APROBADO (¡Regla vital!):</strong><ul><li>Mientras es <strong>BORRADOR</strong> lleva número provisional (<code>BORRADOR-12</code>), <strong>no gasta correlativo fiscal</strong>, no descuenta inventario ni contabiliza. Puedes editarlo o eliminarlo libremente.</li><li>Al pulsar <strong>«Aprobar y contabilizar»</strong>, en ese instante: se asigna el <strong>número de factura y número de control consecutivos</strong>, se descuenta el inventario, se registra el costo de ventas y se crea el asiento cuadrado.</li></ul></li><li><strong>Enviar por correo / Imprimir:</strong> Desde la factura aprobada, pulsa <strong>«Imprimir»</strong> (sale con tu formato o sobre talonario preimpreso y con el <strong>QR del Portal de Clientes</strong> al pie mientras tenga saldo) o <strong>«Enviar por correo»</strong>.</li></ol>
+<div class="callout"><strong>¿Aprobaste una factura por error y NO la imprimiste?</strong> Si es la <strong>última de la serie</strong>, no se envió por correo, no tiene cobros, despachos ni notas asociadas, un administrador puede abrirla y usar <strong>«Eliminar (no impresa)»</strong> para liberar el número. En cualquier otro caso, se usa <strong>«Anular»</strong> (genera asiento reverso y conserva el número anulado en el Libro de Ventas).</div>
+<h2 class="sec-h2">4. Notas de Crédito y Notas de Débito</h2>
+<ul class="bullets"><li><strong>Nota de crédito:</strong> Devuelve mercancía o rebaja deuda del cliente. Siempre indica <strong>«Factura que afecta»</strong> (si la factura original era de tu sistema anterior, elige <em>«Emitida en otro sistema»</em> para no duplicar ventas).</li><li><strong>Cruzar Nota de crédito con Factura:</strong> Abre la nota de crédito aprobada y pulsa <strong>«Cruzar con una factura»</strong> para rebajar directamente el saldo de la factura sin pasar por cobros. <em>(Solo mismo cliente y misma moneda).</em></li><li><strong>Nota de débito:</strong> Aumenta la deuda del cliente (intereses, recargos, ajustes).</li></ul>
+<h2 class="sec-h2">5. Registrar Cobros, IGTF y Retenciones Recibidas</h2>
+<figure class="screenshot"><img src="../presentacion/img/cxc-cobro.png" alt="Registro de cobro"><figcaption>Registro de cobro</figcaption></figure>
+<h3>5.1 Cobro directo (con o sin IGTF)</h3>
+<ol class="steps"><li>Abre la factura y pulsa <strong>«Registrar cobro»</strong> (o ve a la pestaña <strong>Cobros</strong>).</li><li>Elige la <strong>cuenta bancaria</strong> donde entró el dinero, la fecha, el método y <strong>copia la referencia bancaria exacta</strong> <em>(clave para que el banco concilie solo después)</em>.</li><li><strong>Si la cuenta es en divisas y tu empresa es contribuyente especial:</strong> GesPro calcula automáticamente el <strong>3 % de IGTF</strong> encima de lo aplicado a facturas (ej. para saldar una factura de $100, el cliente paga $103: $100 cancelan la factura y $3 van a <em>IGTF percibido por enterar</em>).</li><li>Reparte el monto entre una o varias facturas. Si el cliente pagó de más, elige si el sobrante queda como <strong>Anticipo del cliente</strong> o (si eres Tesorería/Contabilidad/Admin) como <strong>Diferencial cambiario</strong>.</li><li><strong>¿Te equivocaste en un cobro?</strong> Un cobro no se edita: ábrelo y usa <strong>«Anular y registrar de nuevo»</strong> (te precarga todos los datos para corregir solo el error; no aplica si ya está conciliado con el banco).</li></ol>
+<h3>5.2 Retenciones recibidas de clientes (Contribuyentes Especiales)</h3>
+<p>Cuando un cliente especial te retiene el <strong>75 % o 100 % del IVA</strong> (o ISLR):</p>
+<ol class="steps"><li>Registra primero en <strong>Cobros</strong> únicamente el dinero neto que entró al banco. La factura quedará debiendo justo lo retenido.</li><li>Cuando llegue el comprobante del cliente, ve a <strong>Cuentas por cobrar → Retenciones recibidas → «Registrar retención recibida»</strong>.</li><li>Elige cliente, tipo (<strong>IVA</strong> o <strong>ISLR</strong>), número de comprobante (14 dígitos en IVA: <code>AAAAMM + secuencia</code>) y fecha.</li><li>Marca las facturas afectadas (GesPro propone el monto en bolívares según la ficha; ajústalo si el papel dice otra cifra), adjunta el PDF/foto y pulsa <strong>«Registrar»</strong>.</li><li><strong>Resultado automático:</strong> La factura baja su saldo sin tocar bancos, se contabiliza tu crédito fiscal y el número sale directo en el <strong>Libro de Ventas</strong>.</li></ol>
+<h2 class="sec-h2">6. Portal de Clientes y Bandeja de Comprobantes de Pago</h2>
+<figure class="screenshot"><img src="../presentacion/img/comprobantes.png" alt="Bandeja de comprobantes de pago"><figcaption>Bandeja de comprobantes de pago</figcaption></figure>
+<ul class="bullets"><li>Tus clientes entran a <code>/portal</code> (o escanean el <strong>QR al pie de su factura</strong>) solo con su <strong>RIF/Cédula</strong>, sin contraseñas. Allí ven sus facturas pendientes, tus cuentas bancarias y suben su comprobante de pago (y opcionalmente su comprobante de retención).</li><li>Los reportes caen en <strong>Tesorería → Comprobantes de pago</strong> recorriendo estos estados:</li></ul>
+<p><code>RECIBIDO → EN REVISIÓN → VERIFICADO → APLICADO</code> <em>(o <code>RECHAZADO</code> con motivo visible para el cliente)</em>.</p>
+<ul class="bullets"><li><strong>Ayudas automáticas:</strong> Detecta referencias duplicadas, busca el abono en el extracto bancario con índice de confianza (y con Banco Mercantil verifica pagos móviles directo con el banco) y sugiere contra qué facturas imputarlo.</li><li><strong>⚠️ Regla sagrada:</strong> <em>Un comprobante es lo que el cliente dice, no lo que ocurrió.</em> <strong>Nunca lo apliques</strong> sin confirmar que el dinero entró al banco. Si lo aplicaste mal, usa <strong>«Deshacer la aplicación»</strong> para devolverlo a <em>Verificado</em>.</li></ul>
+<h2 class="sec-h2">7. Inteligencia de Cobranza: Antigüedad, Panel y Reporte por Cliente</h2>
+<figure class="screenshot"><img src="../presentacion/img/cxc-antiguedad.png" alt="Antigüedad de saldos"><figcaption>Antigüedad de saldos</figcaption></figure>
+<div class="table-wrap"><table><thead><tr><th>Herramienta en CxC</th><th>Pregunta que te responde al instante</th></tr></thead><tbody><tr><td><strong>Antigüedad de saldos</strong></td><td><em>¿A quién llamo primero hoy?</em> Clasifica cada deuda en Corriente, 1-30, 31-60, 61-90 y +90 días de mora.</td></tr><tr><td><strong>Panel de clientes</strong></td><td><em>¿Quiénes son mis mejores clientes y qué producto compran?</em> Además, te <strong>advierte en alerta si pocos clientes concentran más del 70 %</strong> de tu facturación (riesgo comercial).</td></tr><tr><td><strong>Reporte por cliente</strong></td><td><em>¿Quién me pide 30 días pero me paga a los 65?</em> Muestra <strong>Días promedio reales de pago</strong> (ponderado por monto), <strong>% pagado</strong> de lo facturado y el <strong>producto principal</strong> de cada cliente. Haz clic en cualquier columna para ordenar y exportar a Excel.</td></tr></tbody></table></div>
+<div class="special-box warn"><h2>⚠️ 5 Errores Clásicos en CxC (y Cómo Evitarlos)</h2>
+<div class="table-wrap"><table><thead><tr><th>Error clásico</th><th>Qué pasa</th><th>Solución correcta</th></tr></thead><tbody><tr><td>Poner <code>0</code> en «Bloqueo por facturas vencidas» pensando que bloquea con cero mora</td><td><code>0</code> significa <strong>SIN TOPE</strong> (le venderá aunque deba 20 facturas)</td><td>Escribe <strong><code>1</code></strong> para frenar desde la primera factura vencida</td></tr><tr><td>Inventar o recortar la referencia al registrar un cobro</td><td>La conciliación bancaria no lo cruza sola y toca hacerlo a mano</td><td>Copia la <strong>referencia completa exacta</strong> de la transferencia/pago móvil</td></tr><tr><td>Registrar el monto total de la factura en el banco aunque el cliente retuvo IVA</td><td>El banco queda inflado y nunca concilia</td><td>Registra en <strong>Cobros</strong> solo lo que entró al banco, y lo retenido en <strong>Retenciones recibidas</strong></td></tr><tr><td>Aplicar un comprobante del portal solo viendo la foto de WhatsApp</td><td>Si el pago rebotó o era falso, ya saldaste la deuda</td><td>Verifica primero en el extracto o banca en línea antes de pulsar <strong>Aplicar</strong></td></tr><tr><td>Cobrar en dólares sin revisar el IGTF</td><td>Diferencias de 3 % en caja y sanciones fiscales</td><td>Verifica que la cuenta en divisas tenga marcado <strong>«sujeta a IGTF»</strong> y confirma el cálculo automático</td></tr></tbody></table></div>
+</div>
+<div class="special-box challenge"><h2>🛠️ Reto Práctico del Estudiante (25 min)</h2>
+<ol class="steps"><li>Abre <strong>Cuentas por cobrar</strong> → tarjeta <strong>«Pedidos por facturar»</strong> → crea la factura de tu pedido del Módulo 1 (<code>PED-…</code>), revisa el repaso de precios y pulsa <strong>«Aprobar y contabilizar»</strong>.</li><li>Pulsa <strong>«Imprimir»</strong> para ver la factura con su número fiscal, número de control y código <strong>QR del Portal de Clientes</strong>.</li><li>Pulsa <strong>«Registrar cobro»</strong> por el <strong>50 %</strong> de la factura en una cuenta bancaria (anota tu referencia exacta, ej. <code>COB-EQ1-101</code>). Si usas cuenta en USD y la empresa es contribuyente especial, observa cómo aparece el <strong>3 % de IGTF</strong>.</li><li>Ve a <strong>Retenciones recibidas → Registrar retención recibida</strong>, carga un comprobante de IVA de 14 dígitos (<code>20261100000015</code>) por el 75 % del IVA de esa factura y comprueba el nuevo saldo.</li><li>Entra a <strong>Antigüedad de saldos</strong> y <strong>Reporte por cliente</strong> y responde: <em>¿cuál cliente tiene más días promedio de pago?</em></li></ol>
+</div>
+<div class="special-box cheat"><h2>📌 Chuleta Rápida (1 minuto)</h2>
+<ul class="bullets"><li><strong>Borrador</strong> = editable, sin número fiscal. <strong>Aprobar</strong> = número + control + inventario + asiento contable.</li><li><strong>Bloqueo mora:</strong> <code>0</code> = sin límite; <code>1</code> = bloquea con 1 vencida (destraba Gerencia en <strong>Autorizaciones</strong>).</li><li><strong>Retenciones de clientes:</strong> Cobro por el neto + comprobante de 14 dígitos en <strong>Retenciones recibidas</strong>.</li><li><strong>Cobro equivocado:</strong> No se edita → <strong>«Anular y registrar de nuevo»</strong>.</li></ul>
+</div>
+    </div>
+  </section>
+
+  <section class="module-section" id="mod-03">
+    <div class="module-banner" style="--mod-color: #7c3aed">
+      <div class="mod-num">MÓDULO 03</div>
+      <h1>Cuentas por Pagar</h1>
+      <p class="mod-sub">Facturas con IA, Comprobante Previo, Retenciones IVA/ISLR, Reintegros y Lotes al Banco</p>
+    </div>
+    <div class="module-body">
+      <div class="callout"><strong>Tu misión en este módulo:</strong> Registrar facturas de proveedores en segundos (incluso leyendo PDFs/fotos con IA), validar el comprobante previo, calcular retenciones de IVA e ISLR sin errores, controlar reintegros y enviar pagos masivos al banco respetando el control interno.  <br><strong>🎬 Videos de repaso de este módulo (<code>-WhatsApp.mp4</code> disponibles):</strong> <code>11-Proveedores</code> (<code>1:28</code>) · <code>06-Facturacion-de-proveedores</code> (<code>2:12</code>) · <code>09-Cuentas-por-pagar</code> (<code>1:31</code>) · <code>07-Pago-a-proveedores</code> (<code>1:48</code>).</div>
+<h2 class="sec-h2">1. Mapa del Módulo de Cuentas por Pagar</h2>
+<p>En el menú <strong>Ciclo comercial</strong> tienes herramientas especializadas para separar el registro de compras del pago:</p>
+<div class="table-wrap"><table><thead><tr><th>Sección del menú</th><th>Qué haces allí</th></tr></thead><tbody><tr><td><strong>Proveedores</strong></td><td>Fichas fiscales, porcentajes de retención IVA, concepto ISLR (Decreto 1.808), datos bancarios obligatorios y alerta <strong>«Sin datos para pagarles»</strong>.</td></tr><tr><td><strong>Facturación de proveedores</strong></td><td>Solo cargar y asentar facturas/notas de proveedores (sin acceso a pagos).</td></tr><tr><td><strong>Cuentas por pagar</strong></td><td>Vista completa con 6 pestañas: <strong>Documentos</strong>, <strong>Pagar facturas</strong>, <strong>Antigüedad de saldos</strong>, <strong>Pagos</strong>, <strong>Retenciones por reintegrar</strong> y <strong>Lotes al banco</strong>.</td></tr><tr><td><strong>Pago a proveedores</strong></td><td>Centro de mando de Tesorería/Pagos: <strong>Pagar facturas</strong>, <strong>Programación</strong> (vencimientos vs dinero disponible), <strong>Pagos realizados</strong>, <strong>Retenciones por reintegrar</strong> y <strong>Archivo al banco</strong>.</td></tr><tr><td><strong>Operaciones → Importaciones</strong></td><td>Proyectos de importación con cuenta transitoria para acumular flete, seguro, aduana y facturas antes de cerrar o costear.</td></tr></tbody></table></div>
+<h2 class="sec-h2">2. Ficha del Proveedor: El Secreto para Pagar sin Tropiezos</h2>
+<figure class="screenshot"><img src="../presentacion/img/proveedores-listado.png" alt="Listado de proveedores"><figcaption>Listado de proveedores</figcaption></figure>
+<ol class="steps"><li><strong>Los 4 datos bancarios obligatorios:</strong> Para incluir a un proveedor en un <strong>Lote de pago al banco</strong>, su ficha debe tener: <strong>Banco</strong>, <strong>Número de cuenta</strong>, <strong>Titular</strong> y <strong>Documento</strong>.<ul><li>Revisa siempre la tarjeta <strong>«Sin datos para pagarles»</strong> en la parte superior de <code>Proveedores</code>: te muestra exactamente a quién y qué dato le falta antes del día de pago.</li><li>Si al proveedor se le paga en efectivo (o es un organismo sin transferencia), marca <strong>«Se le paga en efectivo»</strong> en <em>Forma de pagarle</em> (no pedirá datos bancarios ni entrará en lotes).</li></ul></li><li><strong>Condición fiscal y retenciones (⚠️ ¡Clave para ISLR!):</strong><ul><li>Configura su <strong>% de retención de IVA</strong> (75 % o 100 %) y su <strong>concepto de ISLR</strong> según el tabulador del Decreto 1.808.</li><li><strong>Proveedores extranjeros:</strong> Nunca los dejes como «Extranjero» a secas; elige <strong>«Persona natural no residente»</strong> o <strong>«Persona jurídica no domiciliada»</strong> (de lo contrario GesPro no puede aplicar la tabla correcta de ISLR ni permite retenerles).</li></ul></li></ol>
+<h2 class="sec-h2">3. Registrar una Factura de Proveedor (2 Caminos: IA o Manual)</h2>
+<figure class="screenshot"><img src="../presentacion/img/cxp-listado.png" alt="Listado de cuentas por pagar"><figcaption>Listado de cuentas por pagar</figcaption></figure>
+<h3>Camino A · 🚀 Importar factura con IA (el más rápido)</h3>
+<ol class="steps"><li>En <strong>Cuentas por pagar</strong> (o <strong>Facturación de proveedores</strong>), pulsa <strong>«Importar factura con IA»</strong>.</li><li>Si conoces la moneda de la factura (o si pertenece a una <strong>Importación</strong>), indícalo. Adjunta el <strong>PDF o foto</strong> (hasta 8 MB).</li><li>En segundos, la IA lee proveedor/RIF, número de factura, número de control, fecha, moneda, renglones y totales, y crea un <strong>Borrador</strong> con el documento original adjunto.<ul><li>Si el RIF no existía, abre la ficha nueva prellenada para que la guardes y cree la factura sola.</li><li>Los renglones cuyo código coincida exactamente con tu catálogo se enlazan solos al inventario; los demás entran como gasto/servicio para que los ajustes.</li></ul></li><li>Abre el borrador, pulsa <strong>«Ver factura original»</strong> para comparar lado a lado, revisa cualquier advertencia en las notas y aprueba.</li></ol>
+<h3>Camino B · Registro manual</h3>
+<ol class="steps"><li>Pulsa <strong>«Nuevo documento»</strong>, elige el proveedor y escribe el <strong>número de factura</strong> y el <strong>número de control</strong> exactamente como vienen en el papel del proveedor <em>(en CxP estos números nunca son automáticos; van al Libro de Compras)</em>.</li><li>Agrega las líneas: si compras mercancía, selecciona el <strong>artículo</strong> y el <strong>almacén</strong> de destino; si es un servicio o gasto, elige la <strong>cuenta contable</strong> de gasto.</li><li>Guarda en <strong>Borrador</strong>.</li></ol>
+<h3>El Comprobante de Pago y Retención Previo (<code>CPR-…</code>)</h3>
+<ul class="bullets"><li>Apenas guardas el borrador de la factura del proveedor, GesPro genera automáticamente el <strong>Comprobante previo (<code>CPR-…</code>)</strong>: desglosa base imponible, IVA, retenciones de IVA/ISLR estimadas y el <strong>neto real a pagar</strong>.</li><li>Pulsa <strong>«Copiar enlace»</strong> y envíaselo al proveedor (página de solo lectura válida por 30 días) para que confirme los cálculos antes de pagar. Si modificas la factura, el enlace viejo caduca y nace uno nuevo.</li><li>Al pulsar <strong>«Aprobar / Asentar»</strong>: entra la mercancía al almacén (recalculando el <strong>costo promedio</strong>), nace la deuda en CxP y se genera el asiento contable.</li></ul>
+<h2 class="sec-h2">4. Casos Especiales que Ahorran Dolores de Cabeza</h2>
+<h3>4.1 «Pagada por un accionista»</h3>
+<p>Cuando un socio/accionista paga de su bolsillo una factura de proveedor:</p>
+<ol class="steps"><li>Registra y aprueba la factura del proveedor <strong>como siempre</strong> (con el gasto en su cuenta real — <strong>NUNCA</strong> pongas la cuenta de accionistas en el renglón de gasto).</li><li>Haz las retenciones primero si aplican.</li><li>Abre la factura aprobada y pulsa <strong>«Pagada por un accionista»</strong> → indica quién pagó, fecha y monto.</li></ol>
+<ul class="bullets"><li><strong>Qué hace GesPro:</strong> Salda la factura (nadie la pagará dos veces), mueve la deuda de <em>Proveedores</em> a <em>Cuentas por pagar Accionistas</em> y <strong>no saca dinero de ningún banco</strong>. Cuando la empresa le devuelva el dinero al socio, se registra un movimiento de banco contra esa cuenta.</li></ul>
+<h3>4.2 «Retenciones por reintegrar» (Proveedor que exige el 100 %)</h3>
+<p>Algunos proveedores cobran la factura entera sin dejar descontar la retención y devuelven el monto retenido días después:</p>
+<ol class="steps"><li>Al pagarle completo desde <strong>Pagar facturas</strong>, la retención se declara y entera igual al SENIAT, pero lo retenido queda abierto como deuda a tu favor en la pestaña <strong>Retenciones por reintegrar</strong>.</li><li>Cuando el proveedor te devuelva ese dinero, entra a <strong>Retenciones por reintegrar</strong> y pulsa <strong>«Registrar reintegro»</strong> (o regístralo desde el abono en la conciliación bancaria).</li><li>Si acuerdan rebajarlo de su próxima factura, pulsa <strong>«Descontar de otra factura»</strong>.</li></ol>
+<h2 class="sec-h2">5. Pagar Facturas y Emitir Comprobantes Fiscales de Retención</h2>
+<ol class="steps"><li>Entra a <strong>Pago a proveedores</strong> (o <strong>Cuentas por pagar → Pagar facturas</strong>) y selecciona el proveedor.</li><li>Verás todas sus facturas pendientes, días vencidos y retenciones calculadas automáticamente:<ul><li><strong>IVA:</strong> según % de la ficha (75 % o 100 %; lo exento se separa automáticamente en <em>Sin derecho a crédito</em>).</li><li><strong>ISLR:</strong> según el tabulador del <strong>Decreto 1.808</strong>. <em>(Para empresas no domiciliadas en filas T-2, GesPro aplica automáticamente la <strong>Tarifa 2 acumulativa anual</strong>: 15 %, 22 % y 34 % restando lo ya retenido en el año).</em></li></ul></li><li>Marca las facturas a pagar (puedes pagar el saldo completo o un monto parcial, y las retenciones se prorratean).</li><li>Elige la cuenta bancaria (solo muestra cuentas de la misma moneda), fecha, método y referencia. Verifica el neto a transferir y pulsa <strong>«Generar pago»</strong>.</li><li><strong>Emitir comprobantes fiscales:</strong> Abre el pago en la pestaña <strong>Pagos</strong> → pulsa <strong>«Emitir comprobante de IVA»</strong> y/o <strong>«… de ISLR»</strong> → verifica fecha de emisión y escribe la <strong>fecha de aplicación</strong> (obligatoria) → imprime el PDF (con logo, firma y sello configurados en <code>Configuración → Retenciones</code>) o pulsa <strong>«Enviar por correo»</strong> al proveedor.</li></ol>
+<h2 class="sec-h2">6. Pagos por Lote al Banco (Segregación de Tareas)</h2>
+<figure class="screenshot"><img src="../presentacion/img/cxp-lotes.png" alt="Lotes de pago al banco"><figcaption>Lotes de pago al banco</figcaption></figure>
+<p>Para pagar a 10, 30 o 100 proveedores sin teclear transferencias a mano:</p>
+<ol class="steps"><li><strong>Compras / CxP</strong> registra y postea los pagos (rebajan la deuda de cada proveedor).</li><li><strong>Tesorería</strong> entra a <strong>Bancos → Pago masivo (archivo al banco)</strong> (o <strong>Lotes al banco</strong>), agrupa esos pagos y elige la plantilla del banco (ancho fijo o delimitado por <code>;</code>).</li><li>Revisa la <strong>Vista previa</strong> del archivo, genera el archivo de texto (queda con huella criptográfica SHA-256) y súbelo al portal del banco.</li><li>Sigue el ciclo de vida: <code>BORRADOR → GENERADO → ENVIADO → CONFIRMADO</code>.<ul><li><em>Regla de control interno:</em> Quien registra facturas/pagos en compras <strong>no</strong> es quien genera y envía el archivo al banco; GesPro impone esta separación por permisos.</li><li>Si anulas un lote antes de enviarlo, sus pagos vuelven a estar disponibles.</li></ul></li></ol>
+<div class="special-box warn"><h2>⚠️ 5 Errores Clásicos en CxP (y Cómo Evitarlos)</h2>
+<div class="table-wrap"><table><thead><tr><th>Error clásico</th><th>Qué pasa</th><th>Cómo hacerlo bien</th></tr></thead><tbody><tr><td>Elegir la cuenta de «Accionistas» en el renglón de gasto de la factura</td><td>No registra el gasto y baja falsamente la deuda del socio</td><td>Carga el gasto en su cuenta real, aprueba, y luego pulsa <strong>«Pagada por un accionista»</strong></td></tr><tr><td>Dejar un proveedor del exterior como «Extranjero» a secas</td><td>El sistema bloquea la retención de ISLR por ambigüedad legal</td><td>Edita su ficha y elige <em>Persona natural no residente</em> o <em>Persona jurídica no domiciliada</em></td></tr><tr><td>Llegar al día de pago sin revisar datos bancarios</td><td>El proveedor queda fuera del lote masivo al banco</td><td>Usa la tarjeta <strong>«Sin datos para pagarles»</strong> en <code>Proveedores</code> al crear la ficha</td></tr><tr><td>Aprobar una factura importada con IA sin mirar el original</td><td>Puede entrar una fecha, tasa o renglón mal interpretado</td><td>Pulsa siempre <strong>«Ver factura original»</strong> y lee los avisos antes de aprobar</td></tr><tr><td>Intentar cambiar la fecha de emisión de un comprobante de IVA a otro mes</td><td>El mes va incrustado en el número fiscal (<code>AAAAMM…</code>)</td><td>Anula ese comprobante y emite uno nuevo en el mes correcto</td></tr></tbody></table></div>
+</div>
+<div class="special-box challenge"><h2>🛠️ Reto Práctico del Estudiante (25 min)</h2>
+<ol class="steps"><li>Ve a <strong>Proveedores</strong>, pulsa el indicador <strong>«Sin datos para pagarles»</strong> (o abre un proveedor cualquiera) y asegúrate de que tenga sus 4 datos bancarios completos.</li><li>Entra a <strong>Cuentas por pagar → Nuevo documento</strong>, registra una factura de proveedor (inventa número <code>FAC-P-001</code> y control <code>00-99001</code>) comprando <strong>10 unidades</strong> de un artículo del catálogo hacia el almacén principal. Guarda en borrador.</li><li>Abre el borrador, revisa el <strong>Comprobante previo (<code>CPR-…</code>)</strong> y pulsa <strong>«Aprobar y contabilizar»</strong>.</li><li>Ve a <strong>Pagar facturas</strong>, elige ese proveedor, marca la factura, observa las retenciones de IVA/ISLR calculadas y pulsa <strong>«Generar pago»</strong>.</li><li>Abre el pago en la pestaña <strong>Pagos</strong>, emite el <strong>Comprobante de retención de IVA</strong> (poniendo fecha de aplicación de hoy) y revisa la vista previa del PDF.</li></ol>
+</div>
+<div class="special-box cheat"><h2>📌 Chuleta Rápida (1 minuto)</h2>
+<ul class="bullets"><li><strong>Ahorra tiempo:</strong> Usa <strong>«Importar factura con IA»</strong> (PDF o foto) y valida contra el original.</li><li><strong>Antes de aprobar:</strong> Revisa y comparte el <strong>Comprobante previo (<code>CPR-…</code>)</strong>.</li><li><strong>Pagó un socio:</strong> Aprueba normal → botón <strong>«Pagada por un accionista»</strong>.</li><li><strong>Pagó completo sin retener:</strong> Controla la devolución en <strong>Retenciones por reintegrar</strong>.</li><li><strong>Lotes al banco:</strong> Compras postea el pago → Tesorería genera el archivo (<code>BORRADOR → GENERADO → ENVIADO → CONFIRMADO</code>).</li></ul>
+</div>
+    </div>
+  </section>
+
+  <section class="module-section" id="mod-04">
+    <div class="module-banner" style="--mod-color: #059669">
+      <div class="mod-num">MÓDULO 04</div>
+      <h1>Inventario</h1>
+      <p class="mod-sub">Catálogo, Costo Inicial, Kardex, Apartado 24h, Reposición, Notas de Despacho y Manufactura</p>
+    </div>
+    <div class="module-body">
+      <div class="callout"><strong>Tu misión en este módulo:</strong> Saber en todo momento qué mercancía tienes, dónde está, cuánto vale al costo promedio ponderado, qué está apartado por pedidos, cómo reponer faltantes y cómo documentar cada salida con Notas de despacho sin descuadrar la contabilidad.  <br><strong>🎬 Videos de repaso de este módulo (<code>-WhatsApp.mp4</code> disponibles):</strong> <code>15-Inventario</code> (<code>1:41</code>) · <em>opcionales:</em> <code>16-Manufactura</code> (<code>1:53</code>) · <code>17-Sucursales</code> (<code>1:20</code>).</div>
+<h2 class="sec-h2">1. Mapa del Módulo de Inventario (11 Pestañas)</h2>
+<p>En <strong>Operaciones → Inventario</strong> encontrarás pestañas organizadas para controlar el ciclo físico y valorado <em>(nota: quienes no tienen permiso de ver costos —como vendedores o cajeros— solo ven existencias y precios, nunca costos ni kardex)</em>:</p>
+<div class="table-wrap"><table><thead><tr><th>Pestaña</th><th>Para qué sirve</th></tr></thead><tbody><tr><td><strong>Artículos</strong></td><td>Catálogo de productos y servicios, precios (Precio 1, 2 y 3), costo promedio, valorización, importación desde Excel/CSV y adjuntos del producto (garantías, fichas técnicas, certificados).</td></tr><tr><td><strong>Existencias por almacén</strong></td><td>Stock real sede por sede y el recuadro clave <strong>«Apartado por pedidos»</strong> (Existencia − Apartado = Disponible real).</td></tr><tr><td><strong>Kardex</strong></td><td>Historial movimiento por movimiento de cada artículo (entradas, salidas, costo promedio y saldo después de cada operación).</td></tr><tr><td><strong>Costo inicial</strong></td><td>Herramienta masiva para cargar costo a artículos migrados del sistema anterior con existencia en cero costo.</td></tr><tr><td><strong>Alertas de stock</strong></td><td>Productos que llegaron a su stock mínimo o están por debajo.</td></tr><tr><td><strong>Órdenes de compra</strong></td><td>Pedidos a proveedores (manuales o automáticos con <strong>«Generar por faltantes»</strong>).</td></tr><tr><td><strong>Recepción de mercancía</strong></td><td>Registro físico de la entrada de mercancía de órdenes aprobadas.</td></tr><tr><td><strong>Listas de precios</strong></td><td>Listas de precios de proveedores para comparar y presupuestar reposiciones.</td></tr><tr><td><strong>Transferencias</strong></td><td>Mover mercancía de un almacén a otro (sin asiento contable, porque el valor total de la empresa no cambia).</td></tr><tr><td><strong>Notas de despacho</strong></td><td><strong>Órdenes de entrega</strong> (ventas) y <strong>Guías de despacho</strong> (donaciones, muestras con solicitante, traslados, consignación).</td></tr><tr><td><strong>Almacenes</strong></td><td>Gestión de almacenes, su sucursal asociada y su <strong>Encargado de despachar</strong> (recibe avisos en GP Mensajes).</td></tr></tbody></table></div>
+<p><em>(Módulos hermanos bajo Operaciones: <strong>Manufactura</strong> para recetas y órdenes de producción, y <strong>Sucursales</strong> para gestionar varias sedes).</em></p>
+<h2 class="sec-h2">2. Catálogo, Costo Promedio y «Costo Inicial»</h2>
+<figure class="screenshot"><img src="../presentacion/img/inventario-articulos.png" alt="Catálogo de artículos"><figcaption>Catálogo de artículos</figcaption></figure>
+<h3>Cómo calcula GesPro el costo (Costo Promedio Ponderado)</h3>
+<ul class="bullets"><li>Cada vez que entra mercancía por una compra (o producción), el costo promedio se recalcula automáticamente:</li></ul>
+<div class="formula-box">Nuevo costo promedio = <span class="frac"><span class="num">(Existencia actual × Costo anterior) + (Cantidad nueva × Costo nuevo)</span><span class="den">Existencia total</span></span></div>
+<ul class="bullets"><li>Al vender, ese costo promedio es el que sale al <strong>Costo de ventas</strong> en contabilidad. Por eso el costo promedio <strong>nunca se teclea a mano</strong> en la ficha del artículo: tocarlo descuadraría el inventario contra el balance.</li></ul>
+<h3>🚨 Alerta Roja: «Artículos con existencia y sin costo» → <code>Costo inicial</code></h3>
+<p>Si migraste existencias desde un sistema viejo sin ponerles costo, esas unidades entraron en <strong>$0,00</strong>. Si compras mercancía nueva sin corregir eso primero:</p>
+<ul class="bullets"><li><em>Ejemplo del desastre:</em> 10 unidades a $0 + 10 unidades compradas a $20 = promedio de <strong>$10</strong> (falso).</li><li><strong>Solución en 4 pasos (<code>Inventario → Costo inicial</code>):</strong></li></ul>
+<ol class="steps"><li>Abre la pestaña <strong>Costo inicial</strong> (muestra todos los artículos con stock y costo $0).</li><li>Escribe el costo unitario en la columna (o pulsa <strong>«Plantilla»</strong>, llénalo en Excel y súbelo con <strong>«Subir archivo»</strong>).</li><li>Elige la fecha y pulsa <strong>«Revisar y guardar»</strong> para comprobar el asiento contable (<em>Debe: Inventario / Haber: Saldos de apertura</em>, no es ganancia del mes).</li><li>Confirma <strong>«Guardar los costos»</strong>. En el Kardex aparecerá una línea <strong><code>COSTO INICIAL</code></strong> sin cambiar unidades.</li></ol>
+<h3>Papeles de cada artículo y Moneda de Precios</h3>
+<ul class="bullets"><li>Dentro de cualquier artículo puedes adjuntar hasta 6 MB en PDF o imagen (factura original, garantía, manual, certificado): viajan siempre con la ficha.</li><li>Si tu contabilidad va en bolívares pero fijas precios en dólares (<code>MONEDA_PRECIOS = USD</code>), escribes el precio y costo en USD y GesPro convierte automáticamente a la tasa BCV del día al facturar o guardar el kardex.</li></ul>
+<h2 class="sec-h2">3. El Kardex y la Mercancía Apartada (24 h hábiles)</h2>
+<figure class="screenshot"><img src="../presentacion/img/inventario-kardex.png" alt="Kardex de inventario"><figcaption>Kardex de inventario</figcaption></figure>
+<h3>Usar el Kardex como lupa de auditoría</h3>
+<p>Cuando algo no cuadra en almacén, <strong>empieza siempre en <code>Inventario → Kardex</code></strong>:</p>
+<ul class="bullets"><li>Elige el artículo (y opcionalmente almacén y rango de fechas — si filtras desde una fecha, el kardex arranca con el <strong>saldo inicial arrastrado</strong>).</li><li>Cada fila te dice: fecha, tipo de movimiento (compra, venta, ajuste, transferencia, costo inicial, revalorización, despacho), documento origen, cantidad, costo unitario y saldo resultante.</li></ul>
+<h3>Existencias vs Disponible («Apartado por pedidos»)</h3>
+<ul class="bullets"><li>En <strong>Existencias por almacén</strong>, revisa el cuadro <strong>«Apartado por pedidos»</strong>: muestra Existencia total, unidades apartadas por pedidos firmes (con su hora exacta de vencimiento de 24 h hábiles) y lo realmente <strong>Disponible</strong>.</li><li>GesPro impide vender o producir por encima de lo disponible para evitar sobreventas.</li></ul>
+<h2 class="sec-h2">4. Ajustes, Transferencias y Reposición (Órdenes de Compra)</h2>
+<h3>Diferencia clave entre Transferencia y Ajuste</h3>
+<div class="table-wrap"><table><thead><tr><th>Operación</th><th>Cuándo usarla</th><th>¿Genera asiento contable?</th></tr></thead><tbody><tr><td><strong>Transferir</strong> (botón arriba o pestaña <em>Transferencias</em>)</td><td>Mover cajas del Almacén Principal al Almacén Sucursal Valencia</td><td><strong>NO</strong> (el valor total del inventario de la empresa no cambia)</td></tr><tr><td><strong>Ajustar existencia</strong> (botón arriba)</td><td>Conteo físico (sobrantes/faltantes), roturas, mermas, inventario inicial</td><td><strong>SÍ</strong> (automático contra cuenta de mermas/ajustes o apertura)</td></tr></tbody></table></div>
+<div class="callout"><strong>Ojo con Sucursales:</strong> La sucursal a la que se acredita una venta sale del <strong>Almacén</strong> de donde se despacha la mercancía, no de quién hizo la factura. Si ves un aviso rojo de <em>«Almacenes sin sucursal»</em>, pulsa <strong>«Asignarlos a la principal»</strong>.</div>
+<h3>Órdenes de compra y Recepción de mercancía</h3>
+<ol class="steps"><li>En <strong>Alertas de stock</strong> ves los artículos en o bajo el stock mínimo.</li><li>En <strong>Órdenes de compra</strong>, pulsa <strong>«Generar por faltantes»</strong>: GesPro arma automáticamente borradores agrupados por el proveedor habitual de cada artículo (también puede hacerlo el <strong>Agente de Compras</strong> según horario).</li><li>El encargado revisa, edita cantidades si hace falta y pulsa <strong>«Revisar y aprobar»</strong>.</li><li>Cuando llega el camión, en <strong>Recepción de mercancía</strong> (o desde la orden aprobada → <strong>«Registrar recepción»</strong>) se registra lo que entró realmente (puede ser recepción parcial).</li></ol>
+<h2 class="sec-h2">5. Notas de Despacho (Órdenes de Entrega y Guías)</h2>
+<p>En <strong>Inventario → Notas de despacho</strong> salen los documentos físicos que acompañan a la mercancía (con número <code>DES-…</code>, logo y leyenda obligatoria <strong>«SIN DERECHO A CRÉDITO FISCAL»</strong> — Providencia SNAT/2024/000102):</p>
+<div class="table-wrap"><table><thead><tr><th>Motivo</th><th>Nombre del papel</th><th>Cómo nace</th><th>¿Mueve inventario?</th><th>¿Genera asiento?</th></tr></thead><tbody><tr><td><strong>Venta</strong></td><td>Orden de entrega</td><td><strong>Sola</strong> al aprobar una factura con mercancía</td><td>No (ya lo descontó la factura)</td><td>No (ya lo hizo la factura)</td></tr><tr><td><strong>Muestra</strong></td><td>Guía de despacho</td><td>Botón <strong>«Nueva nota de despacho»</strong> <em>(pide Solicitante)</em></td><td>Sí (sale al costo promedio)</td><td>Sí (Gasto por muestras vs Inventario)</td></tr><tr><td><strong>Donación</strong></td><td>Guía de despacho</td><td>Botón <strong>«Nueva nota de despacho»</strong> <em>(pide Solicitante)</em></td><td>Sí (sale al costo promedio)</td><td>Sí (Gasto por donaciones vs Inventario)</td></tr><tr><td><strong>Traslado</strong></td><td>Guía de despacho</td><td>Botón <strong>«Nueva nota de despacho»</strong></td><td>Sí (de almacén origen a destino)</td><td>No</td></tr><tr><td><strong>Préstamo / Consignación</strong></td><td>Guía de despacho</td><td>Botón <strong>«Nueva nota de despacho»</strong></td><td>Pasa al almacén destino (ej. Consignación)</td><td>No</td></tr></tbody></table></div>
+<ul class="bullets"><li><strong>Control de muestras y donaciones:</strong> En <em>Muestra</em> o <em>Donación</em>, el campo <strong>«Solicitante»</strong> es obligatorio (quién lo pidió: vendedor, gerente, médico…). Al buscar su nombre en la lista de Notas de despacho, GesPro suma arriba cuántas muestras pidió y cuánto costaron.</li><li>Cuando el encargado del almacén entrega físicamente las cajas, abre la nota y pulsa <strong>«Marcar despachada»</strong>.</li></ul>
+<h2 class="sec-h2">6. Bonus: Manufactura (si tu empresa fabrica o ensambla)</h2>
+<p>En <strong>Operaciones → Manufactura</strong>:</p>
+<ol class="steps"><li><strong>Recetas:</strong> Define los insumos, cantidades, merma esperada, mano de obra y costos indirectos por lote (soporta subensambles multinivel y bloquea recetas circulares).</li><li><strong>Orden de producción (3 pasos):</strong><ul><li><strong>Planificar (Borrador):</strong> Verifica si alcanza la materia prima nivel por nivel.</li><li><strong>Iniciar:</strong> Saca los insumos del almacén y pasa su costo a <em>Producción en proceso</em>.</li><li><strong>Terminar:</strong> Ingresa las unidades buenas que realmente salieron; el costo real del lote (insumos + mano de obra + indirectos) se divide entre las unidades buenas producidas y entra al inventario con su costo real.</li></ul></li></ol>
+<div class="special-box warn"><h2>⚠️ 5 Errores Clásicos en Inventario (y Cómo Evitarlos)</h2>
+<div class="table-wrap"><table><thead><tr><th>Error clásico</th><th>Qué pasa</th><th>Cómo hacerlo bien</th></tr></thead><tbody><tr><td>Comprar encima de inventario migrado con costo <code>$0</code></td><td>El costo promedio se desploma a la mitad y falsea tus utilidades</td><td>Carga primero el costo real en <strong>Inventario → Costo inicial</strong></td></tr><tr><td>Usar «Ajustar existencia» (salida + entrada) en vez de «Transferir»</td><td>Genera dos asientos innecesarios de merma/ajuste y ensucia resultados</td><td>Usa siempre <strong>Transferir</strong> para mover stock entre tus almacenes</td></tr><tr><td>Sacar muestras o regalos «de palabra» sin documento</td><td>Faltantes inexplicables en el conteo de fin de mes</td><td>Emite una <strong>Nota de despacho (Muestra)</strong> indicando el <strong>Solicitante</strong></td></tr><tr><td>Ignorar el cuadro «Apartado por pedidos»</td><td>Crees que sobra mercancía y te sorprende que el sistema bloquee la venta</td><td>Mira siempre la columna <strong>Disponible</strong> (= Existencia − Apartado)</td></tr><tr><td>Dejar un almacén sin «Encargado de despachar»</td><td>Nadie recibe el aviso inmediato en GP Mensajes al aprobarse una factura</td><td>Configura el encargado en <strong>Inventario → Almacenes → Editar</strong></td></tr></tbody></table></div>
+</div>
+<div class="special-box challenge"><h2>🛠️ Reto Práctico del Estudiante (25 min)</h2>
+<ol class="steps"><li>Abre <strong>Inventario → Kardex</strong>, selecciona el artículo que vendiste en el Módulo 2 y compraste en el Módulo 3. Anota su costo promedio actual y comprueba que ambos movimientos aparecen enlazados a sus documentos.</li><li>Pulsa <strong>«Transferir»</strong> (arriba a la derecha) y mueve <strong>2 unidades</strong> de un artículo desde el Almacén Principal a otro almacén.</li><li>Ve a <strong>Notas de despacho → Nueva nota de despacho</strong>, elige motivo <strong>Muestra</strong>, selecciona 1 unidad, escribe tu nombre como <strong>Solicitante</strong>, guarda, revisa el PDF (leyenda <em>Sin derecho a crédito fiscal</em>) y pulsa <strong>«Marcar despachada»</strong>.</li><li>Entra a <strong>Órdenes de compra</strong> y pulsa <strong>«Generar por faltantes»</strong> para observar cómo el sistema propone reposiciones por proveedor.</li></ol>
+</div>
+<div class="special-box cheat"><h2>📌 Chuleta Rápida (1 minuto)</h2>
+<ul class="bullets"><li><strong>Algo no cuadra en stock:</strong> Mira primero <strong>Inventario → Kardex</strong>.</li><li><strong>Stock migrado en cero costo:</strong> Usa <strong>Inventario → Costo inicial</strong> antes de comprar.</li><li><strong>Mover entre almacenes:</strong> <strong>Transferir</strong> (0 asientos). <strong>Merma/conteo:</strong> <strong>Ajustar existencia</strong> (sí contabiliza).</li><li><strong>Salidas sin venta (muestras/donaciones):</strong> <strong>Notas de despacho</strong> con <strong>Solicitante</strong> obligatorio.</li></ul>
+</div>
+    </div>
+  </section>
+
+  <section class="module-section" id="mod-05">
+    <div class="module-banner" style="--mod-color: #d97706">
+      <div class="mod-num">MÓDULO 05</div>
+      <h1>Análisis de Costos</h1>
+      <p class="mod-sub">Fichas de Costo, 4 Modalidades, IA Gemini, Fórmula de Precio, Revalorización y PEPS</p>
+    </div>
+    <div class="module-body">
+      <div class="callout"><strong>Tu misión en este módulo:</strong> Descubrir cuánto te cuesta <em>de verdad</em> cada producto o servicio que vendes (importado, fabricado, servicio o mixto), calcular el precio de venta correcto para no perder margen, aprovechar la IA Gemini como analista y entender la utilidad real con Costo Promedio vs PEPS.  <br><strong>🎬 Videos de repaso de este módulo (<code>-WhatsApp.mp4</code> disponibles):</strong> <code>23-Analisis-de-costos</code> (<code>3:48</code>) · <em>complementos:</em> <code>22-Importaciones</code> (<code>2:39</code>) · <code>21-Reportes</code> (<code>1:38</code>).</div>
+<h2 class="sec-h2">1. ¿Por Qué Existe Análisis de Costos?</h2>
+<p>Uno de los errores más caros en cualquier empresa es fijar precios «a ojo» o multiplicar el costo de factura por 1,30 creyendo que se gana un 30 %. Cuando sumas flete marítimo, seguro, aranceles, agente aduanal, transporte al almacén, gastos generales de la empresa y comisiones de ventas, ese «30 %» suele convertirse en un <strong>5 %… o en pérdida</strong>.</p>
+<p>En <strong>Operaciones → Análisis de costos</strong>, cada artículo o servicio tiene su <strong>Ficha de costo</strong> viva, con el origen exacto de cada cifra. Y cuando Contabilidad o Administración la aprueba, <strong>actualiza el costo del artículo y revaloriza el inventario automáticamente</strong>.</p>
+<h2 class="sec-h2">2. Las Cuatro Modalidades de Costeo</h2>
+<p>Al pulsar <strong>«Nueva ficha de costo»</strong>, GesPro soporta 4 formas de obtener lo que vendes y llena automáticamente lo que ya sabe tu sistema:</p>
+<div class="table-wrap"><table><thead><tr><th>Modalidad</th><th>Lo que GesPro llena SOLO desde tu sistema</th><th>Lo que tú revisas o completas</th></tr></thead><tbody><tr><td><strong>Importado</strong></td><td>Precio de la última factura de compra, o los costos repartidos de una <strong>Importación</strong> (flete, seguro, aduana, impuestos). Sin importación ligada, toma el % histórico de gastos de tus importaciones anteriores.</td><td>Arancel específico del código arancelario y transporte local hasta el almacén.</td></tr><tr><td><strong>Elaborado</strong></td><td>La receta de <strong>Manufactura</strong>: cada material con su merma al costo de hoy, mano de obra y gastos de fabricación para el lote de la receta.</td><td>Cualquier gasto adicional fuera de la receta.</td></tr><tr><td><strong>Servicio</strong></td><td>Costo por hora real del personal activo en <strong>Recursos humanos</strong> (<code>sueldo ÷ 173,33 horas/mes</code>, sin cargas sociales).</td><td>Cantidad de horas que lleva prestar el servicio, insumos y servicios de terceros.</td></tr><tr><td><strong>Mixto</strong></td><td>Combina lo que aplique de compras, receta y horas de personal.</td><td>Ajustes específicos del paquete producto + servicio.</td></tr></tbody></table></div>
+<div class="callout"><strong>Plus automático en las 4 modalidades:</strong> Si tienes contabilidad con historial, GesPro calcula solo tus <strong>Gastos generales y de administración</strong> comparando los gastos de los últimos <strong>3 meses completos</strong> contra las ventas del mismo período (como % del precio de venta).</div>
+<h2 class="sec-h2">3. Dos Conceptos que Debes Dominar como la Palma de tu Mano</h2>
+<h3>A. La casilla <strong><code>Al costo</code></strong> (¡No mezcles inventario con gastos de venta!)</h3>
+<p>Cada renglón de una ficha tiene una casilla llamada <strong><code>Al costo</code></strong>:</p>
+<ul class="bullets"><li><strong>✅ Marcada (<code>Al costo</code>):</strong> Forma parte del <strong>Costo del artículo</strong> (lo que contablemente va al inventario): <em>Precio FOB, Flete, Seguro, Aranceles, Aduana, Transporte al almacén, Materiales, Mano de obra, Gastos de fabricación</em>.</li><li><strong>⬜ Desmarcada:</strong> <strong>No</strong> infla el valor del inventario; <strong>solo cuenta para calcular el Costo completo y el Precio sugerido</strong>: <em>Gastos generales y de administración, Comisiones de venta</em>.</li></ul>
+<h3>B. La Fórmula Exacta del Precio Sugerido (Margen sobre Precio)</h3>
+<p>En GesPro, un margen del <strong>30 %</strong> significa que el <strong>30 % del precio final que paga el cliente</strong> es ganancia neta después de cubrir costos, gastos generales y comisiones:</p>
+<div class="formula-box">Precio sugerido = <span class="frac"><span class="num">Costo completo (por unidad)</span><span class="den">1 - Margen - Σ % sobre el precio</span></span></div>
+<p><strong>Ejemplo real paso a paso:</strong></p>
+<ul class="bullets"><li>Costo del artículo (FOB + flete + aduana): <strong>$13,86</strong></li><li>Gastos generales: <strong>12 %</strong> del precio de venta <em>(sin marcar <code>Al costo</code>)</em></li><li>Comisión al vendedor: <strong>3 %</strong> del precio de venta <em>(sin marcar <code>Al costo</code>)</em></li><li>Margen deseado: <strong>30 %</strong> sobre el precio de venta</li><li>Cálculo de GesPro: <code>13,86 ÷ (1 − 0,30 − 0,12 − 0,03) = 13,86 ÷ 0,55 =</code> <strong>$25,20</strong></li><li><em>Comprobación:</em> De $25,20, el 12 % son $3,02 (gastos generales), el 3 % son $0,76 (comisión), el costo es $13,86 → quedan <strong>$7,56</strong> de ganancia, que es exactamente el <strong>30,0 %</strong> de $25,20.</li></ul>
+<h3>Bases de cálculo disponibles en cada renglón</h3>
+<p>Cada renglón puede ser un <strong>Importe</strong> (<code>cantidad × unitario</code>, incluso en otra moneda convertida a la tasa de la fecha de la ficha) o un <strong>Porcentaje</strong> calculado sobre 4 posibles bases:</p>
+<ol class="steps"><li><strong>del precio de compra (FOB)</strong></li><li><strong>del CIF</strong> (<code>compra + flete + seguro</code>, la base legal de los aranceles)</li><li><strong>del costo del artículo</strong></li><li><strong>del precio de venta</strong> <em>(se despeja automáticamente con la fórmula de arriba)</em></li></ol>
+<h2 class="sec-h2">4. Crear, Revisar (con IA) y Aprobar una Ficha de Costo</h2>
+<h3>Paso a paso individual</h3>
+<ol class="steps"><li>Entra a <strong>Operaciones → Análisis de costos</strong> y pulsa <strong>«Nueva ficha de costo»</strong>.</li><li>Elige el <strong>Artículo o servicio</strong>, la modalidad y con qué llenarla:<ul><li><strong>Los datos del sistema y la IA:</strong> GesPro carga los datos reales y <strong>Gemini (IA)</strong> propone estimaciones para los renglones faltantes.</li><li><strong>Los datos del sistema:</strong> Solo cifras reales de facturas, recetas, importaciones y nómina.</li><li><strong>Nada (la escribo yo):</strong> Ficha en blanco.</li></ul></li><li><strong>Revisa las cifras en amarillo:</strong> Todo lo que la IA estimó aparece resaltado en <strong>amarillo</strong> con etiqueta <strong><code>Estimado</code></strong> y su explicación debajo.<ul><li><em>Seguridad y privacidad:</em> La IA solo ve el artículo y cifras anónimas (nunca nombres de clientes ni proveedores), y <strong>jamás aprueba nada por su cuenta</strong>.</li></ul></li><li>Edita cualquier cantidad, moneda, importe o porcentaje: los 4 indicadores superiores (<em>Costo del artículo, Costo completo, Precio sugerido y Costo de hoy</em>) se recalculan <strong>en vivo mientras escribes</strong>.</li><li>Escribe el <strong>Margen sobre el precio (%)</strong> que buscas. Debajo de los indicadores, GesPro te dice de inmediato: <em>«Precio 1 de hoy: X; con el costo completo de la ficha deja Y % de margen»</em> (¡alerta instantánea si estás vendiendo muy barato!).</li><li>Pulsa <strong>«Guardar»</strong>. Queda en <strong>BORRADOR</strong>.</li><li><strong>Aprobar (solo Contabilidad o Administrador):</strong> Pulsa <strong>«Aprobar…»</strong>. Una ventana te muestra exactamente:<ul><li>El costo nuevo vs el actual.</li><li>Cuánto cambia el valor del inventario y contra qué cuenta contable va el asiento.</li><li>La casilla opcional <strong>«Actualizar también el Precio 1»</strong> (si quieres adoptar de una vez el precio sugerido).</li></ul></li></ol>
+<h3>Atajo masivo para importadores: Pestaña «Desde una importación»</h3>
+<ol class="steps"><li>Cuando una importación ya tiene aprobada su factura de mercancía y sus gastos (flete, seguro, aduana), abre la pestaña <strong>«Desde una importación»</strong>.</li><li>Elige la importación y el criterio de reparto: <strong>«Según lo que costó cada artículo» (por valor)</strong> o <strong>«Por unidades» (por cantidad)</strong>.</li><li>Revisa la tabla con el <strong>Costo de llegada</strong> de cada artículo y pulsa <strong>«Preparar las fichas de todos»</strong>: GesPro crea un borrador por cada artículo de golpe, listo para revisar y aprobar.<ul><li><em>Ventaja contable:</em> Al aprobar las fichas ligadas a una importación abierta, esos gastos <strong>salen de la cuenta transitoria de la importación y pasan al costo del inventario</strong>, de modo que al cerrar la importación ya no se mandan a gastos.</li></ul></li></ol>
+<h2 class="sec-h2">5. ¿Qué Pasa Exactamente al Aprobar una Ficha?</h2>
+<div class="table-wrap"><table><thead><tr><th>Tipo de artículo</th><th>Efecto en Inventario / Kardex</th><th>Efecto en Contabilidad</th></tr></thead><tbody><tr><td><strong>Producto CON existencia</strong></td><td>Su costo promedio pasa al de la ficha. En el <strong>Kardex</strong> aparece una línea <strong><code>REVALORIZACION</code></strong> sin cambiar unidades, mostrando el cambio de valor por almacén.</td><td>Asiento automático por <code>existencia × diferencia de costo</code> contra la cuenta transitoria de la importación, ajustes de inventario o apertura.</td></tr><tr><td><strong>Producto SIN existencia</strong></td><td>Guarda el costo de referencia en la ficha del artículo; la próxima compra volverá a promediar con su factura.</td><td>Sin asiento (existencia = 0).</td></tr><tr><td><strong>Servicio</strong></td><td>Actualiza el costo unitario del servicio (usado para medir su margen en reportes de rentabilidad).</td><td>Sin asiento (no tiene stock).</td></tr></tbody></table></div>
+<p><em>(La ficha aprobada anteriormente no se borra: pasa al historial con estado <strong><code>Reemplazada</code></strong>).</em></p>
+<h2 class="sec-h2">6. Complemento Gerencial: Utilidad Bruta (Promedio vs PEPS) y Agentes</h2>
+<p>Para vigilar tus márgenes todos los días después de costear:</p>
+<ol class="steps"><li><strong>Reportes → Utilidad bruta:</strong> Compara tus ventas del período dos veces lado a lado:<ul><li><strong>Costo promedio:</strong> El oficial de tu contabilidad.</li><li><strong>PEPS (Primero en entrar, primero en salir):</strong> Mide cuánto ganaste usando el costo original de las unidades más antiguas. <em>(Cuando los costos suben por inflación, PEPS muestra más utilidad contable; cuando bajan, menos).</em></li><li><em>Nota:</em> Es solo analítico; no modifica tus libros. También avisa si vendiste algo con costo <code>$0</code> (margen falso del 100 %).</li></ul></li><li><strong>Agentes automáticos (<code>Configuración → Agentes</code>):</strong><ul><li><strong>Rentabilidad (semanal):</strong> Detecta artículos vendidos por debajo del costo, por debajo del margen mínimo o que cayeron ≥5 puntos porcentuales.</li><li><strong>Costos de compra e inventario sin movimiento (diario/semanal):</strong> Avisa apenas entra una compra más cara que el promedio de los últimos 90 días (ej. &gt;10 %) y te dice cómo quedó tu margen actual con el nuevo costo.</li></ul></li></ol>
+<div class="special-box warn"><h2>⚠️ 5 Errores Clásicos en Análisis de Costos (y Cómo Evitarlos)</h2>
+<div class="table-wrap"><table><thead><tr><th>Error clásico</th><th>Consecuencia</th><th>Cómo hacerlo bien</th></tr></thead><tbody><tr><td>Marcar <code>Al costo</code> en <em>Gastos generales</em> o <em>Comisiones de venta</em></td><td>Inflas artificialmente el activo de inventario violando normas contables</td><td>Deja <strong>desmarcada</strong> <code>Al costo</code> en gastos generales y comisiones (solo afectan el precio)</td></tr><tr><td>Aprobar una ficha con cifras en <strong>amarillo (<code>Estimado</code>)</strong> sin verificarlas</td><td>Queda contabilizado un costo inventado por la IA o aproximado</td><td>Revisa y reemplaza cada renglón amarillo por tu tarifa/factura real antes de aprobar</td></tr><tr><td>Poner margen + gastos sobre precio que suman casi 100 %</td><td>El denominador se vuelve cero o negativo (el sistema te bloquea con error)</td><td>Mantén <code>Margen + % sobre precio &lt; 95 %</code></td></tr><tr><td>Cerrar una importación antes de repartir sus costos en <code>Análisis de costos</code></td><td>Todos los fletes y aduanas se van al gasto del mes en vez del costo del producto</td><td>Primero reparte y aprueba las fichas en <strong>Desde una importación</strong>, luego cierra la importación</td></tr><tr><td>Confundir «recargo sobre costo» (×1,30) con «margen sobre precio» (÷0,70)</td><td>Crees que ganas 30 % cuando solo ganas 23 %</td><td>Confía en el <strong>Precio sugerido</strong> de GesPro (calcula margen real sobre precio de venta)</td></tr></tbody></table></div>
+</div>
+<div class="special-box challenge"><h2>🛠️ Reto Práctico del Estudiante (20 min)</h2>
+<ol class="steps"><li>Ve a <strong>Operaciones → Análisis de costos → «Nueva ficha de costo»</strong>. Elige un artículo inventariable en modalidad <strong>Importado</strong> (usa <em>«Los datos del sistema»</em> o <em>«Los datos del sistema y la IA»</em> si está activa).</li><li>Asegúrate de tener estos renglones (añade con <strong>«Añadir renglón»</strong> los que falten):<ul><li>Precio de compra (FOB): importe real o <code>10,00</code> USD (<code>Al costo</code> ✅)</li><li>Flete: importe <code>2,00</code> USD (<code>Al costo</code> ✅)</li><li>Arancel: porcentaje <code>15 %</code> sobre <strong>CIF</strong> (<code>Al costo</code> ✅)</li><li>Gastos generales: porcentaje <code>12 %</code> sobre <strong>precio de venta</strong> (<code>Al costo</code> ⬜)</li><li>Comisiones de venta: porcentaje <code>3 %</code> sobre <strong>precio de venta</strong> (<code>Al costo</code> ⬜)</li></ul></li><li>Escribe <strong>30</strong> en <strong>Margen sobre el precio (%)</strong>. Anota en tu cuaderno:<ul><li><em>Costo del artículo:</em> ________</li><li><em>Costo completo:</em> ________</li><li><em>Precio sugerido:</em> ________</li><li><em>¿El Precio 1 actual estaba ganando o perdiendo frente al margen de 30 %?</em></li></ul></li><li>Guarda y <strong>Aprueba</strong> la ficha (revisa el cuadro de impacto en inventario). Luego abre el <strong>Kardex</strong> de ese artículo y ubica la línea <strong><code>REVALORIZACION</code></strong>.</li><li>Abre <strong>Reportes → Utilidad bruta</strong> y compara la columna de Costo Promedio vs PEPS.</li></ol>
+</div>
+<div class="special-box cheat"><h2>📌 Chuleta Rápida (1 minuto)</h2>
+<ul class="bullets"><li><strong><code>Al costo</code> ✅</strong> = Entra al inventario (FOB, flete, seguro, arancel, aduana, materiales, mano de obra).</li><li><strong><code>Al costo</code> ⬜</strong> = Solo para calcular precio (gastos generales, comisiones).</li><li><strong>Amarillo (<code>Estimado</code>)</strong> = Propuesta de IA; <strong>revisa siempre antes de aprobar</strong>.</li><li><strong>Fórmula mágica:</strong> <code>Precio = Costo completo ÷ (1 − Margen − % sobre precio)</code>.</li><li><strong>Importaciones:</strong> Reparte en <strong>Desde una importación</strong> → <strong>Preparar las fichas de todos</strong>.</li></ul>
+</div>
+    </div>
+  </section>
+
+  <section class="module-section" id="mod-06">
+    <div class="module-banner" style="--mod-color: #0284c7">
+      <div class="mod-num">MÓDULO 06</div>
+      <h1>Bancos y Conciliación</h1>
+      <p class="mod-sub">Cuentas y Devaluación, Libro, Extracto, Conciliación 7 Pasos, Devoluciones y Agente</p>
+    </div>
+    <div class="module-body">
+      <div class="callout"><strong>Tu misión en este módulo:</strong> Controlar el saldo real de tus bancos y cajas en cada moneda, vigilar la pérdida por devaluación en bolívares, conciliar cualquier estado de cuenta en minutos hasta dejar la diferencia en <strong>0,00</strong> y activar el Agente de conciliación para que trabaje por ti todos los días.  <br><strong>🎬 Videos de repaso de este módulo:</strong> <code>13-Bancos-y-conciliacion</code> (<code>1:45</code>, resumen general, también en <code>-WhatsApp.mp4</code>) + <code>video/gespro-conciliacion.mp4</code> (<code>5:50</code>, los 7 pasos en detalle + Agente).</div>
+<h2 class="sec-h2">1. Mapa del Módulo de Bancos (5 Pestañas)</h2>
+<p>En <strong>Tesorería → Bancos y conciliación</strong> tienes todo el control del dinero:</p>
+<div class="table-wrap"><table><thead><tr><th>Pestaña</th><th>Qué haces allí</th></tr></thead><tbody><tr><td><strong>Cuentas y saldos</strong></td><td>Lista de cuentas bancarias y cajas (corriente, ahorro, caja), moneda, consolidado a moneda base, contador <strong>Sin conciliar</strong> y columna <strong>Devaluación</strong> (en multimoneda).</td></tr><tr><td><strong>Libro bancario</strong></td><td>Todos los ingresos y egresos registrados por el ERP (cobros, pagos, nóminas, movimientos manuales) con filtros por fecha y estado de conciliación.</td></tr><tr><td><strong>Extracto del banco</strong></td><td>Carga automática del estado de cuenta real descargado del banco (Excel, CSV o TXT con o sin encabezados).</td></tr><tr><td><strong>Conciliación</strong></td><td>Tablero cara a cara (Libro a la izquierda, Extracto a la derecha) con cruce automático, cruce manual, notas del banco, devoluciones y cierre auditado.</td></tr><tr><td><strong>Pago masivo (archivo al banco)</strong></td><td>Armado y generación de archivos TXT/CSV de pago por lote a proveedores y nómina (<code>BORRADOR → GENERADO → ENVIADO → CONFIRMADO</code>).</td></tr></tbody></table></div>
+<h2 class="sec-h2">2. Cuentas, Devaluación y Reglas del Saldo Inicial</h2>
+<figure class="screenshot"><img src="../presentacion/img/01-cuentas.png" alt="Cuentas bancarias y movimientos"><figcaption>Cuentas bancarias y movimientos</figcaption></figure>
+<h3>Al crear una cuenta bancaria (<code>Nueva cuenta</code>)</h3>
+<ul class="bullets"><li>Escribe el <strong>número de cuenta exactamente</strong> como aparece en el estado de cuenta de tu banco (GesPro lo usa para impedir que importes por error el extracto de otra cuenta).</li><li>Asocia su <strong>moneda</strong> (una vez tenga movimientos, la moneda queda fija), su <strong>cuenta contable</strong> (<code>11…</code>), su <strong>plantilla de pago</strong> (si harás lotes masivos) y marca <strong>«sujeta a IGTF»</strong> si corresponde.</li><li><strong>Columna «Devaluación» (oro puro para gerencia):</strong> Si operas en bolívares y dólares, GesPro muestra automáticamente cuánto perdió de valor cada saldo quieto en bolívares desde la última tasa BCV, tanto en <strong>%</strong> como en <strong>dinero real</strong>. <em>(Es un dato gerencial para decidir compra de divisas o pagos; no genera asiento contable).</em></li></ul>
+<h3>¿Se puede corregir el Saldo Inicial de una cuenta?</h3>
+<p>Depende del estado de la cuenta (en <code>Cuentas y saldos → Editar</code>):</p>
+<ul class="bullets"><li><strong>Sin movimientos:</strong> Sí, se corrige sin restricción.</li><li><strong>Con movimientos sin conciliar:</strong> Sí, con aviso (desplaza el saldo histórico en todas las fechas).</li><li><strong>Con movimientos YA conciliados:</strong> <strong>BLOQUEADO.</strong> Nunca se altera el saldo inicial bajo una conciliación ya firmada. Para ajustar una diferencia, usa el botón superior <strong>«Movimiento manual»</strong> (crea un movimiento con fecha, concepto y asiento auditable).</li></ul>
+<h2 class="sec-h2">3. Conciliación Bancaria en 7 Pasos Exactos</h2>
+<div class="callout"><strong>🎬 Video de apoyo para repasar en casa:</strong> <code>video/gespro-conciliacion.mp4</code> (5 min 50 s) recorre exactamente estos 7 pasos + el Agente automático.</div>
+<figure class="screenshot"><img src="../presentacion/img/07-panel-inicial.png" alt="Panel de conciliación bancaria"><figcaption>Panel de conciliación bancaria</figcaption></figure>
+<h3>Paso 1 · Revisar la cuenta y el libro</h3>
+<ol class="steps"><li>En <strong>Cuentas y saldos</strong>, ubica la cuenta con movimientos en la columna <strong>«Sin conciliar»</strong>.</li><li>Revisa en <strong>Libro bancario</strong> que ya hayas registrado los cobros y pagos del período antes de empezar.</li></ol>
+<h3>Paso 2 · Importar el extracto del banco</h3>
+<ol class="steps"><li>Ve a <strong>Extracto del banco → «Importar extracto»</strong>.</li><li>Selecciona la cuenta y sube tu archivo (<strong>Excel, CSV o TXT</strong> tal como lo baja tu banco — incluso texto posicional sin encabezados como Banco Mercantil, con separador <code>;</code>, <code>,</code> o tabulador, o pegando el texto).</li><li><strong>3 Validaciones automáticas antes de guardar:</strong><ul><li>Confirma que la <strong>moneda</strong> coincida con la cuenta.</li><li>Confirma que el <strong>número de cuenta</strong> del archivo sea el de la cuenta elegida (si te equivocaste, te dice cuál parece ser la correcta).</li><li>Comprueba la matemática del extracto: <code>Saldo inicial (SI) + Créditos − Débitos = Saldo final (SF)</code>.</li><li><em>Tranquilidad total:</em> Las líneas <code>SI</code> y <code>SF</code> no se cargan como movimientos (se usan para prellenar el saldo final) y <strong>reimportar el mismo archivo nunca duplica líneas</strong>.</li></ul></li></ol>
+<h3>Paso 3 · Abrir la conciliación</h3>
+<ol class="steps"><li>Pulsa el botón directo desde el resumen de importación, o ve a <strong>Conciliación → «Nueva conciliación»</strong>.</li><li>Selecciona la cuenta, la <strong>fecha de corte</strong> (ej. último día del mes) y escribe el <strong>saldo final exacto según el banco</strong>.</li><li>Pulsa <strong>«Abrir conciliación»</strong>. Se abre el tablero con la fórmula arriba:</li></ol>
+<div class="formula-box">Saldo según banco + Depósitos en tránsito - Cheques pendientes = Saldo según libros</div>
+<p>Y abajo dos columnas frente a frente: <strong>tu Libro a la izquierda</strong> y <strong>el Extracto del banco a la derecha</strong>.</p>
+<h3>Paso 4 · Ejecutar el «Cruce automático»</h3>
+<figure class="screenshot"><img src="../presentacion/img/08-cruce-auto.png" alt="Cruce automático"><figcaption>Cruce automático</figcaption></figure>
+<ul class="bullets"><li>Pulsa <strong>«Cruce automático»</strong> en la cabecera.</li><li>En segundos, GesPro empareja todas las partidas que coinciden por <strong>importe exacto, tipo (ingreso/egreso), tolerancia de fecha y similitud de referencia</strong>. Normalmente resuelve el 80–95 % del mes en un clic y te deja a la vista solo las excepciones.</li></ul>
+<h3>Paso 5 · Emparejar a mano las excepciones</h3>
+<ul class="bullets"><li>Si un cobro o pago entró en el banco varios días después o con otra referencia, haz clic en la fila de la <strong>izquierda (Libro)</strong>, haz clic en su pareja de la <strong>derecha (Extracto)</strong> y pulsa <strong>«Conciliar las dos partidas seleccionadas»</strong>.</li><li><em>¿Te equivocaste?</em> Mientras la conciliación siga abierta, baja a la lista de conciliados y pulsa <strong>«Deshacer»</strong>.</li></ul>
+<h3>Paso 6 · Registrar comisiones y notas del banco (sin salir de aquí)</h3>
+<figure class="screenshot"><img src="../presentacion/img/10-registrar-nota.png" alt="Registrar nota del banco"><figcaption>Registrar nota del banco</figcaption></figure>
+<ul class="bullets"><li>Cuando el banco cobró mantenimiento, comisión por transferencia, IGTF bancario o abonó intereses que aún no estaban en tu libro:</li></ul>
+<ol class="steps"><li>Pulsa <strong>«Registrar»</strong> junto a esa línea del extracto.</li><li>Elige la cuenta contable de contrapartida (ej. <em>Comisiones y gastos bancarios</em>).</li><li>Pulsa <strong>«Registrar y conciliar»</strong>. GesPro crea el movimiento en el libro, <strong>genera el asiento contable cuadrado</strong> y lo concilia al instante.</li></ol>
+<h3>Paso 7 · Transferencias devueltas y Cierre en 0,00</h3>
+<figure class="screenshot"><img src="../presentacion/img/12-cuadrada.png" alt="Conciliación cuadrada"><figcaption>Conciliación cuadrada</figcaption></figure>
+<h4>¿Qué hago si el banco devolvió una transferencia?</h4>
+<p>A veces pagas a un proveedor, el banco rechaza/devuelve el dinero por el mismo monto y luego haces una segunda transferencia exitosa:</p>
+<ol class="steps"><li><strong>NO anules el pago.</strong> Abre el pago en <code>CxP → Pagos</code> (o el cobro en <code>CxC → Cobros</code>) y pulsa <strong>«Corregir referencia»</strong>: pon la referencia de la segunda transferencia (la buena) y el motivo. Así cruza automáticamente con el débito bueno.</li><li>En la conciliación te quedarán sueltas en el extracto la primera transferencia rechazada y su devolución (mismo monto, signos contrarios).</li><li>Selecciona una de ellas, pulsa <strong>«Compensar con su devolución»</strong>, confirma su pareja y escribe el motivo. <strong>Se concilian entre sí SIN crear asientos contables ficticios.</strong> <em>(Si el banco cobró comisión por el rechazo, regístrala aparte con el Paso 6).</em></li></ol>
+<h4>Cerrar con diferencia 0,00</h4>
+<ul class="bullets"><li>Cuando todo el extracto está conciliado y las únicas partidas restantes en tu libro son reales <strong>en tránsito</strong> (ej. un cheque emitido el día 30 que aún no han cobrado), el indicador de diferencia se pone en <strong>verde (<code>0,00</code>)</strong> y se habilita <strong>«Cerrar conciliación»</strong>.</li><li>Al cerrar, la conciliación pasa al <strong>Histórico</strong> en estado <strong>Cerrada</strong> y <strong>bloquea todas sus partidas y el saldo inicial</strong> para que nadie pueda alterar un mes ya auditado. <em>(Si aparece algo después, se registra en el mes siguiente).</em></li></ul>
+<h2 class="sec-h2">4. El Agente de Conciliación Bancaria (Tu Asistente Diario)</h2>
+<figure class="screenshot"><img src="../presentacion/img/14-agente-conciliacion.png" alt="Agente de conciliación"><figcaption>Agente de conciliación</figcaption></figure>
+<p>No esperes al día 30 del mes para conciliar. En <strong>Configuración → Agentes → Conciliación bancaria</strong>:</p>
+<ol class="steps"><li>Enciéndelo y configura tus horarios (ej. <code>8:00 a. m.</code> y <code>4:00 p. m.</code>) y las cuentas a vigilar.</li><li><strong>Qué hace solo por ti:</strong><ul><li>Recuerda por correo y <strong>GP Mensajes</strong> a quien descarga los estados de cuenta si falta cargar el extracto del día.</li><li>Apenas alguien sube un extracto, ejecuta el <strong>cruce automático</strong> solo.</li><li>Envía un <strong>informe separado por área</strong> con lo que no cruzó: ingresos sin registrar → a <strong>CxC</strong>; egresos sin registrar → a <strong>CxP</strong>; comisiones/IGTF/intereses → a <strong>Bancos</strong> (¡incluso avisa si un monto coincide exactamente con una factura abierta!).</li></ul></li><li><strong>Regla de seguridad:</strong> El agente <strong>prepara, cruza y avisa, pero nunca contabiliza ni cierra</strong> sin decisión humana.</li></ol>
+<div class="special-box warn"><h2>⚠️ 5 Errores Clásicos en Bancos (y Cómo Evitarlos)</h2>
+<div class="table-wrap"><table><thead><tr><th>Error clásico</th><th>Qué pasa</th><th>Cómo hacerlo bien</th></tr></thead><tbody><tr><td>Crear un asiento de gasto y otro de ingreso para una transferencia devuelta</td><td>Infla falsamente tus gastos e ingresos en el Estado de Resultados</td><td>Usa <strong>«Compensar con su devolución»</strong> en conciliación y <strong>«Corregir referencia»</strong> en el pago</td></tr><tr><td>Intentar cerrar la conciliación con diferencia distinta de <code>0,00</code></td><td>El sistema bloquea el cierre (casi siempre faltan comisiones/notas del banco)</td><td>Revisa líneas pendientes del extracto y usa <strong>«Registrar»</strong> en comisiones/intereses</td></tr><tr><td>Importar un extracto en dólares dentro de una cuenta en bolívares</td><td>El sistema te detiene avisando la cuenta y moneda correcta</td><td>Verifica siempre la cuenta elegida arriba en el modal de importación</td></tr><tr><td>Querer anular un cobro o pago que ya está conciliado</td><td>GesPro lo impide para no romper una conciliación</td><td>Si está abierta, pulsa <strong>«Deshacer»</strong> en el cruce; si está cerrada, ajusta en el período siguiente</td></tr><tr><td>Dejar acumular un mes entero sin subir extractos</td><td>Cierres estresantes con cientos de partidas sin recordar de quién eran</td><td>Sube el extracto a diario o semanalmente y activa el <strong>Agente de conciliación bancaria</strong></td></tr></tbody></table></div>
+</div>
+<div class="special-box challenge"><h2>🛠️ Reto Práctico del Estudiante (30 min)</h2>
+<ol class="steps"><li>Entra a <strong>Tesorería → Bancos y conciliación → Cuentas y saldos</strong>. Revisa qué cuentas tienen saldo en bolívares y lee su columna de <strong>Devaluación</strong> (si la empresa opera multimoneda).</li><li>Ve a <strong>Extracto del banco → Importar extracto</strong>. Selecciona la cuenta bancaria del Banco Mercantil (<code>BCO-03</code> en la demo) y sube el archivo real <strong><code>ejemplos/extracto-mercantil-agosto.txt</code></strong>. Verifica el resumen de validación (<code>SI + créditos − débitos = SF</code>).</li><li>Abre una <strong>Nueva conciliación</strong> con la fecha de corte y el saldo final del extracto.</li><li>Pulsa <strong>«Cruce automático»</strong> y observa cuántas partidas se cruzan en 1 segundo.</li><li>Practica <strong>1 cruce manual</strong> (una fila de la izquierda + una de la derecha) y pulsa <strong>«Registrar»</strong> en una línea de comisión bancaria asignándola a <em>Comisiones y gastos bancarios</em>.</li><li><em>(Si tu conciliación llega a diferencia <code>0,00</code>)</em> Pulsa <strong>«Cerrar conciliación»</strong> y compruébala luego en el <strong>Histórico</strong>.</li></ol>
+</div>
+<div class="special-box cheat"><h2>📌 Chuleta Rápida (1 minuto)</h2>
+<ul class="bullets"><li><strong>Los 7 pasos:</strong> <code>1. Revisar libro → 2. Importar extracto → 3. Abrir conciliación → 4. Cruce automático → 5. Emparejar a mano → 6. Registrar notas del banco → 7. Compensar devoluciones y cerrar en 0,00</code>.</li><li><strong>Transferencia devuelta:</strong> En el pago usa <strong>«Corregir referencia»</strong>; en el extracto usa <strong>«Compensar con su devolución»</strong> (cero asientos falsos).</li><li><strong>Cierre:</strong> Solo cierra en <strong><code>0,00</code></strong>; al cerrar bloquea partidas y saldo inicial.</li><li><strong>Automatiza:</strong> Activa <strong>Configuración → Agentes → Conciliación bancaria</strong> para informes diarios por área.</li></ul>
+</div>
+    </div>
+  </section>
+
+    <section class="back-sheet" id="referencia">
+      <h2>📌 Hoja de Referencia Rápida (Para tener junto al monitor)</h2>
+      <p style="color:#475569;margin-top:0">Recorta o guarda esta página: resume las direcciones clave, los trucos y las soluciones a los problemas más frecuentes.</p>
+      <div class="cheat-grid">
+        <div class="cheat-card">
+          <h3>🌐 Direcciones útiles del sistema</h3>
+          <p><strong>Sistema principal:</strong> dirección de tu empresa<br>
+          <strong>Portal de clientes:</strong> <code>…/portal</code> (solo RIF, sin clave)<br>
+          <strong>Portal de vendedores:</strong> <code>…/vendedores</code> (con usuario y clave)<br>
+          <strong>GP Mensajes:</strong> <code>…/mensajes/</code> (avisos y encargos)</p>
+        </div>
+        <div class="cheat-card">
+          <h3>🔧 Si algo no aparece en pantalla</h3>
+          <p>• Revisa los filtros arriba y pulsa <strong>Limpiar</strong>.<br>
+          • ¿Cambiaste algo y no se ve? Recarga forzada: <code>⌘⇧R</code> (Mac) o <code>Ctrl+F5</code> (Windows).<br>
+          • ¿No ves un módulo? Tu rol/secciones lo controla el administrador.</p>
+        </div>
+        <div class="cheat-card">
+          <h3>💼 Ventas &amp; CxC en 3 líneas</h3>
+          <p>• Cotización aceptada → Pedido (aparta <strong>24 h hábiles</strong>) → Factura en CxC.<br>
+          • Bloqueo por mora: <code>0</code> = sin tope; <code>1</code> = frena con 1 vencida.<br>
+          • Retención recibida: cobra el neto y carga el comprobante de 14 dígitos en <strong>Retenciones recibidas</strong>.</p>
+        </div>
+        <div class="cheat-card">
+          <h3>🧾 CxP &amp; Inventario en 3 líneas</h3>
+          <p>• Sube facturas PDF/foto con <strong>Importar factura con IA</strong> y revisa el <code>CPR-…</code>.<br>
+          • Stock migrado sin costo → carga primero <strong>Inventario → Costo inicial</strong>.<br>
+          • Mover stock entre almacenes = <strong>Transferir</strong> (sin asiento). Muestras/donaciones = <strong>Nota de despacho</strong>.</p>
+        </div>
+        <div class="cheat-card">
+          <h3>📊 Análisis de Costos en 3 líneas</h3>
+          <p>• <code>Al costo</code> ✅ entra al inventario; <code>Al costo</code> ⬜ solo calcula precio.<br>
+          • Filas en amarillo = <strong>Estimado por IA</strong> (revisa antes de aprobar).<br>
+          • Fórmula: <code>Precio = Costo completo ÷ (1 − Margen − % sobre precio)</code>.</p>
+        </div>
+        <div class="cheat-card">
+          <h3>🏦 Bancos en 3 líneas</h3>
+          <p>• Importar extracto → Abrir conciliación → <strong>Cruce automático</strong> → Manual → <strong>Registrar</strong> notas → Cerrar en <code>0,00</code>.<br>
+          • Transferencia devuelta = <strong>Corregir referencia</strong> + <strong>Compensar con su devolución</strong>.<br>
+          • Activa el <strong>Agente de conciliación</strong> en <code>Configuración → Agentes</code>.</p>
+        </div>
+      </div>
+      <p style="margin-top:26px;font-size:12px;color:#64748b;text-align:center">GesPro Administrativo v5.7.0 · Material de Entrenamiento Práctico · © 2026 J@RTechnologies</p>
+    </section>
+  </div>
+
+<style>
+  .gespro-portal-back{position:fixed;bottom:16px;left:16px;z-index:99999;display:inline-flex;align-items:center;gap:7px;
+    background:#0c1d35;color:#fff !important;text-decoration:none !important;padding:9px 15px;border-radius:999px;
+    font:600 13px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;border:1px solid rgba(137,201,255,.45);
+    box-shadow:0 8px 24px rgba(0,0,0,.28);transition:transform .15s,background .15s}
+  .gespro-portal-back:hover{background:#1a5da8;transform:translateY(-1px)}
+  @media print{.gespro-portal-back{display:none !important}}
+  
+</style>
+<a class="gespro-portal-back" href="../index.html#manuales" title="Volver al portal principal de entrenamiento">← Portal GesPro</a>
+</body>
+</html>
